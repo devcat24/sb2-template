@@ -4,12 +4,15 @@ import org.apache.catalina.connector.Connector;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
+@ServletComponentScan({"com.github.devcat24.servlet"})
+// '@ServletComponentScan' only works for embedded servlet containers !
 public class ServletContainerConfig extends SpringBootServletInitializer {
     @Value("${tomcat.ajp.port}")
     int ajpPort;
