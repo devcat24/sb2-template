@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
-public class ServletContainerConfig  extends SpringBootServletInitializer {
+public class ServletContainerConfig extends SpringBootServletInitializer {
     @Value("${tomcat.ajp.port}")
     int ajpPort;
 

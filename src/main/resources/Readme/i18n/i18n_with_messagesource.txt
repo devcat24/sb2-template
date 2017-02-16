@@ -1,0 +1,23 @@
+1. Directory & Message file generation
+  a. IntelliJ > File > Other Settings > Default Settings > File Encodings
+     -> tick check box 'Transparent native-to-ascii conversion'
+  b. create directory named as 'messages' under 'src/main/resources' directory   
+     -> (IntelliJ) directory structure changed as "src/main/resources/messages/Resource Bundle 'message'" automatically
+  c. create 3 files with names 'messages.properties / messages_en_US.properties / messages_ko_KR.properties'
+  d. double click 'messages_ko_KR.properties' > click 'Resource Bundle' Tab bottom of editor window
+  e. click '+' to create bundle message > message input dialog for all create 3 types languages appear.
+
+2. MessageSourceConfig.java
+  a. MessageSource Bean : define message resource bundle directory & define default encoding
+  c. localeResolver : 'LocalResolver Bean' can be one of 'SessionLocaleResolver' or 'CookieLocaleResolver'
+  b. LocaleChangeIntercepter : used for http parameter based encoding setting
+  d. addInterceptor : register configuration to 'InterceptorRegistry' -> 'MessageSourceConfig' should extends 'WebMvcConfigurerAdapter'
+
+3. Spring MVC Controller/Service Bean
+  a. calling text with specific localeResolver
+     > logger.info("Local.US     : " + messageSource.getMessage("hello.test", null, "no such message", Locale.US));
+
+4. Invoking from view layer (JSTL)
+   a. <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+   b. <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+   c. <h3> Message : <spring:message code="hello.test" text="default text" /> (Current Locale : ${pageContext.response.locale})</h3>
