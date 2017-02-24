@@ -1,5 +1,6 @@
 package com.github.devcat24.mvc.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -12,9 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Locale;
 
+@Slf4j
 @Controller("DefaultController")
 public class DefaultController {
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(DefaultController.class);
+    //private static final org.slf4j.Logger logger = LoggerFactory.getLogger(DefaultController.class);
 
     @Autowired
     private MessageSource messageSource;

@@ -1,5 +1,6 @@
 package com.github.devcat24.config.db;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.jdbc.pool.DataSourceProxy;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,6 +25,7 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.Properties;
 
+@Slf4j
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
@@ -31,12 +33,14 @@ import java.util.Properties;
         transactionManagerRef = "fooTransactionManager",
         basePackages = {
                             "com.github.devcat24.mvc.entity.hr" ,
-                            "com.github.devcat24.mvc.repo.hr"
+                            "com.github.devcat24.mvc.repo.hr",
+                            "com.github.devcat24.mvc.entity.mm",
+                            "com.github.devcat24.mvc.repo.mm"
                             // define for both Entity Objects and JpaRepository
                         }
         )
 public class FooConfig {
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(FooConfig.class);
+    //private static final org.slf4j.Logger logger = LoggerFactory.getLogger(FooConfig.class);
 
     @Value("${foo.datasource.jpa.hibernate.dialect}")
     private String hibernateDialect;
@@ -73,7 +77,7 @@ public class FooConfig {
                 return ((DataSourceProxy) dataSource).createPool().getJmxPool();
             }
             catch (SQLException ex) {
-                logger.warn("Cannot expose DataSource to JMX (could not connect)");
+                log.warn("Cannot expose DataSource to JMX (could not connect)");
             }
         }
         return null;
@@ -94,7 +98,8 @@ public class FooConfig {
         // case1. using JpaVendorAdapter
         //noinspection RedundantArrayCreation
         String [] scanPkg = new String[] {
-                "com.github.devcat24.mvc.entity.hr"
+                "com.github.devcat24.mvc.entity.hr",
+                "com.github.devcat24.mvc.entity.mm"
         };
 
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();

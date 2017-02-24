@@ -1,6 +1,7 @@
 package com.github.devcat24.mvc.entity.fi;
 
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,16 +9,19 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 
-@Data
-@AllArgsConstructor     // @RequiredArgsConstructor, @NoArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor     // @RequiredArgsConstructor, @NoArgsConstructor
 @EqualsAndHashCode      // @EqualsAndHashCode(exclude = {"deptno"})
-@ToString               //@ToString (exclude = {"deptno"})
+@ToString               // @ToString (exclude = {"deptno"})
+@Builder                // Support builder pattern method for creating instance ex. Item item = Item.builder().itemno(1002).name("pen").build();
+@Slf4j                  // lombok annotation for logging (@Slf4j/@Log4j/@Log4j2/@CommonsLog/@Log) -> invoke simply with 'log.info("Sample message");'
+
 @Entity(name="Item01")
 @Table(name="item01")
 public class Item01 implements Serializable {
 
-    @Setter @Getter @Id
+    @Setter @Getter
+    @Id
     @Column(name="itemno", unique=true, columnDefinition="Integer")
     public Integer itemno;
     // Although JPA support column type like...  Integer(10), Float(7,2)

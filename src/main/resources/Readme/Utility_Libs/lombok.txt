@@ -1,0 +1,67 @@
+1. @Data : class level
+   - @Data includes @Getter/@Setter/@EqualsAndHashCode/@ToString/@RequiredArgsConstructor
+       -> includes @Setter -> mutable
+2. @Value : class level
+   - @Value includes @Getter/@EqualsAndHashCode/@ToString/@RequiredArgsConstructor
+       -> doesn't include @Setter -> immutable
+3. @NoArgsConstructor : class level
+4. @AllArgsConstructor : class level
+5. @EqualsAndHashCode : class level
+    - can exclude specific fields to prevent infinite recursion
+      -> ex. @EqualsAndHashCode(exclude = {"deptno"})
+6. @ToString : class level
+    - can exclude specific fields to prevent infinite recursion
+      -> ex. @ToString (exclude = {"deptno"})
+7. @Builder : class level
+    - create builder pattern method for creating instance
+      -> ex. Item item = Item.builder().itemno(1002).name("pen").build();
+8. @Slf4j : class level
+    - lombok annotation for logging (@Slf4j/@Log4j/@Log4j2/@CommonsLog/@Log)
+      -> ex. 'log.info("Sample message");'
+9. @Getter(lazy=true) : field level
+    - lombok lazy getter annotation for member field
+    -------------------------------------------------------------------------------
+    public class Item {
+        @Getter(lazy = true)
+        private final String itemStatus = getItemStatus();
+
+        public Item() {
+            System.out.println("Item constructor. field using '@Getter(lazy = true)' is not initiated by constructor ");
+        }
+
+        private String getItemStatus() {
+            System.out.println("This will not be loaded in constructor");
+            return "ready";
+        }
+    }
+    -------------------------------------------------------------------------------
+    Item i01 = new Item();
+    System.out.println("Item created");
+    i01.getItemStatus();
+    -------------------------------------------------------------------------------
+
+10. @Synchronized : method level
+    - lombok annotion for method level synchronization
+    - more safer than using method level synchronized block -> generates private field for synchronization
+    -------------------------------------------------------------------------------
+    public class Foo {
+        private object fooLocker = new Object();
+
+        @Synchronized("fooLocker")
+        public void foo(){
+        }
+    }
+    -------------------------------------------------------------------------------
+
+11. @NonNull : field/argument level
+    - throws 'NullPointerException' when meets null
+12. Type Interface val : Scala like variable type
+    -------------------------------------------------------------------------------
+    import lombok.val;
+    val list = new ArrayList<String>();
+    list.add("foo");
+    for(val item : list){
+        System.out.println(item);
+    }
+    -------------------------------------------------------------------------------
+

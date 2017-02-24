@@ -6,6 +6,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -64,4 +65,24 @@ public class ServletRegBeanConfig {
 
         return filterBean;
     }
+
+    /*@Bean
+    public FilterRegistrationBean openEntityManagerInViewFilterBean(){
+
+
+        FilterRegistrationBean filterBean = new FilterRegistrationBean();
+        filterBean.setFilter(new OpenEntityManagerInViewFilter());
+        filterBean.addUrlPatterns("*//*");
+//        Map<String, String> params = new HashMap<>();
+//        params.put("param3", "value3");
+//        filterBean.setInitParameters(params);
+        filterBean.setName("OpenEntityManagerInViewFilter");
+
+        System.out.println("-----------filter loaded ----------------------->>>");
+        System.out.println("-----------filter loaded ----------------------->>>");
+        System.out.println("-----------filter loaded ----------------------->>>");
+        System.out.println("-----------filter loaded ----------------------->>>");
+        System.out.println("-----------filter loaded ----------------------->>>");
+        return filterBean;
+    }*/
 }

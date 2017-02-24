@@ -1,5 +1,6 @@
 package com.github.devcat24.config.db;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.jdbc.pool.DataSourceProxy;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,6 +23,7 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.Properties;
 
+@Slf4j
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
@@ -34,7 +36,7 @@ import java.util.Properties;
                         }
         )
 public class BarConfig {
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(BarConfig.class);
+    //private static final org.slf4j.Logger logger = LoggerFactory.getLogger(BarConfig.class);
 
     @Value("${bar.datasource.jpa.hibernate.dialect}")
     private String hibernateDialect;
@@ -62,7 +64,7 @@ public class BarConfig {
                 return ((DataSourceProxy) dataSource).createPool().getJmxPool();
             }
             catch (SQLException ex) {
-                logger.warn("Cannot expose DataSource to JMX (could not connect)");
+                log.warn("Cannot expose DataSource to JMX (could not connect)");
             }
         }
         return null;

@@ -1,5 +1,6 @@
 package com.github.devcat24.mvc.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -8,9 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.Locale;
 
+@Slf4j
 @Controller("TestController")
 public class TestController {
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(TestController.class);
+    //private static final org.slf4j.Logger logger = LoggerFactory.getLogger(TestController.class);
 
     @SuppressWarnings("SpringAutowiredFieldsWarningInspection")
     @Autowired
@@ -24,8 +26,8 @@ public class TestController {
     @ResponseBody
     @RequestMapping(value="/msgSrc")
     public String msgSrc() throws Exception {
-        logger.info("Local.US     : " + messageSource.getMessage("hello.test", null, "no such message", Locale.US));
-        logger.info("Local.KR     : " + messageSource.getMessage("hello.test", null, "no such message", Locale.KOREA));
+        log.info("Local.US     : " + messageSource.getMessage("hello.test", null, "no such message", Locale.US));
+        log.info("Local.KR     : " + messageSource.getMessage("hello.test", null, "no such message", Locale.KOREA));
         return "ok !";
     }
 

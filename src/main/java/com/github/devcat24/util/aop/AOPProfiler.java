@@ -1,5 +1,6 @@
 package com.github.devcat24.util.aop;
 
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -11,10 +12,11 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+@Slf4j
 @Component
 @Aspect
 public class AOPProfiler {
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(AOPProfiler.class);
+    //private static final org.slf4j.Logger logger = LoggerFactory.getLogger(AOPProfiler.class);
 
     //@Before("execution(* com.github.devcat24.mvc.repo.hr.Emp01Repo.*(..))")
     //public void lookDatabaseAutoConfiguration(JoinPoint jointPoint) throws Throwable{
@@ -42,7 +44,7 @@ public class AOPProfiler {
         Object [] args = proceedingJoinPoint.getArgs();
         if(args != null && args.length > 0) {
             for (Object arg : args) {
-                logger.info("spring aop - params :  " + arg.toString());
+                log.info("spring aop - params :  " + arg.toString());
             }
         }
         Object rtnObj = null;
@@ -51,7 +53,7 @@ public class AOPProfiler {
         } catch (Throwable e) {
             throw e;
         }
-        logger.info("spring aop - returns with =============================: "+ (rtnObj != null ? rtnObj.toString() :"" ) );
+        log.info("spring aop - returns with =============================: "+ (rtnObj != null ? rtnObj.toString() :"" ) );
         return rtnObj;
 
     }
