@@ -2,7 +2,6 @@ package com.github.devcat24.config.db;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.jdbc.pool.DataSourceProxy;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -13,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -83,6 +83,14 @@ public class FooConfig {
         return null;
     }
 
+/*  // --> bind each *DAO
+        ==> https://docs.spring.io/spring/docs/current/spring-framework-reference/html/jdbc.html
+   @Primary
+    @Bean(name = "fooJDBCTemplate")
+    public JdbcTemplate jdbcTemplate(@Qualifier("fooDataSource") DataSource dataSource){
+        return new JdbcTemplate(dataSource);
+    }*/
+
 
     @Primary
     // '@Primary' annotation should declared only once in a project
@@ -125,7 +133,12 @@ public class FooConfig {
         //    prop.setProperty("hibernate.jmx.agentId", "MySQLJMX");
         //    prop.setProperty("hibernate.jmx.defaultDomain", "Spring.JPA");
         //    DataSource related JMX is not working !!!
+
+        emf.setMappingResources("META-INF/orm_foo.xml", "META-INF/orm_foo2.xml");
+        // emf.setMappingResources("META-INF/orm_foo.xml", "META-INF/orm_foo2.xml");
+
         emf.setJpaProperties(prop);
+        emf.setPersistenceUnitName("fooPersistence");
 
         return emf;
 

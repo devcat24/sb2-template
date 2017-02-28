@@ -1,5 +1,6 @@
 package com.github.devcat24.mvc.entity.mm;
 
+import com.github.devcat24.mvc.dto.mm.MemberDTO;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -7,6 +8,37 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+//    9. invoke Stored Procedure using NamedStoredProcedureQuery
+//     -> Basic feature works well with 'Entity' result type but,
+//        with projection type result it doesn't work smoothly like other cases.(especially with ResultSet-Mappings)
+//     -> utilize 'NamedNativeQuery' type !
+//    ------------------------------------------------------------------------------------------------------------------
+//    @NamedStoredProcedureQuery(name = "Member.memberAfterWithNamedStoredProcedure", procedureName = "get_member_after", parameters = {
+//                    @StoredProcedureParameter(mode = ParameterMode.IN, name = "search_id", type = Long.class),
+//                    @StoredProcedureParameter(mode = ParameterMode.OUT, name = "id", type = Long.class),
+//                    @StoredProcedureParameter(mode = ParameterMode.OUT, name = "name", type = String.class),
+//                    @StoredProcedureParameter(mode = ParameterMode.OUT, name = "city", type = String.class),
+//                    @StoredProcedureParameter(mode = ParameterMode.OUT, name = "street", type = String.class),
+//                    @StoredProcedureParameter(mode = ParameterMode.OUT, name = "zipcode", type = String.class)
+//                }, resultSetMappings="mappingMemberAfterWithNamedStoreProcedure"
+//            )
+//    @SqlResultSetMapping(name="mappingMemberAfterWithNamedStoreProcedure",
+//            classes = {
+//                    @ConstructorResult(
+//                            targetClass = MemberDTO.class,
+//                            columns = {
+//                                    @ColumnResult(name="id", type=Long.class),
+//                                    @ColumnResult(name="name", type=String.class),
+//                                    @ColumnResult(name="city"),
+//                                    @ColumnResult(name="street"),
+//                                    @ColumnResult(name="zipcode")
+//                            }
+//                    )
+//            }
+//    )
+//    ------------------------------------------------------------------------------------------------------------------
+
 
 @NoArgsConstructor
 @AllArgsConstructor     // @RequiredArgsConstructor, @NoArgsConstructor
@@ -36,7 +68,8 @@ public class Member extends BaseEntity implements Serializable {
     @Setter @Getter
     private String zipcode;
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    // orphanRemoval -> only for '@OneToMany/@OneToOne' relation - remove orphan slave : be cautious to apply
     @Setter @Getter
     private List<Order> orders = new ArrayList<>();
 

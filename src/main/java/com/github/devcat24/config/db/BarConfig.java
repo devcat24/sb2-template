@@ -93,6 +93,7 @@ public class BarConfig {
         prop.setProperty("hibernate.show_sql", hibernateShowSQL);
         prop.setProperty("hibernate.format_sql", formatSQL);
 
+        emf.setMappingResources("META-INF/orm_bar.xml");
         emf.setJpaProperties(prop);
 
         return emf;

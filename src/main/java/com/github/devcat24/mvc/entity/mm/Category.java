@@ -42,7 +42,8 @@ public class Category implements Serializable {
     @Setter @Getter
     private Category parent;
 
-    @OneToMany(mappedBy = "parent")
+    // 'cascade = CascadeType.ALL' -> should be defined in '@OneToMany' side, as relation information is stored in '@ManyToOne' side
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
     @Setter @Getter
     private List<Category> child = new ArrayList<>();
 

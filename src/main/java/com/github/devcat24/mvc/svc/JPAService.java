@@ -1,5 +1,7 @@
 package com.github.devcat24.mvc.svc;
 
+import com.github.devcat24.mvc.dao.mm.MemberDAO;
+import com.github.devcat24.mvc.dto.mm.MemberDTO;
 import com.github.devcat24.mvc.entity.fi.Item01;
 import com.github.devcat24.mvc.entity.hr.Emp01;
 import com.github.devcat24.mvc.entity.mm.Member;
@@ -13,9 +15,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.ParameterMode;
+import javax.persistence.PersistenceContext;
+import javax.persistence.StoredProcedureQuery;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j  // lombok annotation for logging (@Slf4j/@Log4j/@Log4j2/@CommonsLog/@Log) -> invoke simply with 'log.info("Sample message");'
 @Service("PAService")
@@ -42,6 +53,14 @@ public class JPAService {
     @Autowired
     private OrderItemRepo orderItemRepo;
 
+    //@Autowired
+    @PersistenceContext(unitName = "fooPersistence")
+    private EntityManager entityManager;
+
+    @Autowired
+    private MemberDAO memberDAO;
+
+
     @Transactional(value="fooTransactionManager", propagation = Propagation.REQUIRED)
     public void loadInitialData()  {
         log.info("------------- in JPAService.loadInitialData() ----------------");
@@ -63,6 +82,9 @@ public class JPAService {
         Member member01 = new Member(10001L, "JohnDoe", "Hamilton", "Hillcrest", "21230", null);
         // <- Id may be re-written by the policy '@GeneratedValue(strategy = GenerationType.IDENTITY)'
         member01 = memberRepo.saveAndFlush(member01);
+
+        Member member02 = Member.builder().id(10002L).name("JaneSmith").city("Hamilton").street("Rototuna").zipcode("21203").orders(null).build();
+        member02 = memberRepo.saveAndFlush(member02);
 
 
 //        Order order01 = new Order(10001L, new Date(), OrderStatus.ORDER, member01, null);
@@ -100,15 +122,85 @@ public class JPAService {
     }
 
     @Transactional(value="fooTransactionManager", propagation = Propagation.REQUIRED)
-    public void searchInitialData()  {
-//        Order order02 = orderRepo.findById(1L);
-//        Member member02 = order02.getMember();
-//        logger.info("::::::::::::::::::::::::: " + member02.getName() + " ] "+ order02.getOrderItems().get(0));
-//        logger.info("::::::::::::::::::::::::: " + member02.getName() + " ] "+ order02.getOrderItems().get(0));
-//        logger.info("::::::::::::::::::::::::: " + member02.getName() + " ] "+ order02.getOrderItems().get(0));
-//        logger.info("::::::::::::::::::::::::: " + member02.getName() + " ] "+ order02.getOrderItems().get(0));
-//        logger.info("::::::::::::::::::::::::: " + member02.getName() + " ] "+ order02.getOrderItems().get(0));
+    public void jpaRepositorySampleInvoke()  {
 
+        log.info("------- JPA Repository invocation --------");
+        // 1. Simple JPA Repository invoke
+        Member m01 = memberRepo.findById(1L);
+        log.info(" 1. Simple JPA: " +m01.getName() + "(" + m01.getId() + ")");
+
+        // 2. JPA invoke using JPQL (Param type #1)
+        List <Member> mList02 = memberRepo.findAllMembersFromId(0L);
+        for(Member mem : mList02) { log.info(" 2. Simple JPQL-1: " + mem.getName() + "(" + mem.getId() + ")"); }
+
+        // 3. JPA invoke using JPQL (Param type #2)
+        List <Member> mList03 = memberRepo.findAllMembersFromIdParam(0L);
+        for(Member mem : mList03) { log.info(" 3. Simple JPQL-2: " + mem.getName() + "(" + mem.getId() + ")"); }
+
+        // 4. JPA invoke using Native query - return type with 'entity' class
+        List <Member> mList04 = memberRepo.findAllMembersWithNativeSQL(0L);
+        for(Member mem : mList04) { log.info(" 4. Native query - Simple: " + mem.getName() + "(" + mem.getId() + ")"); }
+
+        // 5. JPQL with Projection Return type
+        //  -> return object should be specified with 'AllArgsConstructor -> new XXX(...)'
+        List <MemberDTO> mList05 = memberRepo.findAllMembersFromIdParamAsProjectionResult(0L);
+        for(MemberDTO mem : mList05) { log.info(" 5. JPQL - Projection: " + mem.getName() + "(" + mem.getId() + ")"); }
+
+        // 6. JPQL invoke with external XML file (orm.xml)
+        List <Member> mList06 = memberRepo.findAllMembersWithSQLFile("J");
+        for(Member mem : mList06) { log.info(" 6. External JPQL: " + mem.getName() + "(" + mem.getId() + ")"); }
+
+        // 7. Native query using external XML file (orm.xml)
+        //   a. If results are (collection of) entity class, projection for 'result-set-mapping' is not required.
+        //      Unfortunately, most of native query requires custom result class type & does not need to be entity object
+        //       -> need 'result-set-mapping' which is correspond to JPA projection
+        //   b. With JPA 2.1, 'result-set-mapping' with 'constructor-result' & 'target-class' is supported
+        //       -> XML schema for 'orm.xml' should be 'orm version 2.1'
+        //       -> define 'result-set-mapping' & 'column' which call constructor of DTO(projection) class
+        List <MemberDTO> mList07 = memberRepo.findAllMembersWithNativeSQLFile("J");
+        for(MemberDTO mem : mList07) { log.info(" 7. External NativeQuery with Projection: " + mem.getName() + "(" + mem.getId() + ")"); }
+
+
+        // 8. invoke Stored Procedure using Entity Manager
+        StoredProcedureQuery storedQuery
+                = entityManager.createStoredProcedureQuery("get_member_after")
+                .registerStoredProcedureParameter(1, Long.class, ParameterMode.IN)
+                .setParameter(1, 0L);
+        storedQuery.execute();
+        //noinspection unchecked
+        List <Object[]> mList08 = storedQuery.getResultList();
+        for(Object[] memObj: mList08){
+            log.info(" 8. Stored Procedure call as Array Object ResultSet: " + memObj[1] + "(" + memObj[0] + ")");
+        }
+
+        // 9. invoke Stored Procedure using NamedStoredProcedureQuery (only recommended for entity type results)
+        // -> Basic feature works well with 'Entity' result type but,
+        //    with projection type result it doesn't work smoothly like other cases.(especially with ResultSet-Mappings)
+        // -> utilize 'NamedNativeQuery' type !
+        //  ---------------------------------------------------------------------
+        //  StoredProcedureQuery storedProcedureQuery02
+        //            = entityManager.createNamedStoredProcedureQuery("Member.memberAfterWithNamedStoredProcedure")
+        //                            .registerStoredProcedureParameter("search_id", Long.class, ParameterMode.IN);
+        //  storedProcedureQuery02.setParameter("search_id", 0L);
+        //  storedProcedureQuery02.execute();
+        //  List <MemberDTO> mList09 = storedProcedureQuery02.getResultList();
+        //
+        //  ---------------------------------------------------------------------
+
+        // 10. Stored Procedure call using Native query (external XML file - orm.xml)
+        // -> '@NamedStoredProcedureQuery' or '@Procedure' is simple and convenient way to invoke 'stored procedure'
+        //    But, if ResultSet is not 'Entity' Object type, it becomes complicated and tricky.
+        //    (Although JPA 2.1 supports 'constructor-result' type mapping but, only works well with @NativeQuery.)
+        //    Moreover, considering the characteristics of stored procedure, usually it is not limited single table,
+        //    which means 'resultset-mapping' is required most time(Projection in JPA).
+        // -> Instead of '@NamedStoredProcedureQuery', using '@NamedNativeQuery' could be good alternative for this case
+        List <MemberDTO> mList10 = memberRepo.getMemberAfterStoredProcedureUsingNamedQuery(0L);
+        for(MemberDTO mem : mList10) { log.info(" 10. Stored Procedure using Native Query: " + mem.getName() + "(" + mem.getId() + ")"); }
+
+
+        // 11. JdbcTemplate with RowMapper
+        List <MemberDTO> mList11 = memberDAO.getAllMemberFromId(0L);
+        for(MemberDTO mem : mList11) { log.info(" 11. JdbcTemplate with RowMapper: " + mem.getName() + "(" + mem.getId() + ")"); }
     }
 
 

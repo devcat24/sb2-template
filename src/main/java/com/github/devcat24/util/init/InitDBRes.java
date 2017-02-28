@@ -53,7 +53,7 @@ public class InitDBRes {
     @PostConstruct
     public void buildData() throws JsonProcessingException {
         jpaService.loadInitialData();
-        jpaService.searchInitialData();
+        jpaService.jpaRepositorySampleInvoke();
 
 
 

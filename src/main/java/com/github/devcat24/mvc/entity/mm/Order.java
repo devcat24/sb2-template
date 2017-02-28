@@ -71,7 +71,7 @@ public class Order extends BaseEntity implements Serializable {
     private Member member;
     // 'variable name' matched with 'mapped by in @OneToMany Entity'
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "order")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL)
     @JsonBackReference // prevents infinite loop !
     @Setter @Getter
     private List<OrderItem> orderItems = new ArrayList<OrderItem>();

@@ -1,0 +1,101 @@
+https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#projections
+
+1. Specify 'MappingResource' in EntityManager(Datasource) Configuration
+   ---------------------------------------------
+@Primary
+@Bean(name = "fooEntityManagerFactory")
+public LocalContainerEntityManagerFactoryBean entityManagerFactory(
+		@SuppressWarnings("SpringJavaAutowiringInspection") EntityManagerFactoryBuilder builder,
+		@Qualifier("fooDataSource") DataSource dataSource) {
+	String [] scanPkg = new String[] { "com.github.devcat24.mvc.entity.hr", "com.github.devcat24.mvc.entity.mm"	};
+
+	LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
+	emf.setDataSource(dataSource());
+	emf.setPackagesToScan(scanPkg);
+
+	JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+	emf.setJpaVendorAdapter(vendorAdapter);
+
+	Properties prop = new Properties();
+	prop.setProperty("hibernate.dialect", hibernateDialect);
+	prop.setProperty("hibernate.hbm2ddl.auto", hibernateHbm2ddlAuto);
+	prop.setProperty("hibernate.show_sql", hibernateShowSQL);
+	prop.setProperty("hibernate.format_sql", formatSQL);
+
+	emf.setMappingResources("META-INF/orm_foo.xml");
+    // emf.setMappingResources("META-INF/orm_foo.xml", "META-INF/orm_foo2.xml");
+
+	emf.setJpaProperties(prop);
+
+	return emf;
+}
+   ---------------------------------------------
+
+
+2. create 'orm_xxx.xml' in 'src/resources/META-INF'
+    & define sql query
+   ---------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings
+        xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.datanucleus.org/xsd/jpa/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd"
+        version="2.1">
+
+    <named-query name="Member.findAllMembersWithSQLFile">
+        <!--
+             name="Member.findAllMembersWithNativeSQLFile"
+               -> name should be 'Entity' Object (not Repository) !
+             jpql query cannot define 'result-class' attribute
+         -->
+        <query>
+            SELECT m FROM com.github.devcat24.mvc.entity.mm.Member m WHERE LOWER(m.name) LIKE LOWER(CONCAT('%', :nameString, '%')) ORDER BY m.id DESC
+        </query>
+    </named-query>
+
+    <named-native-query name="Member.findAllMembersWithNativeSQLFile" result-class="com.github.devcat24.mvc.entity.mm.Member">
+        <!-- name="Member.findAllMembersWithNativeSQLFile" -> name should be 'Entity' Object (not Repository) ! -->
+        <query>
+            select * from jpa_lab_member where name like LOWER(CONCAT('%', :nameString, '%'))
+        </query>
+    </named-native-query>
+</entity-mappings>
+   ---------------------------------------------
+
+
+3. Create named query in JPA repository interface
+   ---------------------------------------------
+@Repository("MemberRepo")
+public interface MemberRepo extends JpaRepository<Member, Long> {
+    // query using external xml files
+    @Query
+    List<Member> findAllMembersWithSQLFile(@Param("nameString") String nameString);
+
+    // native query using external xml files
+    @Query(nativeQuery=true)
+    List<Member> findAllMembersWithNativeSQLFile(@Param("nameString") String nameString);
+
+    // passing parameter with parameter name using '@Param("***")'
+    @Query("SELECT m FROM com.github.devcat24.mvc.entity.mm.Member m WHERE m.id > :queryID")
+    List<Member> findAllMembersFromIdParam(@Param("queryID") Long startingID);
+
+    // native query
+    @Query(value="SELECT * FROM jpa_lab_member m WHERE m.MEMBER_ID > :queryID", nativeQuery=true)
+    List<Member> findAllMembersWithNativeSQL(@Param("queryID") Long startingID);
+}
+   ---------------------------------------------
+
+
+4. Invoke from service method
+   ---------------------------------------------
+@Transactional(value="fooTransactionManager", propagation = Propagation.REQUIRED)
+public void jpaRepositorySampleInvoke()  {
+	List <Member> memList = memberRepo.findAllMembersWithSQLFile("John");
+	List <Member> nativeMemList = memberRepo.findAllMembersWithNativeSQLFile("John");
+
+			..............
+}
+   ---------------------------------------------
+
+
+

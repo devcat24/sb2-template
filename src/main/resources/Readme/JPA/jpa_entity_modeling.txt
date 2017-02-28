@@ -1,7 +1,10 @@
 // === Master of OneToMany/ManyToOne/OneToOne relation ===
 // The entity which uses '@JoinColumn(name = "**_ID")' has a field (containing opposite table information) -> master (save mapping information to table column)
 // The entity which uses 'mappedBy = "**")' -> slave
+// 'cascade = CascadeType.ALL' -> should be defined in '@OneToMany' side, as relation information is stored in '@ManyToOne' side (master)
 
+// === orphanRemoval ===
+//  -> only for '@OneToMany/@OneToOne' relation - remove orphan slave : be cautious to apply
 
 // === Embeddable composite key ===
 // Embedded Key Object
