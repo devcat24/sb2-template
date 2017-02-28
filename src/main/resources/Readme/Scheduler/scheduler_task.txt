@@ -1,0 +1,10 @@
+1. Annotation based simple Quartz scheduler
+  - '@Scheduled(cron="* * * * * *")' : cron type task execution
+  - '@Scheduled(fixedRate=***)' : time interval (milliseconds)based task execution
+
+2. Scheduling task with Quartz API
+    a. define 'quartz.properties' & 'quartz-job-config.xml'
+    b. load 'StdScheduler' using configured properties : QuartzTaskManager.class
+       > StdScheduler scheduler = (StdScheduler) (new StdSchedulerFactory(quartz_prop_file)).getScheduler();
+    c. managed task with Quartz API
+

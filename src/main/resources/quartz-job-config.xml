@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job-scheduling-data
+        xmlns="http://www.quartz-scheduler.org/xml/JobSchedulingData"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.quartz-scheduler.org/xml/JobSchedulingData
+        http://www.quartz-scheduler.org/xml/job_scheduling_data_1_8.xsd"
+        version="1.8">
+
+    <schedule>
+        <job>
+            <name>JobOne</name>
+            <group>group00</group>
+            <description>Inital Job</description>
+            <job-class>com.github.devcat24.util.scheduler.JobOne</job-class>
+        </job>
+        <trigger>
+            <cron>
+                <name>JobOne_Trigger1</name>
+                <job-name>JobOne</job-name>
+                <job-group>group00</job-group>
+                <!-- execute every 30 seconds -->
+                <cron-expression>0 0/10 * * * ?</cron-expression>
+            </cron>
+        </trigger>
+        <trigger>
+            <simple>
+                <name>JobOne_Trigger2</name>
+                <job-name>JobOne</job-name>
+                <job-group>group00</job-group>
+                <repeat-count>-1</repeat-count>  <!-- repeat indefinitely -->
+                <repeat-interval>120000</repeat-interval> <!-- every 120 sec -->
+            </simple>
+        </trigger>
+    </schedule>
+
+</job-scheduling-data>
