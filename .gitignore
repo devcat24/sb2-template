@@ -2,6 +2,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 
 .attach_pid*
+target/
 
 ### tmp log file ###
 logs/*

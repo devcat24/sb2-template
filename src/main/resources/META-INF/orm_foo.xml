@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    +. Do not add testing code using '@DataJpaTest' in XML configured '@Query' project.
+    +. '@DataJpaTest' is designed for 'ERD/Entity/JPA validation' and does not load with '@SpringBootTest'
+    +. Which means if project has @NamedQuery using 'orm.xml' for SQL, '@DataJpaTest' cannot load proper entities and eventually cannot pass with test procedure.
+-->
 <entity-mappings
         xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -19,7 +24,7 @@
     <named-native-query name="Member.findAllMembersWithNativeSQLFile" result-set-mapping="MemberDTOMapping">
         <!-- name="Member.findAllMembersWithNativeSQLFile" -> name should be 'Entity' Object (not Repository) ! -->
         <query>
-            select cast(m.member_id as unsigned) as member_id, m.name as name, m.city as city, m.street as street, m.zipcode as zipcode from jpa_lab_member m where m.name like LOWER(CONCAT('%', :nameString, '%'))
+            select m.member_id as member_id, m.name as name, m.city as city, m.street as street, m.zipcode as zipcode from jpa_lab_member m where m.name like LOWER(CONCAT('%', :nameString, '%'))
         </query>
     </named-native-query>
     <named-native-query name="Member.getMemberAfterStoredProcedureUsingNamedQuery" result-set-mapping="StoredProcedureMemberDTOMapping">

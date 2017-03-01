@@ -24,7 +24,8 @@ public class MemberDAO {
 
     public List<MemberDTO> getAllMemberFromId(Long id){
         String queryString
-                = " select cast(m.member_id as unsigned) as member_id, m.name as name, m.city as city, " +
+                //= " select cast(m.member_id as unsigned) as member_id, m.name as name, m.city as city, " +
+                = " select m.member_id as member_id, m.name as name, m.city as city, " +
                   "         m.street as street, m.zipcode as zipcode "                                   +
                   " from jpa_lab_member m where member_id > ? ";
 

@@ -1,5 +1,11 @@
 https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#projections
 
+0. Before start
+  -> Do not add testing code using '@DataJpaTest' in XML configured '@Query' project.
+  -> '@DataJpaTest' annotation is designed for 'ERD/Entity/JPA validation' and does not load with '@SpringBootTest'
+     Which means if project has @NamedQuery using 'orm.xml' for SQL, '@DataJpaTest' cannot load proper entities and eventually cannot pass with test procedure.
+
+
 1. Specify 'MappingResource' in EntityManager(Datasource) Configuration
    ---------------------------------------------
 @Primary

@@ -158,6 +158,13 @@ public class JPAService {
         for(MemberDTO mem : mList07) { log.info(" 7. External NativeQuery with Projection: " + mem.getName() + "(" + mem.getId() + ")"); }
 
 
+
+        // To Test 8/9/10, stored procedure is required
+        // For mysql/mariadb
+        //   -- CREATE PROCEDURE get_member_after (IN search_id int)
+        //   -- BEGIN select member_id as id, name, city, street, zipcode from jpa_lab_member where MEMBER_ID > search_id ;
+        //   -- END
+        /*
         // 8. invoke Stored Procedure using Entity Manager
         StoredProcedureQuery storedQuery
                 = entityManager.createStoredProcedureQuery("get_member_after")
@@ -193,7 +200,7 @@ public class JPAService {
         // -> Instead of '@NamedStoredProcedureQuery', using '@NamedNativeQuery' could be good alternative for this case
         List <MemberDTO> mList10 = memberRepo.getMemberAfterStoredProcedureUsingNamedQuery(0L);
         for(MemberDTO mem : mList10) { log.info(" 10. Stored Procedure using Native Query: " + mem.getName() + "(" + mem.getId() + ")"); }
-
+        */
 
         // 11. JdbcTemplate with RowMapper
         List <MemberDTO> mList11 = memberDAO.getAllMemberFromId(0L);
