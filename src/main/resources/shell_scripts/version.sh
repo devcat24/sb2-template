@@ -1,0 +1,1 @@
+java -cp ./target/dev-template-0.0.1-SNAPSHOT.jar -Dloader.main=com.github.devcat24.util.version.AppVersion org.springframework.boot.loader.PropertiesLauncher
