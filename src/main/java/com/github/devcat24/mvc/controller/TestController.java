@@ -1,5 +1,6 @@
 package com.github.devcat24.mvc.controller;
 
+import com.github.devcat24.util.regex.RegExpExample;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -28,6 +29,16 @@ public class TestController {
     public String msgSrc() throws Exception {
         log.info("Local.US     : " + messageSource.getMessage("hello.test", null, "no such message", Locale.US));
         log.info("Local.KR     : " + messageSource.getMessage("hello.test", null, "no such message", Locale.KOREA));
+        return "ok !";
+    }
+
+    @ResponseBody
+    @RequestMapping(value="/regExpExamples")
+    public String regExpExamples() throws Exception {
+        log.info("------------ invoke Regular Expression Examples --------------");
+        RegExpExample regExpExample = new RegExpExample();
+        regExpExample.regExp01();
+        log.info("--------------------------------------------------------------");
         return "ok !";
     }
 
