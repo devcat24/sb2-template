@@ -1,0 +1,15 @@
+1. Create GlobalExceptionHandler class using '@ControllerAdvice' annotation
+  a. create methods with '@ExceptionHandler' annotation
+     -> This method only works for 'sub-type exceptions' which is specified by annotation argument
+	     ex. SQLException
+     -> Define actions for Exception Handling
+	     ex. error pages, log to file, log to database
+  b. In case of logging exception to database -> be careful to infinite loop
+	  -> database connection error -> logging -> try to connect to database -> database connection error -> ...
+
+2. Create 'Controller' class to handle error pages which are defined in '@ControllerAdvice' class
+
+3. Servlet Container exceptions	which are happened out side of SpringMVC, should be controlled by servlet container layer
+   a. Create(or load) class(Bean) which implements EmbeddedServletContainerCustomizer
+   b. Override 'customize(ConfigurableEmbeddedServletContainer container)' method
+  

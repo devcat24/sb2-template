@@ -1,5 +1,6 @@
 package com.github.devcat24.mvc.controller;
 
+import antlr.debug.MessageAdapter;
 import com.github.devcat24.config.prop.ApplicationVersion;
 import com.github.devcat24.util.regex.RegExpExample;
 import lombok.extern.slf4j.Slf4j;
@@ -20,9 +21,32 @@ import java.util.Locale;
 public class TestController {
     //private static final org.slf4j.Logger logger = LoggerFactory.getLogger(TestController.class);
 
-    @SuppressWarnings("SpringAutowiredFieldsWarningInspection")
-    @Autowired
+    // 1. Spring dependency injection - type 1: using field dependency injection
+    //    > quite popular practice but, not recommended by Spring
+    // @SuppressWarnings("SpringAutowiredFieldsWarningInspection")
+    // @Autowired
+    // private MessageSource messageSource;
+
+    // 2. Spring dependency injection - type 2: using setter dependency injection
+    //   > Official recommendation from Spring 3.x
     private MessageSource messageSource;
+    @Autowired
+    public void setMessageSource(MessageSource messageSource){
+        this.messageSource = messageSource;
+    }
+
+    // 3. Spring dependency injection - type 3: using constructor dependency injection
+    //   > From Spring 4.x, officially setter injection over constructor is no longer encouraged
+    //   > From Spring 4.3, '@Autowird' is no longer required for 'single-constructor'
+    //     - https://spring.io/blog/2016/03/04/core-container-refinements-in-spring-framework-4-3
+    // private MessageSource messageSource;
+    // @Autowired
+    // public TestController(MessageSource messageSource){
+    //    this.messageSource = messageSource;
+    // }
+
+
+
 
     @RequestMapping(value={"wel"})
     public String welcome(Model model) throws Exception {
