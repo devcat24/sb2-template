@@ -23,6 +23,9 @@
             Message : <spring:message code="hello.test" text="default text" />
         </h3>
         Current Locale : ${pageContext.response.locale}
+        <br />
+        <hr />
+        <sub>App version: ${applicationVersion}</sub>
 
     </body>
 </html>
