@@ -11,24 +11,10 @@
     </head>
     <body>
         <%= "Welcome!" %> <sub><%= "from /webapp/WEB-INF/view" %></sub>
-        <ul>
-            <li>Context Path: ${pageContext.request.contextPath}</li>
-            <li>Request URI: ${pageContext.request.requestURI}</li>
-            <li>HTTP Session: ${pageContext.request.getSession(true)}</li>
-            <li>Real Path: ${pageContext.request.getRealPath("/")}</li>
-        </ul>
-        <hr />
-        Language : <a href="wel?lang=en_US">English</a> | <a href="wel?lang=ko_KR">Korea</a>
+        <h1>Hello New </h1>
         <h3>
             Message : <spring:message code="hello.test" text="default text" />
         </h3>
-        Current Locale : ${pageContext.response.locale}
-        <br />
-        <hr />
-        <p>Click <a href="./welcome_member"> to a member greeting.</a></p>
-        <br />
-        <hr />
-        <sub>App version: ${applicationVersion}</sub>
 
     </body>
 </html>
