@@ -64,6 +64,10 @@ public class RESTSvcController {
         //return restTemplate.getForObject(url, RestEmp[].class);
         RestEmp [] rtnList = restTemplate.getForObject(url, RestEmp[].class);
         //List<RestEmp> rtnArrayList = Arrays.asList(rtnList);
+
+        // String rtn = restTemplate.getForObject(url, String.class);
+        // -> retrieve response with parsing to Object
+
         return rtnList;
     }
 
