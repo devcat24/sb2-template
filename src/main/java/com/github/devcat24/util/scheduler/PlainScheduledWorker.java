@@ -23,20 +23,20 @@ public class PlainScheduledWorker {
     //          0 0/5 14 * * ? -> Fire every 5 minutes starting at 2pm and ending at 2:55pm, every day
     //          0 10,44 14 ? 3 WED -> Fire at 2:10pm and at 2:44pm every Wednesday in the month of March.
     //          -> http://www.quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger
-	@Scheduled(cron="5 * * * * ?")
+	@Scheduled(cron="0 0,10,20,30,40,50 * * * ?")
 	public void doWorkByCron(){
-		System.out.println("[PlainScheduledWorker: Cron Worker] - "+ (new SimpleDateFormat("HH:mm:ss")).format(new Date()));
+		System.out.println("[PlainScheduledWorker: Cron Worker #1] - "+ (new SimpleDateFormat("HH:mm:ss")).format(new Date()));
 	}
 
 
     // Set Cron expression using application.properties
     @Scheduled(cron="${spring.template.quartz.job1.cron}")
     public void doWorkByCronProperties(){
-        System.out.println("[PlainScheduledWorker: Cron Worker] - "+ (new SimpleDateFormat("HH:mm:ss")).format(new Date()));
+        System.out.println("[PlainScheduledWorker: Cron Worker #2] - "+ (new SimpleDateFormat("HH:mm:ss")).format(new Date()));
     }
 
 
-    @Scheduled(fixedRate = 3000)
+    @Scheduled(fixedRate = 300000)
 	public void doWorkByFixedRate(){
 		System.out.println("[PlainScheduledWorker: FixedRate Worker] - "+ (new SimpleDateFormat("HH:mm:ss")).format(new Date()));
 	}

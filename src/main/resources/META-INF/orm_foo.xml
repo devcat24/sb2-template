@@ -17,7 +17,8 @@
              jpql query cannot define 'result-class' attribute
          -->
         <query>
-            SELECT m FROM com.github.devcat24.mvc.entity.mm.Member m WHERE LOWER(m.name) LIKE LOWER(CONCAT('%', :nameString, '%')) ORDER BY m.id DESC
+            SELECT m FROM com.github.devcat24.mvc.svc.db.entity.mm.Member m WHERE LOWER(m.name) LIKE LOWER(CONCAT('%',
+            :nameString, '%')) ORDER BY m.id DESC
         </query>
     </named-query>
 
@@ -34,7 +35,7 @@
     </named-native-query>
 
     <sql-result-set-mapping name="MemberDTOMapping">
-        <constructor-result target-class="com.github.devcat24.mvc.dto.mm.MemberDTO">
+        <constructor-result target-class="com.github.devcat24.mvc.svc.db.dto.mm.MemberDTO">
             <column name="member_id" class="java.lang.Long"/>
             <column name="name" />
             <column name="city" />
@@ -44,7 +45,7 @@
     </sql-result-set-mapping>
 
     <sql-result-set-mapping name="StoredProcedureMemberDTOMapping">
-        <constructor-result target-class="com.github.devcat24.mvc.dto.mm.MemberDTO">
+        <constructor-result target-class="com.github.devcat24.mvc.svc.db.dto.mm.MemberDTO">
             <column name="id" class="java.lang.Long"/>
             <column name="name" />
             <column name="city" />
@@ -65,7 +66,7 @@
         </named-stored-procedure-query>
 
         <sql-result-set-mapping name="StoreProcedureMemberDTOMapping">
-            <constructor-result target-class="com.github.devcat24.mvc.dto.mm.MemberDTO">
+            <constructor-result target-clacom.github.devcat24.mvc.svc.db.dto.mm.MemberDTOrDTO">
                 <column name="id" class="java.lang.Long"/>
                 <column name="name" />
                 <column name="city" />

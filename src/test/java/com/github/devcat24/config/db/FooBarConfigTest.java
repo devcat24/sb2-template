@@ -1,9 +1,9 @@
 package com.github.devcat24.config.db;
 
-import com.github.devcat24.mvc.entity.fi.Item01;
-import com.github.devcat24.mvc.entity.hr.Emp01;
-import com.github.devcat24.mvc.repo.fi.Item01Repo;
-import com.github.devcat24.mvc.repo.hr.Emp01Repo;
+import com.github.devcat24.mvc.svc.db.entity.fi.Item01;
+import com.github.devcat24.mvc.svc.db.entity.hr.Emp01;
+import com.github.devcat24.mvc.svc.db.repo.fi.Item01Repo;
+import com.github.devcat24.mvc.svc.db.repo.hr.Emp01Repo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.LoggerFactory;

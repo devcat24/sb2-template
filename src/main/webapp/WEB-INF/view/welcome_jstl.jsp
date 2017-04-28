@@ -5,30 +5,49 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Dev Template</title>
-    </head>
-    <body>
-        <%= "Welcome!" %> <sub><%= "from /webapp/WEB-INF/view" %></sub>
-        <ul>
-            <li>Context Path: ${pageContext.request.contextPath}</li>
-            <li>Request URI: ${pageContext.request.requestURI}</li>
-            <li>HTTP Session: ${pageContext.request.getSession(true)}</li>
-            <li>Real Path: ${pageContext.request.getRealPath("/")}</li>
-        </ul>
-        <hr />
-        Language : <a href="wel?lang=en_US">English</a> | <a href="wel?lang=ko_KR">Korea</a>
-        <h3>
-            Message : <spring:message code="hello.test" text="default text" />
-        </h3>
-        Current Locale : ${pageContext.response.locale}
-        <br />
-        <hr />
-        <p>Click <a href="./welcome_member"> to a member greeting.</a></p>
-        <br />
-        <hr />
-        <sub>App version: ${applicationVersion}</sub>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Dev Template</title>
 
-    </body>
+    <script src="${pageContext.request.contextPath}/webjars/jquery/jquery.min.js"></script>
+    <script src="${pageContext.request.contextPath}/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.bootswatch.readable.css">
+    <script src="${pageContext.request.contextPath}/js/db_template.js"></script>
+
+
+</head>
+<body>
+<input type="hidden" id="ctxPath" name="ctxPath" value="${pageContext.request.contextPath}" />
+
+
+<div class="container">
+    <div class="bs-component">
+        <h3><%= "Welcome!" %> <sup><%= "from /webapp/WEB-INF/view" %></sup></h3>
+    </div>
+    <ul>
+        <li>Context Path: ${pageContext.request.contextPath}</li>
+        <li>Request URI: ${pageContext.request.requestURI}</li>
+        <li>HTTP Session: ${pageContext.request.getSession(true)}</li>
+        <li>Real Path: ${pageContext.request.getRealPath("/")}</li>
+    </ul>
+    <br />
+    Language : <a href="wel?lang=en_US">English</a> | <a href="wel?lang=ko_KR">Korea</a>
+    <h3>
+        Message : <spring:message code="hello.test" text="default text" />
+    </h3>
+    Current Locale : ${pageContext.response.locale}
+    <br />
+    <hr />
+    <%--<p>Click <a href="./welcome_member"> to a member greeting.</a></p>
+    <br />
+    <hr />--%>
+
+    <p><a href="./dbTemplate">1. Database JPA Template</a></p>
+
+
+    <hr />
+    <sub>App version: ${applicationVersion}</sub>
+</div>
+</body>
 </html>

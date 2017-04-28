@@ -32,10 +32,10 @@ import java.util.Properties;
         entityManagerFactoryRef = "fooEntityManagerFactory",
         transactionManagerRef = "fooTransactionManager",
         basePackages = {
-                            "com.github.devcat24.mvc.entity.hr" ,
-                            "com.github.devcat24.mvc.repo.hr",
-                            "com.github.devcat24.mvc.entity.mm",
-                            "com.github.devcat24.mvc.repo.mm"
+                            "com.github.devcat24.mvc.svc.db.entity.hr" ,
+                            "com.github.devcat24.mvc.svc.db.repo.hr",
+                            "com.github.devcat24.mvc.svc.db.entity.mm",
+                            "com.github.devcat24.mvc.svc.db.repo.mm"
                             // define for both Entity Objects and JpaRepository
                         }
         )
@@ -106,8 +106,8 @@ public class FooConfig {
         // case1. using JpaVendorAdapter
         //noinspection RedundantArrayCreation
         String [] scanPkg = new String[] {
-                "com.github.devcat24.mvc.entity.hr",
-                "com.github.devcat24.mvc.entity.mm"
+                "com.github.devcat24.mvc.svc.db.entity.hr",
+                "com.github.devcat24.mvc.svc.db.entity.mm"
         };
 
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();

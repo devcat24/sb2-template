@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
 
 public class GsonUtil {
     public static String toJsonString(Object obj){
-        String rtn = "";
+        String rtn = "{}";
         if(obj != null) {
             rtn = toJsonString("dd/MM/yyyy", obj);
         }

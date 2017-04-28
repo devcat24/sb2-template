@@ -55,11 +55,11 @@ public LocalContainerEntityManagerFactoryBean entityManagerFactory(
              jpql query cannot define 'result-class' attribute
          -->
         <query>
-            SELECT m FROM com.github.devcat24.mvc.entity.mm.Member m WHERE LOWER(m.name) LIKE LOWER(CONCAT('%', :nameString, '%')) ORDER BY m.id DESC
+            SELECT m FROM com.github.devcat24.mvc.svc.db.entity.mm.Member m WHERE LOWER(m.name) LIKE LOWER(CONCAT('%', :nameString, '%')) ORDER BY m.id DESC
         </query>
     </named-query>
 
-    <named-native-query name="Member.findAllMembersWithNativeSQLFile" result-class="com.github.devcat24.mvc.entity.mm.Member">
+    <named-native-query name="Member.findAllMembersWithNativeSQLFile" result-class="com.github.devcat24.mvc.svc.db.entity.mm.Member">
         <!-- name="Member.findAllMembersWithNativeSQLFile" -> name should be 'Entity' Object (not Repository) ! -->
         <query>
             select * from jpa_lab_member where name like LOWER(CONCAT('%', :nameString, '%'))
@@ -82,7 +82,7 @@ public interface MemberRepo extends JpaRepository<Member, Long> {
     List<Member> findAllMembersWithNativeSQLFile(@Param("nameString") String nameString);
 
     // passing parameter with parameter name using '@Param("***")'
-    @Query("SELECT m FROM com.github.devcat24.mvc.entity.mm.Member m WHERE m.id > :queryID")
+    @Query("SELECT m FROM com.github.devcat24.mvc.svc.db.entity.mm.Member m WHERE m.id > :queryID")
     List<Member> findAllMembersFromIdParam(@Param("queryID") Long startingID);
 
     // native query

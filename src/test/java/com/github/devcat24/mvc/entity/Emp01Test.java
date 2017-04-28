@@ -1,16 +1,5 @@
 package com.github.devcat24.mvc.entity;
 
-import com.github.devcat24.mvc.entity.fi.Item01;
-import com.github.devcat24.mvc.entity.hr.Emp01;
-import com.github.devcat24.mvc.repo.fi.Item01Repo;
-import com.github.devcat24.mvc.repo.hr.Emp01Repo;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.junit4.SpringRunner;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 /*

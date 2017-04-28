@@ -8,8 +8,8 @@ https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#projections
    ---------------------------------------------
     //  -> return object should be specified with 'AllArgsConstructor -> new XXX(...)'
     @Query("SELECT                                                                                                                                   " +
-            "    new com.github.devcat24.mvc.dto.mm.MemberDTO (m.id as id, m.name as name, m.city as city, m.street as street, m.zipcode as zipcode) " +
-            " FROM com.github.devcat24.mvc.entity.mm.Member m WHERE m.id > :queryID                                                                     ")
+            "    new com.github.devcat24.mvc.svc.db.dto.mm.MemberDTO (m.id as id, m.name as name, m.city as city, m.street as street, m.zipcode as zipcode) " +
+            " FROM com.github.devcat24.mvc.svc.db.entity.mm.Member m WHERE m.id > :queryID                                                                     ")
     List<MemberDTO> findAllMembersFromIdParamAsProjectionResult(@Param("queryID") Long startingID);
 
 
@@ -38,7 +38,7 @@ https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#projections
 		</named-native-query>
 
 		<sql-result-set-mapping name="MemberDTOMapping">
-			<constructor-result target-class="com.github.devcat24.mvc.dto.mm.MemberDTO">
+			<constructor-result target-class="com.github.devcat24.mvc.svc.db.dto.mm.MemberDTO">
 				<column name="member_id" class="java.lang.Long"/>
 				<column name="name" />
 				<column name="city" />

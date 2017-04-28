@@ -30,8 +30,8 @@ import java.util.Properties;
         entityManagerFactoryRef = "barEntityManagerFactory",
         transactionManagerRef = "barTransactionManager",
         basePackages = {
-                            "com.github.devcat24.mvc.entity.fi" ,
-                            "com.github.devcat24.mvc.repo.fi"
+                            "com.github.devcat24.mvc.svc.db.entity.fi" ,
+                            "com.github.devcat24.mvc.svc.db.repo.fi"
                             // define for both Entity Objects and JpaRepository
                         }
         )
@@ -79,7 +79,7 @@ public class BarConfig {
         emf.setDataSource(dataSource());
         //noinspection RedundantArrayCreation
         emf.setPackagesToScan(new String[] {
-                "com.github.devcat24.mvc.entity.fi"
+                "com.github.devcat24.mvc.svc.db.entity.fi"
         });
         // define only for the Entity Objects (-> LocalContainerEntityManagerFactoryBean)
 

@@ -3,6 +3,14 @@ target/
 
 .attach_pid*
 target/
+# logs/*
+
+
+### escaping security related information in application.properties ###
+# use -> 'run.sh / pkg.sh / escape_prop.sh' to generate password escaped 'application.properties'
+# src/main/resources/application.properties 
+# dev_conf/
+
 
 ### tmp log file ###
 logs/*

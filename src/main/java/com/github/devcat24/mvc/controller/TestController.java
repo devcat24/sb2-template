@@ -2,7 +2,14 @@ package com.github.devcat24.mvc.controller;
 
 import antlr.debug.MessageAdapter;
 import com.github.devcat24.config.prop.ApplicationVersion;
+import com.github.devcat24.mvc.svc.JPAService;
+import com.github.devcat24.mvc.svc.db.entity.mm.Member;
+import com.github.devcat24.util.json.GraphAdapterBuilder;
+import com.github.devcat24.util.json.GsonUtil;
+import com.github.devcat24.util.net.RestTemplateExample;
 import com.github.devcat24.util.regex.RegExpExample;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,14 +52,56 @@ public class TestController {
     //    this.messageSource = messageSource;
     // }
 
+    private JPAService jpaService;
+    @Autowired
+    void setJpaService(JPAService jpaService){
+        this.jpaService = jpaService;
+    }
 
-
+    private RestTemplateExample restTemplateExample;
+    @Autowired
+    void setRestTemplateExample(RestTemplateExample restTemplateExample){
+        this.restTemplateExample = restTemplateExample;
+    }
 
     @RequestMapping(value={"wel"})
     public String welcome(Model model) throws Exception {
         model.addAttribute("applicationVersion", ApplicationVersion.applicationVersion);
         return "welcome_jstl" ;
     }
+    @RequestMapping(value={"/dbTemplate"})
+    public String dbTemplate(Model model) throws Exception {
+        model.addAttribute("allMembers", jpaService.getAllMembers());
+        return "db_template" ;
+    }
+
+    @ResponseBody
+    @RequestMapping(value="/findMemberById", produces={"application/json;charset=UTF-8"})
+    public String findMemberById(Long id){
+        /*Member foundMember = jpaService.findMemberById(id);
+
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        new GraphAdapterBuilder().addType(Member.class).registerOn(gsonBuilder);
+        Gson gson = gsonBuilder.setPrettyPrinting().setDateFormat("dd/MM/yyyy").create();
+        return gson.toJson(foundMember);
+        */
+        return GsonUtil.toJsonString(jpaService.findMemberById(id));
+    }
+
+    @ResponseBody
+    @RequestMapping(value="/findAllMembersFrom", produces={"application/json;charset=UTF-8"})
+    public String findAllMembersFrom(Long id){
+        return GsonUtil.toJsonString(jpaService.findAllMembersFrom(id));
+    }
+
+
+
+
+
+
+
+
+
 
     @ResponseBody
     @RequestMapping(value="/msgSrc")
@@ -68,6 +117,12 @@ public class TestController {
         RegExpExample regExpExample = new RegExpExample();
         regExpExample.regExp01();
         return "ok !";
+    }
+
+    @ResponseBody
+    @RequestMapping(value="/restTemplateExamples")
+    public String restTemplateExample() throws Exception {
+        return restTemplateExample.getJsonPostExample01();
     }
 
 

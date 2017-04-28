@@ -193,14 +193,87 @@
 		</dependency>
 
 
+		<!--
+			spring mail can be compiled without exception even if following does not included pom.xml.
+		 	but, it makes runtime exception with smtp. When all source codes have no problem and smtp
+		 	server has issue -> it has exception like 'could not connect to SMTP host XXX' -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.subethamail</groupId>
+			<artifactId>subethasmtp</artifactId>
+			<version>3.1.7</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>webjars-locator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>bootstrap</artifactId>
+			<version>3.3.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>bootstrap-datepicker</artifactId>
+			<!--<version>1.5.0-1</version>-->
+			<version>1.6.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>jquery</artifactId>
+			<version>1.12.3</version>
+			<!-- jquery 2.x doesn't support ie 6/7/8 -->
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>momentjs</artifactId>
+			<version>2.12.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>typeaheadjs</artifactId>
+			<version>0.11.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>bootbox</artifactId>
+			<version>4.4.0</version>
+		</dependency>
+		<!--<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>handlebars</artifactId>
+			<version>4.0.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>font-awesome</artifactId>
+			<version>4.6.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars.npm</groupId>
+			<artifactId>chart.js</artifactId>
+			<version>2.2.1</version>
+		</dependency>-->
+
+
 
 	</dependencies>
 
 	<build>
+		<finalName>${project.artifactId}</finalName>
+		<!-- remove version from final jar name -->
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<executable>true</executable>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

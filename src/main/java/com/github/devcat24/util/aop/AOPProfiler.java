@@ -1,16 +1,10 @@
 package com.github.devcat24.util.aop;
 
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Before;
-import org.slf4j.LoggerFactory;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
-
-import java.util.Date;
 
 @Slf4j
 @Component
@@ -18,7 +12,7 @@ import java.util.Date;
 public class AOPProfiler {
     //private static final org.slf4j.Logger logger = LoggerFactory.getLogger(AOPProfiler.class);
 
-    //@Before("execution(* com.github.devcat24.mvc.repo.hr.Emp01Repo.*(..))")
+    //@Before("execution(* com.github.devcat24.mvc.svc.db.repo.hr.Emp01Repo.*(..))")
     //public void lookDatabaseAutoConfiguration(JoinPoint jointPoint) throws Throwable{
     //    String methodName = jointPoint.getSignature().getName();
     //    Object [] args = jointPoint.getArgs();
@@ -29,7 +23,7 @@ public class AOPProfiler {
     //    }
     //}
     //
-    //@After("execution(* com.github.devcat24.mvc.repo.hr.Emp01Repo.*(..))")
+    //@After("execution(* com.github.devcat24.mvc.svc.db.repo.hr.Emp01Repo.*(..))")
     //public void logAfter(JoinPoint jointPoint) throws Throwable{
     //    String methodName = jointPoint.getSignature().getName();
     //    logger.info("spring aop ] " + methodName+" <--: " + new Date());
@@ -37,7 +31,7 @@ public class AOPProfiler {
     //
     //}
 
-    @Around("execution(* com.github.devcat24.mvc.repo.hr.Emp01Repo.*(..))")
+    @Around("execution(* com.github.devcat24.mvc.svc.db.repo.hr.Emp01Repo.*(..))")
     public Object logJointPoint(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         String methodName = proceedingJoinPoint.getSignature().getName();
 
