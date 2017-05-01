@@ -31,7 +31,8 @@ public class AOPProfiler {
     //
     //}
 
-    @Around("execution(* com.github.devcat24.mvc.svc.db.repo.hr.Emp01Repo.*(..))")
+    //@Around("execution(* com.github.devcat24.mvc.svc.db.repo.hr.Emp01Repo.*(..))")
+    @Around("execution(* com.github.devcat24.mvc.svc.db.repo.mm.MemberRepo.*(..))")
     public Object logJointPoint(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         String methodName = proceedingJoinPoint.getSignature().getName();
 
