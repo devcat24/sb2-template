@@ -65,6 +65,7 @@
     </p>
     <p>5. File Archive : com.github.devcat24.util.archive.ArchiveUtils.*</p>
     <p>6. Send Mail : MailNotificationSvc.sendHtmlEmail()</p>
+    <p>7. Spring Actuator : <a href="http://localhost:8201/manage/TemplateSvc">com.github.devcat24.util.actuator.TemplateSvcEndpoint.*</a></p>
 
     <hr />
     <sub>App version: ${applicationVersion}</sub>
