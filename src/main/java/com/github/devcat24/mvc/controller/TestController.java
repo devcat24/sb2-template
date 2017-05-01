@@ -1,15 +1,11 @@
 package com.github.devcat24.mvc.controller;
 
-import antlr.debug.MessageAdapter;
 import com.github.devcat24.config.prop.ApplicationVersion;
 import com.github.devcat24.mvc.svc.JPAService;
-import com.github.devcat24.mvc.svc.db.entity.mm.Member;
-import com.github.devcat24.util.json.GraphAdapterBuilder;
 import com.github.devcat24.util.json.GsonUtil;
 import com.github.devcat24.util.net.RestTemplateExample;
+import com.github.devcat24.util.reflection.ReflectionSampleBean;
 import com.github.devcat24.util.regex.RegExpExample;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.Locale;
 
@@ -98,6 +98,37 @@ public class TestController {
 
 
 
+    @SuppressWarnings("unchecked")
+    @ResponseBody
+    @RequestMapping(value="/reflectionEx01")
+    public String reflectionEx01() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        ReflectionSampleBean rsBean = new ReflectionSampleBean();
+        Class rsBeanClass = rsBean.getClass();
+        //rsBeanClass.getName(); rsBeanClass.getPackage();
+
+        Field[] fields = rsBeanClass.getDeclaredFields();  // rsBeanClass.getFields();       =>  from inheritance
+
+        String [] fieldStringList = new String[fields.length];
+        for(int ins=0; ins < fields.length ; ins++) {
+        //for(Field field : fields){
+            fields[ins].setAccessible(true);
+
+            Annotation[] annotations = fields[ins].getAnnotations();
+            String [] annotationNames = new String[annotations.length];
+            for(int inx=0; inx < annotations.length ; inx ++) {
+                Class<? extends Annotation> type = annotations[inx].annotationType();
+                annotationNames[inx] = type.getName();
+            }
+            String annotationString = StringUtils.join(annotationNames, ", ");
+            fieldStringList[ins] = fields[ins].getName() + " [" + annotationString + "]";
+        }
+        //Method [] methods = rsBeanClass.getDeclaredMethods();  // rsBeanClass.getMethods();  =>  from inheritance
+        Method setAddrMethod = rsBeanClass.getDeclaredMethod("setAddress", String.class);
+        setAddrMethod.setAccessible(true);
+        setAddrMethod.invoke(rsBean,"New Address");
+
+        return StringUtils.join(fieldStringList, ", ");
+    }
 
 
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.devcat24.mvc.svc.db.dto.mm.RestEmp;
+import com.github.devcat24.mvc.svc.resttemplate.RestTemplateSvc;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -11,22 +12,39 @@ import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.Resource;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 
 @Slf4j
 @Controller("RESTSvcController")
 public class RESTSvcController {
-    @Autowired
+
     private ObjectMapper jacksonObjectMapper;
+    @Autowired
+    void setObjectMapper(ObjectMapper objectMapper){
+        this.jacksonObjectMapper = objectMapper;
+    }
+
+    private RestTemplateSvc restTemplateSvc;
+    @Autowired
+    void setRestTemplateSvc(RestTemplateSvc restTemplateSvc){
+        this.restTemplateSvc = restTemplateSvc;
+    }
 
     // -> http://www.baeldung.com/spring-httpmessageconverter-rest
     // -> https://www.mkyong.com/java/jaxb-hello-world-example/
@@ -59,7 +77,8 @@ public class RESTSvcController {
     //   -> curl 'http://localhost:8200/template/foos/resttemplate01'
     @RequestMapping(method=RequestMethod.GET, value="/rest/resttemplate01")
     @ResponseBody
-    public Object restTemplate01(){
+    public Object restTemplate01() throws Exception{
+        /*
         String url = "http://localhost:8200/template/rest/jsonHolder/emps";
         RestTemplate restTemplate = new RestTemplate();
         //return restTemplate.getForObject(url, RestEmp[].class);
@@ -68,8 +87,10 @@ public class RESTSvcController {
 
         // String rtn = restTemplate.getForObject(url, String.class);
         // -> retrieve response with parsing to Object
-
         return rtnList;
+        */
+
+        return restTemplateSvc.fetchAsObjFromRestAPI();
     }
 
     // 4. 'RestTemplate' with custom 'Jackson Message Converter'
