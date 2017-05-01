@@ -64,6 +64,8 @@
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
     </p>
     <p>5. File Archive : com.github.devcat24.util.archive.ArchiveUtils.*</p>
+    <p>6. Send Mail : MailNotificationSvc.sendHtmlEmail()</p>
+
     <hr />
     <sub>App version: ${applicationVersion}</sub>
 </div>
