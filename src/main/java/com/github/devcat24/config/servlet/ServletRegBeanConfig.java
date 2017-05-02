@@ -1,18 +1,29 @@
 package com.github.devcat24.config.servlet;
 
+import com.github.devcat24.config.security.TemplateSecurityFilter;
 import com.github.devcat24.servlet.BaseFilter;
 import com.github.devcat24.servlet.FooServlet;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
 public class ServletRegBeanConfig {
+
+    @Bean
+    public FilterRegistrationBean regTemplateSecurityFilter(){
+        FilterRegistrationBean filterBean = new FilterRegistrationBean();
+        filterBean.setFilter(new TemplateSecurityFilter());
+        filterBean.addUrlPatterns("/*");
+        filterBean.setName("TemplateSecurityFilter");
+        return filterBean;
+    }
+
+
    @Bean
     public ServletRegistrationBean foo(){
         ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean(new FooServlet(), "/foo");
@@ -43,7 +54,7 @@ public class ServletRegBeanConfig {
     /*@Bean
     public FilterRegistrationBean myFilterRegistrationBean(){
         FilterRegistrationBean filterBean = new FilterRegistrationBean();
-        filterBean.setFilter(new SecurityFilter());
+        filterBean.setFilter(new TemplateSecurityFilter());
         filterBean.addUrlPatterns("*//*");
         Map<String, String> params = new HashMap<>();
         params.put("param3", "value3");

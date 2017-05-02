@@ -31,28 +31,25 @@
 
 <div class="container">
     <div class="bs-component">
-        <h3>Dev Template</h3>
+        <h3><%= "Welcome!" %> <sup><%= "from /webapp/WEB-INF/view" %></sup></h3>
     </div>
+    <ul>
+        <li>Context Path: ${pageContext.request.contextPath}</li>
+        <li>Request URI: ${pageContext.request.requestURI}</li>
+        <li>HTTP Session: ${pageContext.request.getSession(true)}</li>
+        <li>Real Path: ${pageContext.request.getRealPath("/")}</li>
+    </ul>
+    <br />
+    Language : <a href="basicContents?lang=en_US">English</a> | <a href="basicContents?lang=ko_KR">Korea</a>
+    <h3>
+        Message : <spring:message code="hello.test" text="default text" />
+    </h3>
+    Current Locale : ${pageContext.response.locale}
+    <br />
     <hr />
-
-    <p><a href="./basicContents">1. Directory configuration & Resource bundle</a></p>
-    <p><a href="./dbTemplate">2. Database JPA Template</a></p>
-    <p>3. RestTemplate & Jackson processing
-        <i class="fa fa-chevron-left" aria-hidden="true"></i>
-            <a href="./rest/resttemplate01">#1</a>,
-            <a href="./rest/resttemplate02">#2</a>
-        <i class="fa fa-chevron-right" aria-hidden="true"></i></p>
-    <p>4. RestTemplate File download : RestTemplateSvc.downloadRemoteFile()</p>
-    <p>5. Reflection : <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        <a href="./reflectionEx01">TestController.reflectionEx01()</a>,
-        <a href="https://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/reflect/package-summary.html">Commons Lang <i class="fa fa-arrow-right" aria-hidden="true"></i> Reflect</a>
-        <i class="fa fa-chevron-right" aria-hidden="true"></i>
-    </p>
-    <p>6. File Archive : com.github.devcat24.util.archive.ArchiveUtils.*</p>
-    <p>7. Send Mail : MailNotificationSvc.sendHtmlEmail()</p>
-    <p>8. Spring Actuator : <a href="http://localhost:8201/manage/TemplateSvc">com.github.devcat24.util.actuator.TemplateSvcEndpoint.*</a></p>
-    <p>9. Security Filter & Development user simulation : TemplateSecurityFilter</p>
-
+    <%--<p>Click <a href="./welcome_member"> to a member greeting.</a></p>
+    <br />
+    <hr />--%>
     <hr />
     <sub>App version: ${applicationVersion}</sub>
 </div>
