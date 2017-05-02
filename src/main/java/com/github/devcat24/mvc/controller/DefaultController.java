@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,12 +26,21 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 @Slf4j
 @Controller("DefaultController")
 public class DefaultController {
     //private static final org.slf4j.Logger logger = LoggerFactory.getLogger(DefaultController.class);
+
+
+    @Value("${template.keep.alive.ping.interval}")
+    private Long keepAlivePing;
+
 
     // 1. Spring dependency injection - type 1: using field dependency injection
     //    > quite popular practice but, not recommended by Spring
@@ -59,8 +69,12 @@ public class DefaultController {
     @RequestMapping(value={"/"})
     public String welcome(HttpServletRequest req, HttpServletResponse res, Model model) throws Exception {
         model.addAttribute("applicationVersion", ApplicationVersion.applicationVersion);
+        model.addAttribute("keepAlivePing", keepAlivePing);
         return "welcome_jstl" ;
     }
+
+
+
 
     private JPAService jpaService;
     @Autowired
@@ -182,6 +196,29 @@ public class DefaultController {
             throw new NullPointerException("Now NullPointerException !!! (type4)");
         }
         return "ok";
+    }
+
+    /**
+     * Response ping (prvent session timeout)
+     */
+    @ResponseBody
+    @RequestMapping(value="/ping", produces = "application/json")
+    public String ping(HttpServletRequest request) {
+
+        Map<String, String> map = new HashMap<>();
+        map.put("status", "alive");
+        String now = (new SimpleDateFormat("yyyyMMdd HH:mm:ss")).format(new Date());
+        map.put("now", now);
+        try {
+            String ipAddr = request.getHeader("X-FORWARDED-FOR");
+            if (ipAddr == null) {
+                ipAddr = request.getRemoteAddr();
+            }
+            map.put("ip", ipAddr);
+        } catch (Exception e) {
+            //throw e;
+        }
+        return GsonUtil.toJsonString(map);
     }
 }
 

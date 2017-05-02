@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.bootswatch.readable.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/font-awesome/css/font-awesome.min.css">
-    <script src="${pageContext.request.contextPath}/js/db_template.js"></script>
+
 
     <style>
         a {
@@ -27,6 +27,7 @@
 </head>
 <body>
 <input type="hidden" id="ctxPath" name="ctxPath" value="${pageContext.request.contextPath}" />
+<input type="hidden" id="keepAlivePing" name="keepAlivePing" value="${keepAlivePing}" />
 
 
 <div class="container">
@@ -48,13 +49,19 @@
         <a href="https://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/reflect/package-summary.html">Commons Lang <i class="fa fa-arrow-right" aria-hidden="true"></i> Reflect</a>
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
     </p>
-    <p>6. File Archive : com.github.devcat24.util.archive.ArchiveUtils.*</p>
+    <p>6. File Archive : ArchiveUtils.*</p>
     <p>7. Send Mail : MailNotificationSvc.sendHtmlEmail()</p>
-    <p>8. Spring Actuator : <a href="http://localhost:8201/manage/TemplateSvc">com.github.devcat24.util.actuator.TemplateSvcEndpoint.*</a></p>
+    <p>8. Spring Actuator : <a href="http://localhost:8201/manage/TemplateSvc">TemplateSvcEndpoint.*</a></p>
     <p>9. Security Filter & Development user simulation : TemplateSecurityFilter</p>
+    <p>10. AES Password encryption/decription : AESUtil</p>
+    <p>11. Keep Alive ping using prevents session timeout : DefaultController.ping()</p>
 
     <hr />
     <sub>App version: ${applicationVersion}</sub>
 </div>
 </body>
 </html>
+
+
+<script src="${pageContext.request.contextPath}/js/welcome_jstl.js"></script>
+<script src="${pageContext.request.contextPath}/js/util_template.js"></script>
