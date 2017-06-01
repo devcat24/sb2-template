@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # target property list - place 'double back slash' (before '.') & (after '=')
 array=(
@@ -30,3 +30,4 @@ done
 
 cp ${working_dir}/${target_file} ./src/main/resources/${target_file}
 rm ${working_dir}/${tmp_file} ${working_dir}/${target_file}
+

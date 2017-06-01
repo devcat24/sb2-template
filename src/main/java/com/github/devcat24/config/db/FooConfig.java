@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -35,7 +34,8 @@ import java.util.Properties;
                             "com.github.devcat24.mvc.svc.db.entity.hr" ,
                             "com.github.devcat24.mvc.svc.db.repo.hr",
                             "com.github.devcat24.mvc.svc.db.entity.mm",
-                            "com.github.devcat24.mvc.svc.db.repo.mm"
+                            "com.github.devcat24.mvc.svc.db.repo.mm",
+                            "com.github.devcat24.util.monitoring"
                             // define for both Entity Objects and JpaRepository
                         }
         )
@@ -92,6 +92,7 @@ public class FooConfig {
     }*/
 
 
+    @SuppressWarnings("unused")
     @Primary
     // '@Primary' annotation should declared only once in a project
     @Bean(name = "fooEntityManagerFactory")
@@ -104,10 +105,10 @@ public class FooConfig {
 
 
         // case1. using JpaVendorAdapter
-        //noinspection RedundantArrayCreation
         String [] scanPkg = new String[] {
                 "com.github.devcat24.mvc.svc.db.entity.hr",
-                "com.github.devcat24.mvc.svc.db.entity.mm"
+                "com.github.devcat24.mvc.svc.db.entity.mm",
+                "com.github.devcat24.util.monitoring"
         };
 
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();

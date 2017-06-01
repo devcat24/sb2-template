@@ -36,8 +36,8 @@
     </div>
     <hr />
 
-    <p><a href="./basicContents">1. Directory configuration & Resource bundle</a></p>
-    <p><a href="./dbTemplate">2. Database JPA Template</a></p>
+    <p>1. <a href="./basicContents">Directory configuration & Resource bundle</a></p>
+    <p>2. <a href="./dbTemplate">Database JPA</a></p>
     <p>3. RestTemplate & Jackson processing
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
             <a href="./rest/resttemplate01">#1</a>,
@@ -56,6 +56,8 @@
     <p>10. AES Password encryption/decription : AESUtil</p>
     <p>11. Keep Alive ping using prevents session timeout : DefaultController.ping()</p>
 
+    <br />
+    <p>12. src/main/resources/Readme/*.txt</p>
     <hr />
     <sub>App version: ${applicationVersion}</sub>
 </div>
