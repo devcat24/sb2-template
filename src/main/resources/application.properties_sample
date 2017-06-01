@@ -67,14 +67,14 @@ template.keep.alive.ping.interval=3000
 # foo.datasource.url=jdbc:log4jdbc:h2:mem:testdb1;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
 #   -> using log4jdbc
 
-#foo.datasource.url=jdbc:h2:mem:devtest2;DB_CLOSE_ON_EXIT=FALSE
-#foo.datasource.driverClassName=org.h2.Driver
-#foo.datasource.username=sa
-#foo.datasource.password=
-foo.datasource.url=jdbc:mysql://localhost:3306/mvc01
-foo.datasource.driverClassName=com.mysql.jdbc.Driver
-foo.datasource.username=root
-foo.datasource.password=mysql
+foo.datasource.url=jdbc:h2:mem:devtest2;DB_CLOSE_ON_EXIT=FALSE
+foo.datasource.driverClassName=org.h2.Driver
+foo.datasource.username=sa
+foo.datasource.password=
+#foo.datasource.url=jdbc:mysql://localhost:3306/mvc01
+#foo.datasource.driverClassName=com.mysql.jdbc.Driver
+#foo.datasource.username=root
+#foo.datasource.password=mysql
 
 foo.datasource.maxActive=30
 foo.datasource.maxIdle=10
@@ -91,8 +91,8 @@ foo.datasource.maxAge=10800000
 # -> Milliseconds to keep connection, if connection exceeds maxAge, it will be destroyed and be recreated (Default 0)
 # Tomcat connection pool properties --> https://tomcat.apache.org/tomcat-8.0-doc/jdbc-pool.html
 
-#foo.datasource.jpa.hibernate.dialect=org.hibernate.dialect.H2Dialect
-foo.datasource.jpa.hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
+foo.datasource.jpa.hibernate.dialect=org.hibernate.dialect.H2Dialect
+#foo.datasource.jpa.hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
 foo.datasource.jpa.hibernate.ddl-auto=create-drop
 # Never use 'create-drop' or 'create'! Even 'create' will also drop table, if it exists on startup!
 # -> Use 'validate' !
