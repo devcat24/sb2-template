@@ -89,7 +89,6 @@ public class RESTSvcController {
         // -> retrieve response with parsing to Object
         return rtnList;
         */
-
         return restTemplateSvc.fetchAsObjFromRestAPI();
     }
 
