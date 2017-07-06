@@ -122,6 +122,7 @@ public class FooConfig {
 
         Properties prop = new Properties();
         prop.setProperty("hibernate.dialect", hibernateDialect);
+        // prop.setProperty("hibernate.hbm2ddl.auto", "validate");   // <- can reduce operational mistake !
         prop.setProperty("hibernate.hbm2ddl.auto", hibernateHbm2ddlAuto);
         prop.setProperty("hibernate.show_sql", hibernateShowSQL);
         prop.setProperty("hibernate.format_sql", formatSQL);
