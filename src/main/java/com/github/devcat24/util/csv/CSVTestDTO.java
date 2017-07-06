@@ -1,5 +1,6 @@
 package com.github.devcat24.util.csv;
 
+import com.opencsv.bean.CsvBindByPosition;
 import lombok.*;
 import java.io.Serializable;
 
@@ -11,12 +12,15 @@ import java.io.Serializable;
 @Builder
 public class CSVTestDTO implements Serializable {
 
+    @CsvBindByPosition(position = 0)
     @Setter @Getter
     Long id;
 
+    @CsvBindByPosition(position = 1)
     @Setter @Getter
     String name;
 
+    @CsvBindByPosition(position = 2)
     @Setter @Getter
     String order;
 }
