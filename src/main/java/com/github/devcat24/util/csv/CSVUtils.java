@@ -4,17 +4,20 @@ package com.github.devcat24.util.csv;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import com.github.devcat24.util.annotation.AnnotationTestBean;
 import com.opencsv.CSVWriter;
-import com.opencsv.bean.ColumnPositionMappingStrategy;
-import com.opencsv.bean.CsvToBean;
-import com.opencsv.bean.StatefulBeanToCsv;
-import com.opencsv.bean.StatefulBeanToCsvBuilder;
+import com.opencsv.bean.*;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
+import org.apache.commons.lang3.reflect.TypeUtils;
 
 import java.io.*;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
@@ -71,6 +74,26 @@ public class CSVUtils {
         CSVWriter csvWriter = null;
 
         try {
+            // working using annotation ...
+            //    -> even though, annotation could be extracted from 'List<T> objects'
+            //       but, if 'List<T> objects' is empty, this approach could make problem
+            //         => just use 'passing headers by parameter' logic
+            /*if(objects != null && objects.size() > 0){
+                Field [] fields = FieldUtils.getAllFields(objects.iterator().next().getClass());
+                for(Field field : fields) {
+                    System.out.println("Field Name: " + field.getName());
+
+                    // Annotation[] annotations = field.getDeclaredAnnotations();
+                    // for(Annotation annotation : annotations) {
+                    //    System.out.println("   > " + annotation.toString());
+                    //}
+                    CsvBindByPosition csvBindByPosition = field.getAnnotation(CsvBindByPosition.class);
+                    if(csvBindByPosition != null){
+                        System.out.println(field.getName() + ": @CsvBindByPosition(position - " + csvBindByPosition.position() + ")");
+                    }
+                }
+            }*/
+
             if(headerLists != null && headerLists.size() > 0) {
                 String[] headers = headerLists.toArray(new String[headerLists.size()]);
                 csvWriter = new CSVWriter(writer, csvSeparator, csvQuoteChar, csvEscapeChar);

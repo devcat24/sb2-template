@@ -153,6 +153,26 @@ public class DefaultController {
         setAddrMethod.invoke(rsBean,"New Address");
 
         return StringUtils.join(fieldStringList, ", ");
+
+
+        // --> Reflection with generic type argument
+        //
+        // public <T> String getAnnotationValueFromGenericList(List<T> objects) {
+        // 	working using annotation ...
+        // 	   -> even though, annotation could be extracted from 'List<T> objects'
+        // 	      but, if 'List<T> objects' is empty, this approach could make problem
+        // 	        => just use 'passing headers by parameter' logic
+        // 	if(objects != null && objects.size() > 0){
+        // 		Field [] fields = FieldUtils.getAllFields(objects.iterator().next().getClass());
+        // 		for(Field field : fields) {
+        // 			CsvBindByPosition csvBindByPosition = field.getAnnotation(CsvBindByPosition.class);
+        // 			if(csvBindByPosition != null){
+        // 				System.out.println(field.getName() + ": @CsvBindByPosition(position - " + csvBindByPosition.position() + ")");
+        // 			}
+        // 		}
+        // 	}
+        // 	return "ok";
+        // }
     }
 
 
