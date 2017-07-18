@@ -71,5 +71,15 @@ public class RestTemplateExampleTest {
         )).thenReturn(res);*/
 
 
+        /* // Sample for 'Mockito ~ when '
+
+        List<SampleObj> anyObj = any();
+        Long objId = anyLong();
+        when(localDBManager.storeObjects(anyObj, objId)).thenThrow(new Exception("Exception Test on Object store"));
+           // -> when method returns something ...
+        Mockito.doThrow(new Exception("Exception Test on Object store")).when(localDBManager).storeObjects(anyList(), anyLong());
+           // void type -> Mockito.doThrow() / Mockito.doAnswer() / Mockito.doNothing() / Mockito.doReturn()
+        */
+
     }
 }
