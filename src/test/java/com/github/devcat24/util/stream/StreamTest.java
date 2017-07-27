@@ -28,6 +28,11 @@ public class StreamTest {
         sample02.streamSample02();
     }
 
+    @Test
+    public void streamSample02aTest() throws Exception {
+        StreamSample02 streamSample02 = new StreamSample02();
+        streamSample02.steamSample02a();
+    }
 
 
 }
