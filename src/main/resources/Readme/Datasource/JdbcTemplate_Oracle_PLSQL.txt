@@ -1,0 +1,77 @@
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
+
+import javax.sql.DataSource;
+import java.sql.*;
+import java.util.List;
+
+@Repository("SPTest01DAO")
+public class SPTest01DAO {
+    private JdbcTemplate jdbcTemplate ;
+    @Autowired
+    void setDataSource(@Qualifier("myDataSource") DataSource dataSource){
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
+    }
+
+    public String getCamProc01() throws SQLException {
+        Connection conn = jdbcTemplate.getDataSource().getConnection();
+
+        String spString =
+			" DECLARE                                                  	  " +
+			" 	p_person test_type_01.test_type_person_01;        		  " +
+			" 	p_etc VARCHAR2(100);                                      " +
+			" 	p_rtn VARCHAR2(300);                                      " +
+			" BEGIN                                                       " +
+			" 	p_person.name := ?;                                       " +
+			" 	p_person.age := ?;                                        " +
+			" 	p_person.contact.email := ?;                              " +
+			" 	p_person.contact.created := sysdate;                      " +
+			" 	p_etc := ?;                                               " +
+			" 	test_pkg_01.test_procedure_01(p_person, p_etc);   		  " +
+			" 	? := p_person.name ;                                      " +
+			" 	? := p_person.contact.email ;                             " +
+			" END;                                                     	  " ;
+
+
+        CallableStatement cStatement = conn.prepareCall(spString);
+        cStatement.setString(1, "john");
+        cStatement.setInt(2, 20);
+        cStatement.setString(3, "john@waikato.ac.nz");
+        cStatement.setString(4, "_old");
+        cStatement.registerOutParameter(5, Types.VARCHAR);
+        cStatement.registerOutParameter(6, Types.VARCHAR);
+
+        cStatement.execute();
+
+        System.out.println("Name: " + cStatement.getObject(5) + ", Email: " + cStatement.getObject(6));
+
+        return "ok";
+    }
+
+    public List<SPTestTb01> getAllRows(Integer id){
+        Object[] paramList = null;
+        if (id > 0) {
+            paramList = new Object[]{id};
+        }
+        String queryString = "select name, age, email, created from SP_TEST_TB_01 ";
+
+        List<SPTestTb01> rtnList = jdbcTemplate.query(queryString, paramList,
+                new RowMapper<SPTestTb01>(){
+                    public SPTestTb01 mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        return CamSPTestTb01.builder()
+                                .name(rs.getString("name"))
+                                .age(rs.getInt("age"))
+                                .email(rs.getString("email"))
+                                .created(rs.getDate("created"))
+                                .build();
+                    }
+                });
+        return rtnList;
+    }
+
+}
+
+
