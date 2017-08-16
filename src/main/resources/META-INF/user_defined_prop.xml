@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sql-mapper>
+
+    <sql id="getUserDefinedSQL01">
+        <query-string>
+            <![CDATA[
+                select name, age, email, created from CAM_SP_TEST_TB_01 WHERE age < 99
+            ]]>
+        </query-string>
+    </sql>
+    <sql id="getUserDefinedSQL02">
+        <query-string>
+            <![CDATA[
+                DECLARE
+                p_person cam_test_type_01.cam_test_type_person_01;
+                p_etc VARCHAR2(100);
+                p_rtn VARCHAR2(300);
+                BEGIN
+                p_person.name := ?;
+                p_person.age := ?;
+                p_person.contact.email := ?;
+                p_person.contact.created := sysdate;
+                p_etc := ?;
+                cam_test_pkg_01.cam_test_procedure_01(p_person, p_etc);
+                ? := p_person.name ;
+                ? := p_person.contact.email ;
+                END;
+            ]]>
+        </query-string>
+        <!--
+        <params>
+            <param>
+                <param-order>1</param-order>
+                <param-type>IN</param-type>
+                <data-type>String</data-type>
+            </param>
+        </params>
+        -->
+    </sql>
+
+
+</sql-mapper>
