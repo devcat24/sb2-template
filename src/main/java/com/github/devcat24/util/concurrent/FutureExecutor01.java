@@ -3,10 +3,7 @@ package com.github.devcat24.util.concurrent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 public class FutureExecutor01 {
     private int loopCount = 10;
@@ -19,6 +16,10 @@ public class FutureExecutor01 {
         for(int ins=0 ; ins < loopCount; ins++) {
             if(ins % 2 != 0) {
                 Future<Integer> future = executor.submit(new Callable01(prevInt, ins));
+                //Future<Integer> future = executor.submit(() -> {
+                //    Thread.sleep(10);
+                //    return 0;
+                //});
                 list.add(future);
             }
             prevInt = ins;
@@ -28,7 +29,9 @@ public class FutureExecutor01 {
         for (Future<Integer> fut : list) {
             try {
                 sum = sum + fut.get();
+                //sum = sum + fut.get(10, TimeUnit.SECONDS);
             } catch (InterruptedException | ExecutionException e) {
+            //} catch (InterruptedException | ExecutionException | TimeoutException e) {
                 e.printStackTrace();
             }
         }
