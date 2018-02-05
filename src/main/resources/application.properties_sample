@@ -9,6 +9,14 @@ server.context-path=/template
 ########### Servlet Container Configuration #############
 
 
+################## ActiveMQ Configuration ####################
+#spring.activemq.broker-url=vm://localhost
+spring.activemq.broker-url=tcp://localhost:51515
+spring.activemq.user=admin
+spring.activemq.password=admin
+################## ActiveMQ Configuration ####################
+
+
 
 ########### Spring Actuator Management Connection #############
 management.port=8201

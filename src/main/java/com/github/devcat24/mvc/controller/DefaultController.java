@@ -8,16 +8,17 @@ import com.github.devcat24.util.reflection.ReflectionSampleBean;
 import com.github.devcat24.util.regex.RegExpExample;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServlet;
+//import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -36,6 +37,10 @@ import java.util.Map;
 @Controller("DefaultController")
 public class DefaultController {
     //private static final org.slf4j.Logger logger = LoggerFactory.getLogger(DefaultController.class);
+
+    private JmsTemplate jmsTemplate;
+    @Autowired
+    public void setJmsTemplate(JmsTemplate jmsTemplate) { this.jmsTemplate = jmsTemplate; }
 
 
     @Value("${template.keep.alive.ping.interval}")
@@ -67,7 +72,7 @@ public class DefaultController {
     // }
 
     @RequestMapping(value={"/"})
-    public String welcome(HttpServletRequest req, HttpServletResponse res, Model model) throws Exception {
+    public String welcome(@SuppressWarnings("unused") HttpServletRequest req, HttpServletResponse res, Model model) throws Exception {
         model.addAttribute("applicationVersion", ApplicationVersion.applicationVersion);
         model.addAttribute("keepAlivePing", keepAlivePing);
         return "welcome_jstl" ;
@@ -88,6 +93,7 @@ public class DefaultController {
         this.restTemplateExample = restTemplateExample;
     }
 
+    @SuppressWarnings("RedundantThrows")
     @RequestMapping(value={"/basicContents"})
     public String welcome(Model model) throws Exception {
         model.addAttribute("applicationVersion", ApplicationVersion.applicationVersion);
@@ -239,6 +245,17 @@ public class DefaultController {
             //throw e;
         }
         return GsonUtil.toJsonString(map);
+    }
+
+    @ResponseBody
+    @RequestMapping(value="/sendAmqQueue01")
+    public String sendAmqQueue01() throws Exception {
+        String qName = "amq.exam.queue01";
+        //jmsTemplate.setPubSubDomain(true);  // -> publish as topic
+        jmsTemplate.convertAndSend("amq.exam.queue01", "New Message !");
+
+
+        return "sent!";
     }
 }
 
