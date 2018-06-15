@@ -21,6 +21,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -54,6 +55,7 @@ public class RESTSvcController {
     //    -> curl 'http://localhost:8200/template/foos/3'
     @RequestMapping(method=RequestMethod.GET, value="/rest/{id}")
     @ResponseBody
+    // @ApiIgnore   // exclude from Swagger API exposure
     public RestEmp getFooEmp01(@PathVariable long id){
         String names [] = {"JohnDoe", "JaneSmith", "PaulButton"};
         RestEmp emp = RestEmp.builder().id(id).name(names[(int) id % 3]).build();
