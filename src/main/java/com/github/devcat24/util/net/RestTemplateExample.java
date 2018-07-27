@@ -34,6 +34,23 @@ RestTemplate restTemplate;*/
 
         mockInvokeTest();
         return  res.getBody().toString();
+
+
+        // --- Basic Authentication & Post ---
+        //
+        // String url = "http://130.217.105.27:8161/api/jolokia";
+        // RestTemplate restTemplate = new RestTemplate();
+        //
+        // HttpHeaders headers = new HttpHeaders();
+        // headers.setContentType(MediaType.APPLICATION_JSON);
+        // headers.add("Authorization", "Basic YWRtaW46YWRtaW4=");
+        //
+        // String requestJson  = "{\"type\":\"read\",\"mbean\":\"org.apache.activemq:type=Broker,brokerName=*\"}";
+        // HttpEntity<String> request = new HttpEntity<>(requestJson, headers);
+        //
+        // ResponseEntity<String> res = restTemplate.exchange(url, HttpMethod.POST, request, String.class );
+        // String brokerInfo = res.getBody().toString();
+
     }
 
 
