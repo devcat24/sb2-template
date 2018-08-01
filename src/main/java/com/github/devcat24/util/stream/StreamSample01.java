@@ -162,6 +162,9 @@ public class StreamSample01 {
         streamSupplier.get().noneMatch(s -> true);  // ok
 
 
+        // Thread.getAllStackTraces().keySet().stream().filter( th -> String.valueOf(1000L).equals("****")).findAny()
+
+
     }
     public void streamSample02() {
         List<StreamDTO> dtoList = Arrays.asList(
