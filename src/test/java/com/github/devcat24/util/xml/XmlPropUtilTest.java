@@ -1,7 +1,5 @@
 package com.github.devcat24.util.xml;
 
-import com.github.devcat24.util.stream.StreamSample01;
-import com.github.devcat24.util.stream.StreamSample02;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
