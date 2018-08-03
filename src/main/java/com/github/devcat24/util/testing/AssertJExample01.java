@@ -1,9 +1,8 @@
 package com.github.devcat24.util.testing;
 
-import lombok.Builder;
-import lombok.Data;
 
-import java.util.ArrayList;
+import com.github.devcat24.util.stream.Article;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -49,32 +48,32 @@ public class AssertJExample01 {
         Throwable thrown = catchThrowable(() -> { throw new Exception("boom!"); });
         assertThat(thrown).hasMessageContaining("boom");
 
-
-        List<StreamArticle> articles = new ArrayList<>();
-        //noinspection RedundantArrayCreation
-        articles.add(StreamArticle.builder().author("Maria Hawking").title("Cloud Architecture").tags(Arrays.asList(new String[]{"cloud", "architecture", "infrastructure"})).build());
-        articles.add(StreamArticle.builder().author("John Doe").title("Java Stream API").tags(Arrays.asList("java", "programming", "web")).build());
-        articles.add(StreamArticle.builder().author("Jane Smith").title("Java Microservices").tags(Arrays.asList("microservice", "java", "cloud")).build());
-        articles.add(StreamArticle.builder().author("Max Newton").title("REST Security").tags(Arrays.asList("microservice", "java", "security")).build());
+        Article a01 = Article.builder().author("Maria Hawking").title("Cloud Architecture").tags(Arrays.asList(new String[]{"cloud", "architecture", "infrastructure"})).build();
+        Article a02 = Article.builder().author("John Doe").title("Java Stream API").tags(Arrays.asList("java", "programming", "web")).build();
+        Article a03 = Article.builder().author("Jane Smith").title("Java Microservices").tags(Arrays.asList("microservice", "java", "cloud")).build();
+        Article a04 = Article.builder().author("Max Newton").title("REST Security").tags(Arrays.asList("microservice", "java", "security")).build();
 
         // ... or in Java 8
-        StreamArticle article01 = StreamArticle.builder().author("John Doe").title("Java Stream API").tags(Arrays.asList("java", "programming", "web")).build();
-        StreamArticle article02 = StreamArticle.builder().author("Jane Smith").title("Java Microservices").tags(Arrays.asList("microservice", "java", "cloud")).build();
-        //StreamArticle article02 = StreamArticle.builder().author("Jane Smith").title("Java Microservices002").tags(Arrays.asList("microservice", "java", "cloud")).build();
-        assertThat(articles).filteredOn(a -> a.getTitle().contains("Java"))
-                .containsOnly(article01, article02);
+        Article a05 = Article.builder().author("Steven Button").title("Java Stream API").tags(Arrays.asList("java", "programming", "web")).build();
+        Article a06 = Article.builder().author("James Bond").title("Java Microservices").tags(Arrays.asList("microservice", "java", "cloud")).build();
+        //Article a06 = Article.builder().author("Jane Smith").title("Java Microservices002").tags(Arrays.asList("microservice", "java", "cloud")).build();
+
+
+        List<Article> articles = Arrays.asList(a01, a02, a03, a04, a05, a06);
+        assertThat(articles).filteredOn(a -> a.getTitle().contains("Java")).containsOnly(a02, a03, a05, a06);
 
         // combining filtering and extraction
         //noinspection Convert2MethodRef
-        assertThat(articles).filteredOn(a -> a.getTitle().contains("Java"))
-                .containsOnly(article01, article02)
+        assertThat(articles).filteredOn(a -> a.getTitle()
+                .contains("Java"))
+                .containsOnly(a02, a03, a05, a06)
                 .extracting(a -> a.getAuthor())
                 .doesNotContain("Max Newton")
                 .contains("John Doe", "Jane Smith");
 
         // works on Java 7
         assertThat(articles).filteredOn("author", "John Doe")
-                .containsOnly(article01);
+                .containsOnly(a02);
         assertThat(articles)
                 .extracting("author")
                 .contains("John Doe", "Jane Smith");
@@ -83,14 +82,7 @@ public class AssertJExample01 {
                 .extracting("author", "title")
                 //.contains( tuple("John Doe", "Java Stream API") );
                 .contains(  tuple("John Doe", "Java Stream API"),
-                            tuple("Jane Smith", "Java Microservices"));
-
+                        tuple("Jane Smith", "Java Microservices"));
     }
 }
 
-@Data @Builder
-class StreamArticle {
-    private String title;
-    private String author;
-    private List<String> tags;
-}
