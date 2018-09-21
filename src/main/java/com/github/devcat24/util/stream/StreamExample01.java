@@ -58,10 +58,12 @@ public class StreamExample01 {
                 .orElse("No where");
         assertThat("No where").isEqualToIgnoringCase(rtnObj.toString());
 
+        // "Pet", "Book", "Sport", "Health", "IT", "Finance", "Environment", "Person"
         user03.getInterest().stream()
                 .findFirst()
                 .ifPresent(String::toUpperCase);
         //.ifPresent(System.out::println);
+        //.ifPresent( r -> System.out.println(r.toUpperCase()) );
 
         rtnObj = user03.getInterest().stream()
                 .filter( s -> s.startsWith("Pe"))

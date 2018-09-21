@@ -3,6 +3,7 @@ package com.github.devcat24.util.json;
 import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -123,6 +124,42 @@ public class JacksonExample01 {
         JsonNode newChild01a = objMapper.readTree("\"streaming\"");
         ((ObjectNode) jsonObj.at("/group1/0/item")).replace("media", newChild01a);
         System.out.println("--- update JsonObject with Jackson-Object Node - original json is also replace #4 :  " +jsonObj.toString());
+
+
+        //JsonNode newChild02a = objMapper.readTree("{\"online\": \"streaming\"}");
+        //JsonNode newChild02a = objMapper.readTree("\"streaming\"");
+        JsonNode newChild02a = objMapper.readTree("12345");
+        ((ObjectNode) jsonObj.at("/group1/0/item")).replace("chapter", newChild02a);
+        System.out.println("--- update JsonObject with Jackson-Object Node - original json is also replace #5 :  " +jsonObj.toString());
+
+        // 3-1. updated for data types : modifying Json Data using Jackson (ObjectNode)
+        Object newValue = "{\"online\": \"streaming\"}";
+        if(newValue != null) {
+            if (newValue.getClass().getName().equals("java.lang.String")) {
+                try {
+                    // 3-1-1. when new value is json-type string
+                    //        -> new value is recognised automatically & does not auto escape double quote -> "chapter":{"online":"streaming"}}
+                    JsonNode newValJsonObj = objMapper.readTree(newValue.toString());
+                    ((ObjectNode) jsonObj.at("/group1/0/item")).remove("chapter");
+                    ((ObjectNode) jsonObj.at("/group1/0/item")).set("chapter", newValJsonObj);
+                } catch (JsonParseException jpe) {
+                    // 3-1-1. when new value is plain string
+                    ((ObjectNode) jsonObj.at("/group1/0/item")).remove("chapter");
+                    ((ObjectNode) jsonObj.at("/group1/0/item")).put("chapter", newValue.toString());
+                }
+            }   else {
+                // 3-1-2. when new value is number or boolean
+                JsonNode newValJsonObj = objMapper.readTree(newValue.toString());
+                ((ObjectNode) jsonObj.at("/group1/0/item")).remove("chapter");
+                ((ObjectNode) jsonObj.at("/group1/0/item")).set("chapter", newValJsonObj);
+            }
+        }   else {
+            // 3-1-3. when new value is null
+            ((ObjectNode) jsonObj.at("/group1/0/item")).replace("chapter", null);
+        }
+        System.out.println("--- update JsonObject with Jackson-Object Node - original json is also replace #6 :  " + jsonObj.toString());
+
+
 
 
         // 4. Json Stream API : creating Json Object with Stream
