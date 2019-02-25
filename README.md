@@ -1,1 +1,1 @@
-# dev-template
+# sb2-template

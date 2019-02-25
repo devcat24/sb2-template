@@ -1,0 +1,40 @@
+0. Concept
+    http://localhost:9000          --->       http://localhost:8080/cors_call
+    ---------------------                     -------------------------------
+    invoke external resource                  Add annotation here
+
+
+1. Allow from Spring controller method layer
+    @Controller
+    public class WebMVCController {
+
+        @CrossOrigin(origins="http://localhost:9000")
+        // This method can be invoked from "http://localhost:9000" as the exception of SOP(Single-Origin Policy)
+        @RequestMapping("/cors_call")
+        public String userKey(@RequestParam(required=false, defaultValue="10000A") String userName) {
+            return userName.substring(0, 1) + "00001";
+        }
+
+2. Allow from global config class
+    import org.springframework.context.annotation.Configuration;
+    import org.springframework.web.servlet.config.annotation.CorsRegistry;
+    import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+    import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+    @Configuration
+    public class WebMvcConfig implements WebMvcConfigurer {
+        ...
+        // Add exception to 'SOP(Single-Origin Policy)'
+        @Override
+        public void addCorsMappings(CorsRegistry registry) {
+            // The uri '/allow-to-9000' can be invoked from "http://localhost:9000" as the exception of SOP(Single-Origin Policy)
+            registry.addMapping("/allow-to-9000").allowedOrigins("http://localhost:9000");
+            // Any requests from "http://localhost:9000" can be invoked as the exception of SOP(Single-Origin Policy)
+            registry.addMapping("/**").allowedOrigins("http://localhost:18080");
+        }
+        ...
+    }
+
+
+
+

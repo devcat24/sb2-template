@@ -1,0 +1,160 @@
+*. Swagger & '@RepositoryRestResource'  -> shows random '404 page not found' issue
+
+
+1. Maven dependencies
+    <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-swagger2</artifactId>
+        <version>2.9.2</version>
+        <!-- swagger 2.9.x bug fix
+               : https://github.com/springfox/springfox/issues/2265
+        -->
+        <exclusions>
+            <exclusion>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-models</artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency>
+    <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-swagger-ui</artifactId>
+        <version>2.9.2</version>
+    </dependency>
+    <dependency>
+        <groupId>io.swagger</groupId>
+        <artifactId>swagger-annotations</artifactId>
+        <version>1.5.21</version>
+    </dependency>
+    <dependency>
+        <groupId>io.swagger</groupId>
+        <artifactId>swagger-models</artifactId>
+        <version>1.5.21</version>
+    </dependency>
+    <!--<dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-data-rest</artifactId>
+        <version>2.9.2</version>
+    </dependency>-->
+
+
+2. Swagger Config class
+    import org.springframework.context.annotation.Bean;
+    import org.springframework.context.annotation.Configuration;
+    import springfox.documentation.builders.ApiInfoBuilder;
+    import springfox.documentation.builders.PathSelectors;
+    import springfox.documentation.builders.RequestHandlerSelectors;
+    import springfox.documentation.service.ApiInfo;
+    import springfox.documentation.service.Contact;
+    import springfox.documentation.spi.DocumentationType;
+    import springfox.documentation.spring.web.plugins.Docket;
+    import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+    @Configuration
+    @EnableSwagger2  // filtering API from exposure
+    public class SwaggerConfig {
+        @Bean
+        public Docket api() {
+            return new Docket(DocumentationType.SWAGGER_2)
+                        .select()
+                        .apis(RequestHandlerSelectors.basePackage("com.github.devcat24.mvc.controller"))
+                        // .apis(RequestHandlerSelectors.any())  // use '@ApiIgnore' to exclude specific method from exposure
+                        .paths(PathSelectors.ant("/api/v1/**"))
+                        // .paths(PathSelectors.regex("/.*"))
+                        // .paths(PathSelectors.any())
+                        .build()
+                        .apiInfo(apiInfo());
+        }
+
+        private ApiInfo apiInfo(){
+
+            return new ApiInfoBuilder()
+                    .title("Dev Template REST sample with Swagger")
+                    .description("REST API with Swagger")
+                    .termsOfServiceUrl("http://www-03.ibm.com/software/sla/sladb.nsf/sla/bm?Open")
+                    .contact(new Contact("DevCat24", "devcat24@gmail.com", "devcat24.github.com"))
+                    //.contact("devcat24@gmail.com")
+                    .license("Apache License Version 2.0")
+                    .licenseUrl("https://github.com/IBM-Bluemix/news-aggregator/blob/master/LICENSE")
+                    .version("2.0")
+                    .build();
+        }
+    }
+
+
+3. AddResourceHandlers to 'WebMvcConfigurer' implementing class
+    import org.springframework.context.annotation.Configuration;
+    import org.springframework.web.servlet.config.annotation.CorsRegistry;
+    import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+    import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+    @Configuration
+    public class WebMvcConfig implements WebMvcConfigurer {
+            ...
+        @Override
+        public void addResourceHandlers(ResourceHandlerRegistry registry) {
+            registry.addResourceHandler("swagger-ui.html")
+                    .addResourceLocations("classpath:/META-INF/resources/");
+            ...
+        }
+    }
+
+
+
+4. Add 'webjar ResourceHandler' to application.properties (This this also can be done at WebMvcConfigurer implementing class)
+    # Spring Boot MVC jsp config
+    spring.mvc.static-path-pattern=/resources/**
+    spring.mvc.view.prefix=/WEB-INF/view/
+    spring.mvc.view.suffix=.jsp
+    # Webjars locator
+    #    a. add webjar to pom
+    #    b. invoke with
+    #         ex. <script src="${pageContext.request.contextPath}/webjars/bootstrap/js/bootstrap.min.js"></script>
+    #             <script src="${pageContext.request.contextPath}/webjars/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    #             <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/bootstrap/css/bootstrap.min.css">
+    #             <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/bootstrap/3.3.6/css/bootstrap.min.css">
+    spring.resources.chain.strategy.content.enabled=true
+    spring.resources.chain.strategy.content.paths=/**
+
+
+5. Add guide with annotation - Controller
+    @Api(value="Employee Management System", description="Operations pertaining to employee in Employee Management System")
+    @RestController
+    @RequestMapping("/api/v1")
+    public class HREmpController {
+            ...
+        @ApiOperation(value = "View a list of available employees", response = List.class)
+        @ApiResponses(value = {
+                @ApiResponse(code = 200, message = "Successfully retrieved list"),
+                @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+                @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+                @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
+        })
+        @GetMapping("/emp")
+        public List<Emp01> getAllEmp() {
+            return hrEmpSvc.getAllEmp();
+        }
+            ...
+        @ApiOperation(value = "Update an employee")
+        @PutMapping("/emp/{id}")
+        public ResponseEntity<Emp01> updateEmp( @ApiParam(value = "Employee Id to update employee object", required = true) @PathVariable(value = "id") Integer empno,
+                                                @ApiParam(value = "Update employee object", required = true) @Valid @RequestBody Emp01 emp01) throws ResourceNotFoundException {
+            Emp01 updatedEmp = hrEmpSvc.getEmpById(empno).orElseThrow(() -> new ResourceNotFoundException("Employee not found for this empno :: " + empno));
+            ...
+
+6. Add guide with annotation - Model
+            ...
+    @Entity(name="Emp01")
+    @Table(name="tb_emp_01")
+    @ApiModel(description = "All details about the Employee. ")
+    public class Emp01 implements Serializable{
+            ...
+        @Setter @Getter @Id
+        @Column(name="empno", unique=true, columnDefinition="Integer")
+        @ApiModelProperty(notes = "The database generated employee ID", example="10001")
+        public Integer empno;
+              ...

@@ -1,0 +1,42 @@
+1. Overview
+        Java Bean                               Invoking Method
+        ----------------------                  ------------------
+        Validation annotation                   @Valid
+        @NotNull / @Min / @Max
+        / @Size(min=1, max=30)
+        / @Pattern
+
+        if condition does not matches -> throw exception ex. 'org.springframework.web.bind.MethodArgumentNotValidException'
+
+
+2. Entity example : @NotNull / @Min / @Max / @Size(min=1, max=30) / @Pattern
+
+    public class Emp01 implements Serializable{
+        @NotNull
+        @Min(0)
+        @Setter @Getter @Id
+        @Column(name="empno", unique=true, columnDefinition="Integer")
+        @ApiModelProperty(notes = "The database generated employee ID", example="10001")
+        public Integer empno;
+
+        @NotEmpty
+        @Size(min=1, max=30)
+        @Setter @Getter
+        @NotEmpty @Column(name="ename", nullable=false, columnDefinition="TEXT")
+        @ApiModelProperty(notes = "The employee name", example="Robert")
+        public String ename;
+    }
+
+
+3. Usage : add '@Valid' annotation to method param
+    @RestController
+    @RequestMapping("/api/v1")
+    public class HREmpController {
+            ...
+        @ApiOperation(value = "Add an employee")
+        @PostMapping("/emp")
+        public Emp01 createEmp(@ApiParam(value = "Employee object store in database table", required = true) @Valid @RequestBody Emp01 emp01) {
+            return hrEmpSvc.save(emp01);
+        }
+            ...
+

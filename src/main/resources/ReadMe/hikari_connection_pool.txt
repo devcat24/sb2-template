@@ -1,0 +1,18 @@
+
+spring.datasource.hikari.maximum-pool-size=10
+spring.datasource.hikari.minimum-idle=2
+spring.datasource.hikari.connection-timeout=360000
+spring.datasource.hikari.connectionTimeout=30000
+spring.datasource.hikari.idleTimeout=600000
+spring.datasource.hikari.maxLifetime=1800000
+spring.datasource.hikari.connection-test-query=SELECT 1
+spring.datasource.hikari.pool-name=Hikari-DS-Pool-01
+spring.datasource.hikari.registerMbeans=true
+# allow JMX-monitoring
+
+management.health.db.enabled=true
+# Enable default health indicators.
+
+
+
+

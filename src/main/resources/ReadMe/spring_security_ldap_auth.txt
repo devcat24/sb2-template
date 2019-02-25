@@ -1,0 +1,63 @@
+1. Add Maven dependencies
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-test</artifactId>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.ldap</groupId>
+      <artifactId>spring-ldap-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-ldap</artifactId>
+    </dependency>
+
+
+2. Add 'WebSecurityConfigurerAdapter' implementing config class
+    @Configuration
+    @EnableWebSecurity
+    public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http
+                .authorizeRequests()
+                .antMatchers("/api/v1/emp").permitAll()
+                //.antMatchers(HttpMethod.POST, "/restemp/*").hasRole("USER")
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .permitAll()
+                .and()
+                .logout()
+                .permitAll()
+                .and()
+                .httpBasic();
+        }
+        @Override
+        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+            auth.ldapAuthentication()
+                    .userDnPatterns("ou=User,ou=HR,ou=system")
+                    .groupSearchBase("ou=Group")
+                    .userSearchFilter("uid={0}")
+                    .contextSource()
+                    .url("ldap://myldapserver.com:389/ou=HR,ou=system")
+                    .managerPassword("secureldappassword")
+                    .managerDn("uid=admin,ou=system");
+        }
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http.authorizeRequests().anyRequest().authenticated().and().formLogin();
+        }
+    }
+
+3. Test with LDAP
+
+
+
+
+

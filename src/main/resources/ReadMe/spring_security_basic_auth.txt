@@ -1,0 +1,51 @@
+
+1. Add Maven dependencies
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-test</artifactId>
+        <scope>test</scope>
+    </dependency>
+
+
+2. Add 'WebSecurityConfigurerAdapter' implementing config class
+    @Configuration
+    @EnableWebSecurity
+    public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http
+                .authorizeRequests()
+                .antMatchers("/api/v1/emp").permitAll()
+                //.antMatchers(HttpMethod.POST, "/restemp/*").hasRole("USER")
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .permitAll()
+                .and()
+                .logout()
+                .permitAll()
+                .and()
+                .httpBasic();
+        }
+        /* // this also can be done from application.properties -> spring.security.user.name & spring.security.user.password
+        public void configureGlobal(AuthenticationManagerBuilder authentication)         throws Exception {
+            authentication.inMemoryAuthentication()
+                    .withUser("admin")
+                    .password(passwordEncoder().encode("password"))
+                    .authorities("ROLE_USER");
+        }
+
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+            return new BCryptPasswordEncoder();
+        }
+        */
+    }
+
+
+3. Test with curl
+   $ curl --user admin:password http://localhost:8080/jsp_page
