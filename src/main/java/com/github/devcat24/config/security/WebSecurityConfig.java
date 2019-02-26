@@ -20,7 +20,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     // ### Spring Security Basic Configuration
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().anyRequest().permitAll();
+        // csrf should be disabled to handle 'POST' request
+        http.csrf().disable().authorizeRequests().anyRequest().permitAll();
+
         /*
         http
                 .authorizeRequests()

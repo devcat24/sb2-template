@@ -13,18 +13,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//import org.apache.commons.lang3.StringUtils;
+//import org.springframework.http.HttpEntity;
+//import org.springframework.http.HttpHeaders;
+//import org.springframework.http.HttpMethod;
+//import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+//import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+//import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+//import org.springframework.web.client.RestTemplate;
+
+
 // 1. Sample data creation
 //   $ curl -i -X POST -H "Content-Type:application/json" -d '{"empno": 12331,"ename": "KIM","job": "Admin","mgr": 12331}' http://localhost:8080/api/v1/emp
 // 2. Query user
 //   $ curl -X GET http://localhost:8080/api/v1/emp/12331
-
 
 @Api(value="Employee Management System", description="Operations pertaining to employee in Employee Management System")
 @RestController
 @RequestMapping("/api/v1")
 public class HREmpController {
     private HREmpSvc hrEmpSvc;
-
     @Autowired
     void setHrEmpSvc(HREmpSvc hrEmpSvc) {
         this.hrEmpSvc = hrEmpSvc;
@@ -33,6 +41,7 @@ public class HREmpController {
     @ApiOperation(value = "View a list of available employees", response = List.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved list"),
+            @ApiResponse(code = 400, message = "Invalid request"),
             @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
@@ -41,13 +50,14 @@ public class HREmpController {
     public List<Emp01> getAllEmp() {
         return hrEmpSvc.getAllEmp();
     }
-
     @ApiOperation(value = "Get an employee by Id")
     @GetMapping("/emp/{id}")
-    public ResponseEntity<Emp01> getEmpById(@ApiParam(value = "Employee id from which employee object will retrieve", required = true) @PathVariable(value = "id") Integer empno) throws ResourceNotFoundException {
+    public ResponseEntity<Emp01> getEmpById(
+            @ApiParam(value = "Employee id from which employee object will retrieve", required = true) @PathVariable(value = "id") Integer empno) throws ResourceNotFoundException {
         Emp01 emp01 = hrEmpSvc.getEmpById(empno).orElseThrow(() -> new ResourceNotFoundException("Employee not found for this empno :: " + empno));
         return ResponseEntity.ok().body(emp01);
     }
+
 
     @ApiOperation(value = "Add an employee")
     @PostMapping("/emp")
@@ -76,5 +86,67 @@ public class HREmpController {
         res.put("deleted", Boolean.TRUE);
         return res;
     }
+
+
+
+
+    // ### Spring Security Google OAuth2 Configuration
+    // ### OAuth user information can be extracted from Spring Controller's method parameter
+    /*
+    private OAuth2AuthorizedClientService authorizedClientService;
+    @Autowired
+    void setAuthorizedClientService(OAuth2AuthorizedClientService authorizedClientService) {
+        this.authorizedClientService = authorizedClientService;
+    }
+
+    @ApiOperation(value = "View a list of available employees", response = List.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved list"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+            @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+            @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
+    })
+    @GetMapping("/emp")
+    public List<Emp01> getAllEmp(OAuth2AuthenticationToken authToken) {
+        Map<String, Object> userAttributes = getOAuthUserMap(authToken);
+        if(userAttributes != null){userAttributes.forEach((k, v) -> System.out.println(k + ": " + v));}
+
+        return hrEmpSvc.getAllEmp();
+    }
+    @ApiOperation(value = "Get an employee by Id")
+    @GetMapping("/emp/{id}")
+    public ResponseEntity<Emp01> getEmpById(
+            @ApiParam(value = "Employee id from which employee object will retrieve", required = true) @PathVariable(value = "id") Integer empno,
+            OAuth2AuthenticationToken authToken ) throws ResourceNotFoundException {
+        Map<String, Object> userAttributes = getOAuthUserMap(authToken);
+        if(userAttributes != null){userAttributes.forEach((k, v) -> System.out.println(k + ": " + v));}
+
+        Emp01 emp01 = hrEmpSvc.getEmpById(empno).orElseThrow(() -> new ResourceNotFoundException("Employee not found for this empno :: " + empno));
+        return ResponseEntity.ok().body(emp01);
+    }
+
+    private Map<String, Object> getOAuthUserMap(OAuth2AuthenticationToken authToken){
+        OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient(authToken.getAuthorizedClientRegistrationId(), authToken.getName());
+
+        String userInfoEndpointUri = client.getClientRegistration()
+                .getProviderDetails()
+                .getUserInfoEndpoint()
+                .getUri();
+
+        if (!StringUtils.isEmpty(userInfoEndpointUri)) {
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + client.getAccessToken().getTokenValue());
+
+            HttpEntity<String> entity = new HttpEntity<>("", headers);
+
+            ResponseEntity<Map> response = restTemplate.exchange(userInfoEndpointUri, HttpMethod.GET, entity, Map.class);
+            //noinspection unchecked
+            return (Map<String, Object>)response.getBody();
+        }
+        return null;
+    }
+    */
+
 
 }

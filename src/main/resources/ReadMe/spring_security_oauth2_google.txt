@@ -26,6 +26,50 @@
                 .and()
                 .oauth2Login();
     }
+
++. OAuth user information can be extracted from Spring Controller's method parameter
+    private OAuth2AuthorizedClientService authorizedClientService;
+    @Autowired
+    void setAuthorizedClientService(OAuth2AuthorizedClientService authorizedClientService) {
+        this.authorizedClientService = authorizedClientService;
+    }
+
+    @ApiOperation(value = "Get an employee by Id")
+    @GetMapping("/emp/{id}")
+    public ResponseEntity<Emp01> getEmpById(
+                    @ApiParam(value = "Employee id from which employee object will retrieve", required = true) @PathVariable(value = "id") Integer empno,
+                    OAuth2AuthenticationToken authToken ) throws ResourceNotFoundException {
+        Map<String, Object> userAttributes = getOAuthUserMap(authToken);
+        if(userAttributes != null){userAttributes.forEach((k, v) -> System.out.println(k + ": " + v));}
+
+        Emp01 emp01 = hrEmpSvc.getEmpById(empno).orElseThrow(() -> new ResourceNotFoundException("Employee not found for this empno :: " + empno));
+        return ResponseEntity.ok().body(emp01);
+    }
+    private Map<String, Object> getOAuthUserMap(OAuth2AuthenticationToken authentication){
+        OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient(authentication.getAuthorizedClientRegistrationId(), authentication.getName());
+
+        String userInfoEndpointUri = client.getClientRegistration()
+                .getProviderDetails()
+                .getUserInfoEndpoint()
+                .getUri();
+
+        if (!StringUtils.isEmpty(userInfoEndpointUri)) {
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + client.getAccessToken()
+                    .getTokenValue());
+
+            HttpEntity<String> entity = new HttpEntity<>("", headers);
+
+            ResponseEntity<Map> response = restTemplate.exchange(userInfoEndpointUri, HttpMethod.GET, entity, Map.class);
+            //noinspection unchecked
+            return (Map<String, Object>)response.getBody();
+        }
+        return null;
+    }
+
+
+
 --------------------------------------------------------------------
   Custom Login Page
 --------------------------------------------------------------------
@@ -80,15 +124,25 @@
 --------------------------------------------------------------------
   Using user information from OAuth2
 --------------------------------------------------------------------
-+. Can extract from Spring Controller
++. OAuth user information can be extracted from Spring Controller's method parameter
     private OAuth2AuthorizedClientService authorizedClientService;
     @Autowired
     void setAuthorizedClientService(OAuth2AuthorizedClientService authorizedClientService) {
         this.authorizedClientService = authorizedClientService;
     }
-    @GetMapping("/login_success")
-    public String getLoginInfo(Model model, OAuth2AuthenticationToken authentication) {
 
+    @ApiOperation(value = "Get an employee by Id")
+    @GetMapping("/emp/{id}")
+    public ResponseEntity<Emp01> getEmpById(
+                    @ApiParam(value = "Employee id from which employee object will retrieve", required = true) @PathVariable(value = "id") Integer empno,
+                    OAuth2AuthenticationToken authToken ) throws ResourceNotFoundException {
+        Map<String, Object> userAttributes = getOAuthUserMap(authToken);
+        if(userAttributes != null){userAttributes.forEach((k, v) -> System.out.println(k + ": " + v));}
+
+        Emp01 emp01 = hrEmpSvc.getEmpById(empno).orElseThrow(() -> new ResourceNotFoundException("Employee not found for this empno :: " + empno));
+        return ResponseEntity.ok().body(emp01);
+    }
+    private Map<String, Object> getOAuthUserMap(OAuth2AuthenticationToken authentication){
         OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient(authentication.getAuthorizedClientRegistrationId(), authentication.getName());
 
         String userInfoEndpointUri = client.getClientRegistration()
@@ -102,14 +156,15 @@
             headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + client.getAccessToken()
                     .getTokenValue());
 
-            HttpEntity<String> entity = new HttpEntity<String>("", headers);
+            HttpEntity<String> entity = new HttpEntity<>("", headers);
 
             ResponseEntity<Map> response = restTemplate.exchange(userInfoEndpointUri, HttpMethod.GET, entity, Map.class);
-            Map userAttributes = response.getBody();
-            model.addAttribute("name", userAttributes.get("name"));
+            //noinspection unchecked
+            return (Map<String, Object>)response.getBody();
         }
-
-        return "login_success";
+        return null;
     }
+
+
 
 

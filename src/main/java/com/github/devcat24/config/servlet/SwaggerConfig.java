@@ -10,7 +10,11 @@ import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+//import org.springframework.context.annotation.Import;
+//import springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration;
 
+
+//@Import(SpringDataRestConfiguration.class)
 @Configuration
 @EnableSwagger2  // filtering API from exposure
 public class SwaggerConfig {

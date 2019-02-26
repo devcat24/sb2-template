@@ -1,3 +1,6 @@
+*. Spring Security enables csrf protection by default
+    -> HTTP POST action does not work properly on csrf-enabled mode -> need to disable
+
 
 1. Add Maven dependencies
     <dependency>

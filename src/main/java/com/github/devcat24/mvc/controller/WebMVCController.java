@@ -53,7 +53,9 @@ public class WebMVCController {
     }
 
 
-    /*   // ### Spring Security Google OAuth2 Configuration
+    /*
+    // ### Spring Security Google OAuth2 Configuration
+    // ### custom login page configuration
 
     private static String authorizationRequestBaseUri = "oauth2/authorization";
     Map<String, String> oauth2AuthenticationUrls = new HashMap<>();
@@ -78,38 +80,6 @@ public class WebMVCController {
         model.addAttribute("urls", oauth2AuthenticationUrls);
         return "oauth_login";
     }
-
-
-    private OAuth2AuthorizedClientService authorizedClientService;
-    @Autowired
-    void setAuthorizedClientService(OAuth2AuthorizedClientService authorizedClientService) {
-        this.authorizedClientService = authorizedClientService;
-    }
-    @GetMapping("/login_success")
-    public String getLoginInfo(Model model, OAuth2AuthenticationToken authentication) {
-
-        OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient(authentication.getAuthorizedClientRegistrationId(), authentication.getName());
-
-        String userInfoEndpointUri = client.getClientRegistration()
-                .getProviderDetails()
-                .getUserInfoEndpoint()
-                .getUri();
-
-        if (!StringUtils.isEmpty(userInfoEndpointUri)) {
-            RestTemplate restTemplate = new RestTemplate();
-            HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + client.getAccessToken()
-                    .getTokenValue());
-
-            HttpEntity<String> entity = new HttpEntity<String>("", headers);
-
-            ResponseEntity<Map> response = restTemplate.exchange(userInfoEndpointUri, HttpMethod.GET, entity, Map.class);
-            Map userAttributes = response.getBody();
-            model.addAttribute("name", userAttributes.get("name"));
-        }
-
-        return "login_success";
-    }
-
     */
+
 }
