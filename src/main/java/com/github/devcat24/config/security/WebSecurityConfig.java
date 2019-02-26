@@ -17,6 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    // ### Spring Security Basic Configuration
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().anyRequest().permitAll();
@@ -36,18 +37,43 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic();
          */
     }
-    //@Autowired
-    //public void configureGlobal(AuthenticationManagerBuilder authentication)         throws Exception {
-    //    authentication.inMemoryAuthentication()
-    //            .withUser("admin")
-    //            .password(passwordEncoder().encode("password"))
-    //            .authorities("ROLE_USER");
-    //}
+
+    // ### Spring Security Google OAuth2 Configuration
+    // @Override
+    // protected void configure(HttpSecurity http) throws Exception {
+    //     http
+    //             // .authorizeRequests()
+    //             // .anyRequest().authenticated()
+    //             // .and()
+    //             // .oauth2Login();
     //
-    //@Bean
-    //public PasswordEncoder passwordEncoder() {
-    //    return new BCryptPasswordEncoder();
-    //}
+    //             .authorizeRequests()
+    //             .antMatchers("/oauth_login")
+    //             .permitAll()
+    //             .anyRequest()
+    //             .authenticated()
+    //             .and()
+    //             .oauth2Login()
+    //             //.failureUrl("/login_failure")
+    //             //.defaultSuccessUrl("/login_success")
+    //             .loginPage("/oauth_login");
+    //
+    // }
+
+
+
+    // @Autowired
+    // public void configureGlobal(AuthenticationManagerBuilder authentication)         throws Exception {
+    //     authentication.inMemoryAuthentication()
+    //             .withUser("admin")
+    //             .password(passwordEncoder().encode("password"))
+    //             .authorities("ROLE_USER");
+    // }
+    //
+    // @Bean
+    // public PasswordEncoder passwordEncoder() {
+    //     return new BCryptPasswordEncoder();
+    // }
 
     /*   // -> LDAP integration
     @Override

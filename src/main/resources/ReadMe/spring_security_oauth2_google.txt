@@ -1,0 +1,115 @@
+--------------------------------------------------------------------
+  Basic OAuth Configuration
+--------------------------------------------------------------------
+
++. Add Maven dependencies
+	<dependency>
+		<groupId>org.springframework.security</groupId>
+		<artifactId>spring-security-oauth2-client</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework.security</groupId>
+		<artifactId>spring-security-oauth2-jose</artifactId>
+	</dependency>
+
+
++. Add API Key to 'application.properties'
+    spring.security.oauth2.client.registration.google.client-id=<your client id>
+    spring.security.oauth2.client.registration.google.client-secret=<your client secret>
+
++. Implements the configure(HttpSecurity http) method inherited from 'WebSecurityConfigurerAdapter'
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .authorizeRequests()
+                .anyRequest().authenticated()
+                .and()
+                .oauth2Login();
+    }
+--------------------------------------------------------------------
+  Custom Login Page
+--------------------------------------------------------------------
++. Implements the configure(HttpSecurity http) method inherited from 'WebSecurityConfigurerAdapter'
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .authorizeRequests()
+                .antMatchers("/oauth_login")
+                .permitAll()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .oauth2Login()
+                //.defaultSuccessUrl("/login_success")
+                //.failureUrl("/login_failure")
+                .loginPage("/oauth_login");
+    }
+
++. Add Controller method for login page
+    @GetMapping("/oauth_login")
+    public String getLoginPage(Model model){
+        Iterable<ClientRegistration> clientRegistrations = null;
+        ResolvableType type = ResolvableType.forInstance(clientRegistrationRepository).as(Iterable.class);
+        if (type != ResolvableType.NONE &&
+                ClientRegistration.class.isAssignableFrom(type.resolveGenerics()[0])) {
+            clientRegistrations = (Iterable<ClientRegistration>) clientRegistrationRepository;
+        }
+        clientRegistrations.forEach(registration ->
+                oauth2AuthenticationUrls.put(registration.getClientName(),
+                        authorizationRequestBaseUri + "/" + registration.getRegistrationId()));
+        model.addAttribute("urls", oauth2AuthenticationUrls);
+        return "oauth_login";
+    }
+
++. Create Login page : oauth_login.ftl
+    <#import "/spring.ftl" as spring/>
+    <!DOCTYPE html>
+    <html lang="ko">
+    <head>
+        <meta charset="utf-8">
+        <title>OAuth2 Login Page</title>
+    </head>
+    <body>
+
+    <#list urls?keys as urlKey>
+        <a href="${urls[urlKey]}">${urlKey}</a>
+    </#list>
+    </body>
+    </html>
+
+--------------------------------------------------------------------
+  Using user information from OAuth2
+--------------------------------------------------------------------
++. Can extract from Spring Controller
+    private OAuth2AuthorizedClientService authorizedClientService;
+    @Autowired
+    void setAuthorizedClientService(OAuth2AuthorizedClientService authorizedClientService) {
+        this.authorizedClientService = authorizedClientService;
+    }
+    @GetMapping("/login_success")
+    public String getLoginInfo(Model model, OAuth2AuthenticationToken authentication) {
+
+        OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient(authentication.getAuthorizedClientRegistrationId(), authentication.getName());
+
+        String userInfoEndpointUri = client.getClientRegistration()
+                .getProviderDetails()
+                .getUserInfoEndpoint()
+                .getUri();
+
+        if (!StringUtils.isEmpty(userInfoEndpointUri)) {
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + client.getAccessToken()
+                    .getTokenValue());
+
+            HttpEntity<String> entity = new HttpEntity<String>("", headers);
+
+            ResponseEntity<Map> response = restTemplate.exchange(userInfoEndpointUri, HttpMethod.GET, entity, Map.class);
+            Map userAttributes = response.getBody();
+            model.addAttribute("name", userAttributes.get("name"));
+        }
+
+        return "login_success";
+    }
+
+
