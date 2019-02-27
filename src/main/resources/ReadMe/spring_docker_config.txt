@@ -1,0 +1,99 @@
+
+1. Create Dockerfile
+       cf. Manual docker image creation
+           $ mvn package                                    -> build spring application for docker
+           $ docker build -f Dockerfile -t sb2-template .   -> create docker image manually
+
+    #------------------------------------------------------------------------
+    FROM openjdk:8-jdk-alpine
+    EXPOSE 8080
+    # ADD command does not extract zip file
+    ADD /target/sb2-template.jar sb2-template.jar
+    # use 'docker run -v /tmp/host_filesystem:/opt/docker_filesystem ... ', VOLUME option creates file under docker image directory
+    # VOLUME /tmp
+    ARG DEPENDENCY=target/dependency
+    COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib
+    COPY ${DEPENDENCY}/META-INF /app/META-INF
+    COPY ${DEPENDENCY}/BOOT-INF/classes /app
+    ENTRYPOINT ["java","-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=1199 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false  -Dcom.sun.management.jmxremote.rmi.port=1188","-jar","sb2-template.jar"]
+    #------------------------------------------------------------------------
+
+
+2. Configure Maven plugin for docker image creation (pom.xml)
+                ...
+	<properties>
+                ...
+		<docker.image.prefix>devcat24</docker.image.prefix>
+	</properties>
+                ...
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>1.4.9</version>
+				<configuration>
+					<repository>${docker.image.prefix}/${project.artifactId}</repository>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>unpack</id>
+						<phase>package</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>${project.groupId}</groupId>
+									<artifactId>${project.artifactId}</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+                ...
+
+3. Run docker Maven task
+   $ mvn install dockerfile:build
+
+
+4. Docker run & exec ...
+    $ docker images
+        REPOSITORY              TAG                 IMAGE ID            CREATED             SIZE
+        devcat24/sb2-template   latest              5a7365d86f8e        2 minutes ago       234MB
+        openjdk                 8-jdk-alpine        792ff45a2a17        3 weeks ago         105MB
+
+    $ docker run -d -it --name sb2-templ -p 8080:8080 -v /tmp:/opt/docker/tmp devcat24/sb2-template
+        2a3b082f85af76afa4eca5959de82f7e5bd5d1b3ce3294cbf54aa180bc780d97
+
+    $ docker ps -a
+        CONTAINER ID        IMAGE                   COMMAND                  CREATED             STATUS              PORTS                    NAMES
+        2a3b082f85af        devcat24/sb2-template   "java '-Dcom.sun.man…"   4 seconds ago       Up 3 seconds        0.0.0.0:8080->8080/tcp   sb2-templ
+
+    $ docker exec -it sb2-templ /bin/sh
+        / # ls /opt/docker/tmp
+        file_from_host_system.txt
+        / # exit
+
+    $ docker stop sb2-templ
+        sb2-templ
+
+
+5. Docker run with profile & run with parameter
+    $ docker run -d -it --name sb2-templ  -e "SPRING_PROFILES_ACTIVE=dev" -p 8080:8080 -v /tmp:/opt/docker/tmp devcat24/sb2-template
+    $ docker run -d -it --name sb2-templ2 -e "JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n" -p 8080:8080 -p 5005:5005 devcat24/sb2-template
+
