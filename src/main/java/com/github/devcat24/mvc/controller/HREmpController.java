@@ -29,6 +29,14 @@ import java.util.Map;
 //   $ curl -X GET http://localhost:8080/api/v1/emp/12331
 
 @Api(value="Employee Management System", description="Operations pertaining to employee in Employee Management System")
+// '@ApiResponses' can be defined both class level & method level
+@ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Successfully retrieved list"),
+        @ApiResponse(code = 400, message = "Invalid request"),
+        @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+        @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+        @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
+})
 @RestController
 @RequestMapping("/api/v1")
 public class HREmpController {
@@ -39,12 +47,9 @@ public class HREmpController {
     }
 
     @ApiOperation(value = "View a list of available employees", response = List.class)
+    // '@ApiResponses' can be defined both class level & method level(overrides class level definition)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully retrieved list"),
-            @ApiResponse(code = 400, message = "Invalid request"),
-            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
-            @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
-            @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
+            @ApiResponse(code = 400, message = "Please try again with valid data")
     })
     @GetMapping("/emp")
     public List<Emp01> getAllEmp() {

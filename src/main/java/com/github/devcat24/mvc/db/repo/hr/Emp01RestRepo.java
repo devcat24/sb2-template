@@ -3,7 +3,7 @@ package com.github.devcat24.mvc.db.repo.hr;
 import com.github.devcat24.mvc.db.entity.hr.Emp01;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+//import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
 
@@ -15,7 +15,9 @@ import java.util.List;
 
 //@PreAuthorize("hasRole('USER')")      // integration with Spring Security
 @SuppressWarnings("unused")
-@RepositoryRestResource(collectionResourceRel = "restemp", path = "restemp")
+
+// Temporary Disabled to prevent the conflict between 'Swagger 2.9.2' and '@RepositoryRestResource annotation'
+//@RepositoryRestResource(collectionResourceRel = "restemp", path = "restemp")
 public interface Emp01RestRepo  extends JpaRepository<Emp01, Integer> {
 //public interface Emp01RestRepo  extends PagingAndSortingRepository<Emp01, Integer> {
 
