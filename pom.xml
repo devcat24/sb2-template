@@ -202,6 +202,35 @@
 					<repository>${docker.image.prefix}/${project.artifactId}</repository>
 				</configuration>
 			</plugin>
+            <!-- fabric8 docker plugin : https://dmp.fabric8.io/
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.20.1</version>
+				<configuration>
+					<images>
+						<image>
+							<name>${project.name}:${project.version}</name>
+							<build>
+								<from>openjdk:9</from>
+								<assembly>
+									<descriptorRef>artifact</descriptorRef>
+								</assembly>
+								<ports>
+									<port>8080</port>
+								</ports>
+								<cmd>java -jar maven/${project.name}-${project.version}.jar</cmd>
+							</build>
+							<run>
+								<ports>
+									<port>8080:8080</port>
+								</ports>
+							</run>
+						</image>
+					</images>
+				</configuration>
+			</plugin>
+            -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
