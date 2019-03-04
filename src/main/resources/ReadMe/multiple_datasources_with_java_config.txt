@@ -1,0 +1,17 @@
+1. Define Database properties & JPA properties in 'application.properties'
+   -> refer to '### Datasource & JPA configuration (custom Java Config class) ###' in 'application.properties'
+   -> need to comment out '### Datasource & JPA configuration (using Spring Boot standard properties) ###' section
+
+2. Create Java Configuration class (FooConfig.java & BarConfig.java)
+   -> use 'prefix' to specify target database
+   -> For JMX features, Tomcat Connection Pool & Hikari Pool need specific configuration for MBean registration
+      When JMX exception happens, try to add 'spring.jmx.default-domain=sb2-jmx' to application.properties
+
+3. orm.xml should be placed under 'resources/META-INF/'
+
+
+4. DataSource or JPA Target can be define by
+    - using by '@EnableJpaRepositoryies > basePackages' in 'FooConfig'(DataSource Configuration class)
+    - using by '@Transactional(value="fooTransactionManager", propagation = Propagation.REQUIRED)' in Service class
+
+

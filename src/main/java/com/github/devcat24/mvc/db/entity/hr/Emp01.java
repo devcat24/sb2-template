@@ -15,7 +15,8 @@ import java.io.Serializable;
 @ToString               // @ToString (exclude = {"deptno"})     -> careful to use @ToString for recursive references !
 @NoArgsConstructor(access = AccessLevel.PROTECTED)      // JPA requires at least one constructor
 @EqualsAndHashCode      // @EqualsAndHashCode(exclude = {"deptno"})
-@Slf4j                  // lombok annotation for logging (@Slf4j/@Log4j/@Log4j2/@CommonsLog/@Log) -> invoke simply with 'log.info("Sample message");'
+//@Builder                // Support builder pattern method for creating instance   -> better to define in constructor with only mandatory fields!
+//@Slf4j                  // lombok annotation for logging (@Slf4j/@Log4j/@Log4j2/@CommonsLog/@Log) -> invoke simply with 'log.info("Sample message");'
 @Entity(name="Emp01")
 @Table(name="tb_emp_01")
 @ApiModel(description = "All details about the Employee. ")

@@ -1,21 +1,46 @@
 package com.github.devcat24.util.monitoring;
 
+
 import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-@NoArgsConstructor
-@AllArgsConstructor     // @RequiredArgsConstructor, @NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)      // JPA requires at least one constructor
+//@AllArgsConstructor   // @RequiredArgsConstructor, @NoArgsConstructor -> define manually with @Builder annotation
 @EqualsAndHashCode      // @EqualsAndHashCode(exclude = {"deptno"})
 @ToString               // @ToString (exclude = {"deptno"})
-@Builder                // Support builder pattern method for creating instance
-                        //      ex. Item item = Item.builder().itemno(1002).name("pen").build();
-
+//@Builder                // Support builder pattern method for creating instance   -> better to define in constructor with only mandatory fields!
+//      ex. Item item = Item.builder().itemno(1002).name("pen").build();
 @Entity(name="TXRunRecord")
 @Table(name="tx_run_record")
 public class TXRunRecord implements Serializable{
+
+    @SuppressWarnings("unused")
+    @Builder // Support builder pattern method for creating instance ex. Item item = Item.builder().itemno(1002).name("pen").build();
+    public TXRunRecord(Long runRecordId, String taskType, String taskGroup, String taskName, String txId, String txUser, String txStatus, Date startTime, Date completionTime, Long elapsedTime, String params, String returns, String returnDesc, String errorCode, String errorDesc, String invokedFrom, String returnTo, String desc1, String desc2, String desc3) {
+        this.runRecordId = runRecordId;
+        this.taskType = taskType;
+        this.taskGroup = taskGroup;
+        this.taskName = taskName;
+        this.txId = txId;
+        this.txUser = txUser;
+        this.txStatus = txStatus;
+        this.startTime = startTime;
+        this.completionTime = completionTime;
+        this.elapsedTime = elapsedTime;
+        this.params = params;
+        this.returns = returns;
+        this.returnDesc = returnDesc;
+        this.errorCode = errorCode;
+        this.errorDesc = errorDesc;
+        this.invokedFrom = invokedFrom;
+        this.returnTo = returnTo;
+        this.desc1 = desc1;
+        this.desc2 = desc2;
+        this.desc3 = desc3;
+    }
 
     @Setter @Getter @Id
     @Column(name="run_record_id", unique=true)
