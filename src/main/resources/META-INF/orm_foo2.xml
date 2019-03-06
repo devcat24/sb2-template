@@ -5,4 +5,23 @@
         xsi:schemaLocation="http://www.datanucleus.org/xsd/jpa/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd"
         version="2.1">
 
+    <!--    <named-query name="Member.findAllMembersWithSQLFile">
+            &lt;!&ndash;
+                 name="Member.findAllMembersWithNativeSQLFile"
+                   -> name should be 'Entity' Object (not Repository) !
+                 jpql query cannot define 'result-class' attribute
+             &ndash;&gt;
+            <query>
+                 SELECT m  FROM com.github.devcat24.mvc.db.entity.mm.Member m WHERE LOWER(m.name) LIKE LOWER(CONCAT('%', :nameString, '%')) ORDER BY m.id DESC
+            </query>
+        </named-query>
+
+        <named-native-query name="Member.findAllMembersWithNativeSQLFile" result-class="com.github.devcat24.mvc.db.entity.mm.Member">
+            &lt;!&ndash; name="Member.findAllMembersWithNativeSQLFile" -> name should be 'Entity' Object (not Repository) ! &ndash;&gt;
+            <query>
+                select * from jpa_lab_member where name like LOWER(CONCAT('%', :nameString, '%'))
+            </query>
+        </named-native-query>-->
 </entity-mappings>
+
+

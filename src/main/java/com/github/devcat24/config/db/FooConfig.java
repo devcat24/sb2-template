@@ -11,6 +11,7 @@
 //        import org.springframework.context.annotation.EnableMBeanExport;
 //        import org.springframework.context.annotation.Primary;
 //        import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+//        import org.springframework.jdbc.core.JdbcTemplate;
 //        import org.springframework.jmx.support.RegistrationPolicy;
 //        import org.springframework.orm.jpa.JpaTransactionManager;
 //        import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -198,12 +199,13 @@
 //            // }
 //
 //
-//            /*  // --> bind each *DAO
-//                ==> https://docs.spring.io/spring/docs/current/spring-framework-reference/html/jdbc.html
+//              // --> bind each *DAO
+//              //   ==> https://docs.spring.io/spring/docs/current/spring-framework-reference/html/jdbc.html
+//
 //            @Primary
 //            @Bean(name = "fooJDBCTemplate")
 //            public JdbcTemplate jdbcTemplate(@Qualifier("fooDataSource") DataSource dataSource){
 //                return new JdbcTemplate(dataSource);
-//            }*/
+//            }
 //
 //        }

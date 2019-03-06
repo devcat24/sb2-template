@@ -10,4 +10,69 @@
         xsi:schemaLocation="http://www.datanucleus.org/xsd/jpa/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd"
         version="2.1">
 
+    <named-query name="Member.findAllMembersWithSQLFile">
+        <!--
+             name="Member.findAllMembersWithNativeSQLFile"
+               -> name should be 'Entity' Object (not Repository) !
+             jpql query cannot define 'result-class' attribute
+         -->
+        <query>
+            SELECT m FROM com.github.devcat24.mvc.db.entity.mm.Member m WHERE LOWER(m.name) LIKE LOWER(CONCAT('%',
+            :nameString, '%')) ORDER BY m.id DESC
+        </query>
+    </named-query>
+
+    <named-native-query name="Member.findAllMembersWithNativeSQLFile" result-set-mapping="MemberDTOMapping">
+        <!-- name="Member.findAllMembersWithNativeSQLFile" -> name should be 'Entity' Object (not Repository) ! -->
+        <query>
+            select m.member_id as member_id, m.name as name, m.city as city, m.street as street, m.zipcode as zipcode from jpa_lab_member m where m.name like LOWER(CONCAT('%', :nameString, '%'))
+        </query>
+    </named-native-query>
+    <named-native-query name="Member.getMemberAfterStoredProcedureUsingNamedQuery" result-set-mapping="StoredProcedureMemberDTOMapping">
+        <query>
+            CALL get_member_after(:startingID)
+        </query>
+    </named-native-query>
+
+    <sql-result-set-mapping name="MemberDTOMapping">
+        <constructor-result target-class="com.github.devcat24.mvc.dto.mm.MemberDTO">
+            <column name="member_id" class="java.lang.Long"/>
+            <column name="name" />
+            <column name="city" />
+            <column name="street" />
+            <column name="zipcode" />
+        </constructor-result>
+    </sql-result-set-mapping>
+
+    <sql-result-set-mapping name="StoredProcedureMemberDTOMapping">
+        <constructor-result target-class="com.github.devcat24.mvc.dto.mm.MemberDTO">
+            <column name="id" class="java.lang.Long"/>
+            <column name="name" />
+            <column name="city" />
+            <column name="street" />
+            <column name="zipcode" />
+        </constructor-result>
+    </sql-result-set-mapping>
+
+    <!--
+        <named-stored-procedure-query procedure-name="get_member_after" name="getMemberAfterWithStoredProcedure">
+            <parameter class="java.lang.Long" mode="IN" />
+            <parameter class="java.lang.Long" mode="OUT" name="id"/>
+            <parameter class="java.lang.String" mode="OUT" name="name"/>
+            <parameter class="java.lang.String" mode="OUT" name="city"/>
+            <parameter class="java.lang.String" mode="OUT" name="street"/>
+            <parameter class="java.lang.String" mode="OUT" name="zipcode"/>
+            <result-set-mapping>StoreProcedureMemberDTOMapping</result-set-mapping>
+        </named-stored-procedure-query>
+
+        <sql-result-set-mapping name="StoreProcedureMemberDTOMapping">
+            <constructor-result target-clacom.github.devcat24.mvc.svc.db.dto.mm.MemberDTOrDTO">
+                <column name="id" class="java.lang.Long"/>
+                <column name="name" />
+                <column name="city" />
+                <column name="street" />
+                <column name="zipcode" />
+            </constructor-result>
+        </sql-result-set-mapping>
+    -->
 </entity-mappings>
