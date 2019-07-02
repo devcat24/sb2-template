@@ -29,7 +29,7 @@ public class GsonUtil {
     }
 
     public static JsonObject createJsonDatasetWithHeader(String returnCode, String returnMessage,
-                                                           Long transactionId, Long errorId){
+                                                         Long transactionId, Long errorId){
         JsonObject rtnObj = new JsonObject();
         rtnObj.addProperty("returnCode", returnCode);
         rtnObj.addProperty("returnMessage", returnMessage);

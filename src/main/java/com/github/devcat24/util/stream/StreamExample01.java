@@ -1,5 +1,6 @@
 package com.github.devcat24.util.stream;
 
+
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.*;

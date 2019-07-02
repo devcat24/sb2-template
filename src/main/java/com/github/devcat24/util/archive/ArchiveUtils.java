@@ -5,7 +5,6 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -37,7 +36,7 @@ public class ArchiveUtils {
 
 
     //public void createZip(List<File> srcFiles, String outputFilePath) throws Exception{
-    public void createZip(List<String> srcFileStringList, String outputFileName) throws Exception{
+    public void createZip(List<String> srcFileStringList, String outputFileName) throws Exception {
         List<File> srcFiles = new ArrayList<>();
         for(String fileString : srcFileStringList){
             srcFiles.add(new File(fileWorkingDir + File.separator + fileString));

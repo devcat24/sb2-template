@@ -1,6 +1,5 @@
 package com.github.devcat24.util.version;
 
-
 import java.util.jar.Manifest;
 
 public class AppVersion {

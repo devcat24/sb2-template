@@ -1,7 +1,5 @@
 package com.github.devcat24.util.annotation;
 
-import com.github.devcat24.util.csv.CSVTestDTO;
-import com.github.devcat24.util.csv.CSVUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,9 +8,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 
 //@TestPropertySource(properties = {"fetch.size=5"}) // directly, overrides values in 'application.properties'
@@ -23,7 +18,7 @@ public class AnnotationTest {
 
     @Test
     public void testAnnotationUtil() throws Exception {
-        Field [] fields = FieldUtils.getAllFields(AnnotationTestBean.class);
+        Field[] fields = FieldUtils.getAllFields(AnnotationTestBean.class);
         for(Field field : fields) {
             System.out.println("Field Name: " + field.getName());
 

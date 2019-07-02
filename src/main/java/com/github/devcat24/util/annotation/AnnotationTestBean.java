@@ -17,10 +17,12 @@ public class AnnotationTestBean {
     Long id;
 
     @CsvBindByPosition(position = 1)
-    @Setter @Getter
+    @Setter
+    @Getter
     String name;
 
     @CsvBindByPosition(position = 2)
-    @Setter @Getter
+    @Setter
+    @Getter
     String order;
 }

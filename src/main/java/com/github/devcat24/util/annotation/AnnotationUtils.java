@@ -2,11 +2,8 @@ package com.github.devcat24.util.annotation;
 
 import com.opencsv.bean.CsvBindByPosition;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.apache.commons.lang3.reflect.MethodUtils;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.List;
 
 public class AnnotationUtils {
@@ -19,7 +16,7 @@ public class AnnotationUtils {
         if(objects != null && objects.size() > 0){
             // Annotation[] cAnn = objects.iterator().next().getClass().getAnnotations();
             // Method [] methods = objects.iterator().next().getClass().getDeclaredMethods();
-            Field [] fields = FieldUtils.getAllFields(objects.iterator().next().getClass());
+            Field[] fields = FieldUtils.getAllFields(objects.iterator().next().getClass());
             // Field [] fields = objects.iterator().next().getClass().getFields();
             for(Field field : fields) {
                 System.out.println("Field Name: " + field.getName());

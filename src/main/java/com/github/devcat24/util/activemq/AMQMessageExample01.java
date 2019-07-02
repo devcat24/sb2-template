@@ -9,10 +9,12 @@ import lombok.*;
 @Builder
 public class AMQMessageExample01 {
 
-    @Setter @Getter
+    @Setter
+    @Getter
     String to;
 
-    @Setter @Getter
+    @Setter
+    @Getter
     String body;
 
 }

@@ -2,10 +2,6 @@
 package com.github.devcat24.util.activemq;
 
 
-import org.apache.activemq.broker.BrokerService;
-import org.apache.activemq.broker.jmx.ManagementContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 /*
 
 @Configuration

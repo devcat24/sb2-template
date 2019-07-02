@@ -3,6 +3,7 @@ package com.github.devcat24.util.activemq;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
+
 import javax.jms.JMSException;
 
 @Component

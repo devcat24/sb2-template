@@ -2,10 +2,12 @@ package com.github.devcat24.config.servlet;
 
 import org.apache.catalina.connector.Connector;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+//import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
+//import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.ServletComponentScan;
-import org.springframework.boot.web.support.SpringBootServletInitializer;
+//import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -30,7 +32,7 @@ public class ServletContainerConfig extends SpringBootServletInitializer {
         resolver.setSuffix(".jsp");
         return resolver;
     }
-
+    /* --> for spring boot 1.x
     @Bean
     public EmbeddedServletContainerFactory servletContainer() {
 
@@ -39,6 +41,24 @@ public class ServletContainerConfig extends SpringBootServletInitializer {
         {
             Connector ajpConnector = new Connector("AJP/1.3");
             // ajpConnector.setProtocol("AJP/1.3");  // Deprecated - Protocol should be defined with constructor
+            ajpConnector.setPort(ajpPort);
+            ajpConnector.setSecure(false);
+            ajpConnector.setAllowTrace(false);
+            ajpConnector.setScheme("http");
+            tomcat.addAdditionalTomcatConnectors(ajpConnector);
+        }
+
+        return tomcat;
+    }
+    */
+
+    @Bean
+    public TomcatServletWebServerFactory servletContainer() {
+
+        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
+        if (tomcatAjpEnabled)
+        {
+            Connector ajpConnector = new Connector("AJP/1.3");
             ajpConnector.setPort(ajpPort);
             ajpConnector.setSecure(false);
             ajpConnector.setAllowTrace(false);

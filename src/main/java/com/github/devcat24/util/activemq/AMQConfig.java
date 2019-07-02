@@ -1,4 +1,4 @@
-// http://javasampleapproach.com/spring-framework/spring-boot/use-spring-jms-activemq-jms-consumer-jms-producer-spring-boot
+package com.github.devcat24.util.activemq;// http://javasampleapproach.com/spring-framework/spring-boot/use-spring-jms-activemq-jms-consumer-jms-producer-spring-boot
 
 
 // This class substitute by setting properties in application.properties

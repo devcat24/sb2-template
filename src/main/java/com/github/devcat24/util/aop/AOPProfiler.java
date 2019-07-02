@@ -32,11 +32,11 @@ public class AOPProfiler {
     //}
 
     //@Around("execution(* com.github.devcat24.mvc.svc.db.repo.hr.Emp01Repo.*(..))")
-    @Around("execution(* com.github.devcat24.mvc.svc.db.repo.mm.MemberRepo.*(..))")
+    @Around("execution(* com.github.devcat24.mvc.db.repo.mm.MemberRepo.*(..))")
     public Object logJointPoint(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         String methodName = proceedingJoinPoint.getSignature().getName();
 
-        Object [] args = proceedingJoinPoint.getArgs();
+        Object[] args = proceedingJoinPoint.getArgs();
         if(args != null && args.length > 0) {
             for (Object arg : args) {
                 log.info("spring aop - params :  " + arg.toString());

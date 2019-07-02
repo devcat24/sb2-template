@@ -1,6 +1,5 @@
 package com.github.devcat24.util.csv;
 
-import com.github.devcat24.util.pdf.PDFBoxUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,7 +27,7 @@ public class CSVUtilTest {
         list.add(obj02);
         list.add(obj03);
 
-        String [] headers = {"id", "name", "order"};
+        String[] headers = {"id", "name", "order"};
 
         System.out.println(new CSVUtils().objToCSV(list, Arrays.asList(headers)));
 

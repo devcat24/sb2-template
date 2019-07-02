@@ -1,5 +1,6 @@
 package com.github.devcat24.util.stream;
 
+
 import java.util.Arrays;
 import java.util.function.*;
 import java.util.stream.Collectors;
@@ -22,9 +23,9 @@ public class FunctionalInterfaceExample01 {
         assertThat(streamSupplier.get().noneMatch(s -> true)).isFalse();
 
         IntSupplier intSupplier01 = () -> {
-                                            int num = (int) (Math.random() * 7) + 1;
-                                            return num;
-                                        };
+            int num = (int) (Math.random() * 7) + 1;
+            return num;
+        };
         int intSupplierResult01 = intSupplier01.getAsInt();
         assertThat(intSupplierResult01).isGreaterThan(0);
 
@@ -37,14 +38,14 @@ public class FunctionalInterfaceExample01 {
 
         // 3. Function ( parameter -> o (only one param) , return -> o (Object) , apply() interface) => useful for type-conversion
         Function<String, Integer> streamFunction01 = p -> {
-                                                    return Integer.parseInt(p.substring(1)) * 10;
-                                                 };
+            return Integer.parseInt(p.substring(1)) * 10;
+        };
         assertThat(30).isEqualTo(streamFunction01.apply("a3"));
 
         // 4. Predicate ( parameter -> o (only one param) , return -> o (boolean) , test() interface)
         Predicate<String> streamPredicate01 = p -> {
-                                                     return Integer.parseInt(p.substring(1)) > 0;
-                                                    };
+            return Integer.parseInt(p.substring(1)) > 0;
+        };
         assertThat(streamPredicate01.test("C5")).isTrue();
 
         Address addr01 = Address.builder().zipcode(2000).city("Auckland").street("WEST").build();

@@ -4,20 +4,17 @@ package com.github.devcat24.util.csv;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
-import com.github.devcat24.util.annotation.AnnotationTestBean;
 import com.opencsv.CSVWriter;
 import com.opencsv.bean.*;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.reflect.FieldUtils;
-import org.apache.commons.lang3.reflect.TypeUtils;
 
-import java.io.*;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.List;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
@@ -25,7 +22,7 @@ import java.util.List;
 public class CSVUtils {
 
     @SuppressWarnings("unchecked")
-    public List<CSVTestDTO> csvToJavaObj() throws Exception{
+    public List<CSVTestDTO> csvToJavaObj() throws Exception {
         ColumnPositionMappingStrategy strategy = new ColumnPositionMappingStrategy();
         strategy.setType(CSVTestDTO.class);
         String[] columns = new String[] {"id", "name", "order"};

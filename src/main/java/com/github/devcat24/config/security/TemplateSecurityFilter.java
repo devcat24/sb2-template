@@ -17,7 +17,7 @@ import java.io.IOException;
 public class TemplateSecurityFilter implements Filter {
     private FilterConfig config;
     private JPAService jpaService;
-    private String [] excludePattern = {"gif", "jpg", "png", "ico", "css", "js", "html", "htm", "woff", "woff2", "jpeg", "swf", "otf", "tif", "tiff", "map"};
+    private String[] excludePattern = {"gif", "jpg", "png", "ico", "css", "js", "html", "htm", "woff", "woff2", "jpeg", "swf", "otf", "tif", "tiff", "map"};
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

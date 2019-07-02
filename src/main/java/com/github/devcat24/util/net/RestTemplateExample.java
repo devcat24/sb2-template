@@ -1,9 +1,9 @@
 package com.github.devcat24.util.net;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.*;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -54,7 +54,7 @@ RestTemplate restTemplate;*/
     }
 
 
-    public String mockInvokeTest() throws Exception{
+    public String mockInvokeTest() throws Exception {
         System.out.println("########################################");
         System.out.println("########################################");
         System.out.println("        mockInvokeTest                  ");

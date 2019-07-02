@@ -21,25 +21,17 @@
 package com.github.devcat24.util.json;
 
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.InstanceCreator;
-import com.google.gson.JsonElement;
-import com.google.gson.TypeAdapter;
-import com.google.gson.TypeAdapterFactory;
+import com.google.gson.*;
 import com.google.gson.internal.ConstructorConstructor;
 import com.google.gson.internal.ObjectConstructor;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.IdentityHashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * Writes a graph of objects as a list of named nodes.
@@ -95,7 +87,8 @@ public final class GraphAdapterBuilder {
             final TypeAdapter<T> typeAdapter = gson.getDelegateAdapter(this, type);
             final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
             return new TypeAdapter<T>() {
-                @Override public void write(JsonWriter out, T value) throws IOException {
+                @Override
+                public void write(JsonWriter out, T value) throws IOException {
                     if (value == null) {
                         out.nullValue();
                         return;
@@ -144,7 +137,8 @@ public final class GraphAdapterBuilder {
                     }
                 }
 
-                @Override public T read(JsonReader in) throws IOException {
+                @Override
+                public T read(JsonReader in) throws IOException {
                     if (in.peek() == JsonToken.NULL) {
                         in.nextNull();
                         return null;
