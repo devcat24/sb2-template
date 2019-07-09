@@ -7,6 +7,7 @@ import java.util.stream.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("unchecked")
 public class StreamExample01 {
 
     public void example01(){

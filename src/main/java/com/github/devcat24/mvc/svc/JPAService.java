@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
+//import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -208,6 +208,7 @@ public class JPAService {
     //   -- CREATE PROCEDURE get_member_after (IN search_id int)
     //   -- BEGIN select member_id as id, name, city, street, zipcode from jpa_lab_member where MEMBER_ID > search_id ;
     //   -- END
+    @SuppressWarnings("unchecked")
     public void storeProcedureTest(){
         // 8. invoke Stored Procedure using Entity Manager
         StoredProcedureQuery storedQuery
@@ -215,7 +216,6 @@ public class JPAService {
                 .registerStoredProcedureParameter(1, Long.class, ParameterMode.IN)
                 .setParameter(1, 0L);
         storedQuery.execute();
-        //noinspection unchecked
         List<Object[]> mList08 = storedQuery.getResultList();
         for(Object[] memObj: mList08){
             log.info(" 8. Stored Procedure call as Array Object ResultSet: " + memObj[1] + "(" + memObj[0] + ")");

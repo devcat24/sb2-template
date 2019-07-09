@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("unchecked")
 @Configuration
 public class ServletRegBeanConfig {
 
@@ -26,7 +27,8 @@ public class ServletRegBeanConfig {
 
    @Bean
     public ServletRegistrationBean foo(){
-        ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean(new FooServlet(), "/foo");
+       //noinspection unchecked
+       ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean(new FooServlet(), "/foo");
         // request url
         //     ex. http://localhost:8080/foo
         Map<String, String> params = new HashMap<>();
@@ -67,6 +69,7 @@ public class ServletRegBeanConfig {
     @Bean
     public FilterRegistrationBean myFilterRegistrationBean02(){
         FilterRegistrationBean filterBean = new FilterRegistrationBean();
+        //noinspection unchecked
         filterBean.setFilter(new BaseFilter());
         filterBean.addUrlPatterns("/*");
         Map<String, String> params = new HashMap<>();
