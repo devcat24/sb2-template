@@ -1,0 +1,7 @@
++. PlantUML online editor : https://liveuml.com/
+
++. Official doc sequence diagram document :http://plantuml.com/ko/sequence-diagram
+
++. Generate UML image with CLI -> plantuml 'src.txt' -o 'output-directory'
+
++. IntelliJ -> plugin
