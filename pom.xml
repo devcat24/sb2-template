@@ -254,6 +254,11 @@
 			<version>5.2.0</version>
 			<scope>test</scope>
 		</dependency>
+		<!--<dependency>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-pmd-plugin</artifactId>
+			<version>3.12.0</version>
+		</dependency>-->
 	</dependencies>
 	<build>
 		<finalName>${project.artifactId}</finalName>
@@ -323,5 +328,20 @@
 			</plugin>
 		</plugins>
 	</build>
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>3.12.0</version>
+				<configuration>
+					<rulesets>
+						<ruleset>/rulesets/java/braces.xml</ruleset>
+						<ruleset>/rulesets/java/naming.xml</ruleset>
+					</rulesets>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
 
 </project>
