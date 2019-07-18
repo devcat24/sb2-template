@@ -19,10 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+//import static org.junit.Assert.fail;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+// @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)   -> do not use 'webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT' for integration test, could causes port binding exception
+@SpringBootTest // (webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 // 1. Test for datasource & entity-manager configuration
 // 2. Entity design & Repository interface related tests could be done by '@DataJpaTest'
 //    which does not load 'ApplicationContext' (instead uses in memory database)
@@ -35,6 +36,9 @@ public class FooBarConfigTest {
 
     @Autowired
     private Emp01Repo emp01Repo;
+
+    /* @LocalServerPort
+    private int port; */
 
 
     @Test
