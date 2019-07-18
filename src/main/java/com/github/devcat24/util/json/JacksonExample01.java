@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 //import javafx.util.Pair;
-import org.apache.commons.lang3.tuple.ImmutablePair;
+//import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -18,6 +18,7 @@ import java.util.function.Consumer;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class JacksonExample01 {
+    @SuppressWarnings("ConstantConditions")
     public void jsonWithJackson() throws IOException {
         String jsonString = "{\"group1\":[{\"name\":\"kim\",\"age\":20,\"item\":{\"book\":\"math\",\"chapter\":[9, 10]},\"address\":null,\"notification\":false},{\"name\":\"park\",\"age\":30}],\"status\":\"okay\"}";
         /*

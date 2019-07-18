@@ -1,9 +1,13 @@
 package com.github.devcat24.config.db;
 
-import com.github.devcat24.mvc.svc.db.entity.fi.Item01;
-import com.github.devcat24.mvc.svc.db.entity.hr.Emp01;
-import com.github.devcat24.mvc.svc.db.repo.fi.Item01Repo;
-import com.github.devcat24.mvc.svc.db.repo.hr.Emp01Repo;
+//import com.github.devcat24.mvc.svc.db.entity.fi.Item01;
+//import com.github.devcat24.mvc.svc.db.entity.hr.Emp01;
+//import com.github.devcat24.mvc.svc.db.repo.fi.Item01Repo;
+//import com.github.devcat24.mvc.svc.db.repo.hr.Emp01Repo;
+import com.github.devcat24.mvc.db.entity.fi.Item01;
+import com.github.devcat24.mvc.db.entity.hr.Emp01;
+import com.github.devcat24.mvc.db.repo.fi.Item01Repo;
+import com.github.devcat24.mvc.db.repo.hr.Emp01Repo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.LoggerFactory;
@@ -13,8 +17,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -39,11 +44,12 @@ public class FooBarConfigTest {
         Item01 i01 = item01Repo.findByItemno(2002);
 
         if(e01 == null && i01 == null){
-            e01 = new Emp01();
-            e01.setEmpno(1002);
-            e01.setEname("JaneSmith");
-            e01.setJob("Sales");
-            e01.setMgr(2000);
+            // e01 = new Emp01();
+            // e01.setEmpno(1002);
+            // e01.setEname("JaneSmith");
+            // e01.setJob("Sales");
+            // e01.setMgr(2000);
+            e01 = Emp01.builder().empno(1002).ename("JaneSmith").job("Sales").mgr(2000).build();
             emp01Repo.saveAndFlush(e01);
 
             e01 = emp01Repo.findByEmpno(1002);
@@ -58,7 +64,7 @@ public class FooBarConfigTest {
             item01Repo.delete(i01);
         }   else {
             logger.info("Testing with already existing rows");
-            assertTrue(false);
+            assertTrue(false);  // -> can be simplified with ' fail();'
             // Or create another objects for testing
         }
     }

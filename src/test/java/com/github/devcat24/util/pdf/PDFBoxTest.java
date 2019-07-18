@@ -2,9 +2,9 @@ package com.github.devcat24.util.pdf;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.io.ResourceLoader;
+//import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.ResourceUtils;
 
@@ -19,6 +19,7 @@ public class PDFBoxTest {
     // ResourceLoader resourceLoader;
 
 
+    @SuppressWarnings("RedundantThrows")
     @Test
     public void testRestTemplate() throws Exception {
         try {
