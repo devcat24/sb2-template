@@ -12,7 +12,7 @@ public class InitAppInfo {
 
     @PostConstruct
     public void loadAppVersion() throws Exception {
-        log.info("Loading application version info");
         ApplicationVersion.applicationVersion = new AppVersionLoader().getApplicationTitleNVersion();
+        log.info("Spring Boot application version '" + ApplicationVersion.applicationVersion + "' is loaded");
     }
 }
