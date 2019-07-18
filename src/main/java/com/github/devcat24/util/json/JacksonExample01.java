@@ -7,7 +7,10 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import javafx.util.Pair;
+//import javafx.util.Pair;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.MutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -244,7 +247,8 @@ public class JacksonExample01 {
             // else if (rtnObj.isNull()){}  --> checked by upper condition
         }
         @SuppressWarnings("UnnecessaryLocalVariable")
-        Pair<String, JsonNode> rtnPair = new Pair<>(jsonType, rtnObj);
+        Pair<String, JsonNode> rtnPair = new MutablePair<>(jsonType, rtnObj);
+        //Pair<String, JsonNode> rtnPair = new ImmutablePair<>(jsonType, rtnObj);
         return rtnPair;
     }
 
