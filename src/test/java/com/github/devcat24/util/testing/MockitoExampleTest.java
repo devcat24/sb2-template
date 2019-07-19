@@ -1,6 +1,6 @@
-package com.github.devcat24.mockito;
+package com.github.devcat24.util.testing;
 
-import com.github.devcat24.mvc.rest.RestTemplateSvc;
+import com.github.devcat24.mvc.svc.RestTemplateSvc;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;

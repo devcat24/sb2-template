@@ -3,8 +3,8 @@ package com.github.devcat24.mvc.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.devcat24.mvc.svc.db.dto.mm.RestEmp;
-import com.github.devcat24.mvc.svc.resttemplate.RestTemplateSvc;
+import com.github.devcat24.mvc.dto.mm.RestEmp;
+import com.github.devcat24.mvc.svc.RestTemplateSvc;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -12,23 +12,18 @@ import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import springfox.documentation.annotations.ApiIgnore;
 
-import javax.annotation.Resource;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 
 @Slf4j
@@ -53,7 +48,7 @@ public class RESTSvcController {
     // 1. 'MappingJackson2HttpMessageConverter' for returning JSon result from java object
     //    -> mapping java object should have 'getter/setter' methods
     //    -> curl 'http://localhost:8200/template/foos/3'
-    @RequestMapping(method=RequestMethod.GET, value="/rest/{id}")
+    @RequestMapping(method= RequestMethod.GET, value="/rest/{id}")
     @ResponseBody
     // @ApiIgnore   // exclude from Swagger API exposure
     public RestEmp getFooEmp01(@PathVariable long id){
@@ -77,9 +72,9 @@ public class RESTSvcController {
     // 3. 'RestTemplate' & 'Jackson' for consuming Json REST Service
     //    -> mapping java object should have 'getter/setter' methods
     //   -> curl 'http://localhost:8200/template/foos/resttemplate01'
-    @RequestMapping(method=RequestMethod.GET, value="/rest/resttemplate01")
+    @RequestMapping(method= RequestMethod.GET, value="/rest/resttemplate01")
     @ResponseBody
-    public Object restTemplate01() throws Exception{
+    public Object restTemplate01() throws Exception {
         /*
         String url = "http://localhost:8200/template/rest/jsonHolder/emps";
         RestTemplate restTemplate = new RestTemplate();
@@ -97,7 +92,7 @@ public class RESTSvcController {
     // 4. 'RestTemplate' with custom 'Jackson Message Converter'
     //    -> mapping java object should have 'getter/setter' methods
     //    -> curl 'http://localhost:8200/template/foos/resttemplate01'
-    @RequestMapping(method=RequestMethod.GET, value="/rest/resttemplate02")
+    @RequestMapping(method= RequestMethod.GET, value="/rest/resttemplate02")
     @ResponseBody
     public Object restTemplate02(){
         String url = "http://localhost:8200/template/rest/jsonHolder/emps";
@@ -182,7 +177,7 @@ public class RESTSvcController {
 
     // 6. XML/HTML consuming with JSoup
     //   -> curl 'http://localhost:8200/template/rest/xml/order/2'
-    @RequestMapping(method=RequestMethod.GET, value="/rest/xml/order/{orderNo}")
+    @RequestMapping(method= RequestMethod.GET, value="/rest/xml/order/{orderNo}")
     @ResponseBody
     public String getXmlOrder(@PathVariable int orderNo) throws IOException {
         String rtnString = "";
