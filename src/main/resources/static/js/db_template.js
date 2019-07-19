@@ -25,6 +25,7 @@ var findMemberById = function(id_element) {
         bootbox.alert(findMemberIdMsg_TypeID);
         return;
     }
+    //console.log(' search for id:' + memberId.val());
     findMemberByIdXhr = $.ajax({
         "url" : ctxPath + "/findMemberById",
         "type" : "POST",

@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @SuppressWarnings("unused")
@@ -17,7 +18,8 @@ public interface MemberRepo extends JpaRepository<Member, Long> {
     List<Member> findAll();
 
  // 1. Simple JPA Repository invoke
- <Optional> Member findById(Long id);
+ //<Optional> Member findById(Long id);
+ Optional<Member> findById(Long id);
 
  // 2. JPA invoke using JPQL (Param type #1)
  @Query("SELECT m FROM com.github.devcat24.mvc.db.entity.mm.Member m WHERE m.id > ?1")

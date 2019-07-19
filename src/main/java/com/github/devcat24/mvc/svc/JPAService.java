@@ -152,12 +152,18 @@ public class JPAService {
 
     // 1-1. Simple JPA Repository invoke
     public List<Member> getAllMembers(){
-        return memberRepo.findAll();
+        List<Member> mList = memberRepo.findAll();
+        mList.stream().forEach(s -> {
+            System.out.println("--->" + s.getId() + "<" + s.getName() + ">");
+        });
+        return mList;
+        //return memberRepo.findAll();
     }
     // 1-2. Simple JPA Repository invoke
     public Member findMemberById(Long id){
-    //    return  memberRepo.findById(id);
-        return null;
+        /*Member sudoMember = Member.builder().id(9999L).name("SudoUser").city("Auckland").street("").zipcode("000").build();
+        return memberRepo.findById(id).orElse(sudoMember);*/
+        return memberRepo.findById(id).orElse(null);
     }
     // 2. JPA invoke using JPQL (Param type #1)
     public List<Member> findAllMembersFrom(Long id){
