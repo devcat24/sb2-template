@@ -1,6 +1,7 @@
 package com.github.devcat24.config.security;
 
 
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -22,6 +23,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // csrf should be disabled to handle 'POST' request
         http.csrf().disable().authorizeRequests().anyRequest().permitAll();
+
+        /*http.requestMatcher(EndpointRequest.toAnyEndpoint()).authorizeRequests()
+                .anyRequest().hasRole("ENDPOINT_ADMIN")
+                .and()
+                .httpBasic();*/
+
 
         /*
         http

@@ -79,7 +79,7 @@ public class MailNotificationSvc {
 
         List<String> recipientList = new ArrayList<>();
         if(recipients != null && StringUtils.isNotBlank(recipients)){
-            String [] rArray = recipients.split(",");
+            String[] rArray = recipients.split(",");
             for(String mailAddr : rArray){
                 if(StringUtils.isNotBlank(mailAddr) && Pattern.matches(regExp, mailAddr)){
                     recipientList.add(StringUtils.trimToEmpty(mailAddr));

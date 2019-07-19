@@ -50,7 +50,7 @@
     </p>
     <p>6. File Archive : ArchiveUtils.*</p>
     <p>7. Send Mail : MailNotificationSvc.sendHtmlEmail()</p>
-    <p>8. Spring Actuator : <a href="http://localhost:8201/manage/TemplateSvc">TemplateSvcEndpoint.*</a></p>
+    <p>8. Spring Actuator : <a href="./actuator/health">TemplateSvcEndpoint.*</a></p>
     <p>9. Security Filter & Development user simulation : TemplateSecurityFilter</p>
     <p>10. AES Password encryption/decription : AESUtil</p>
     <p>11. Keep Alive ping using prevents session timeout : DefaultController.ping()</p>

@@ -1,0 +1,29 @@
+- https://dzone.com/articles/spring-boot-actuator-in-spring-boot-20
+- https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-endpoints.html
+- http://www.masterspringboot.com/configuration/metrics/how-to-implement-custom-health-indicators-in-spring-boot
+
++. Add dependency to 'pom.xml'
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+
++. invoke 'http://localhost:8200/template/actuator'
+   -> default actutuator page
+
++. setup properties in 'application.properties'
+   -> management.endpoints.web.exposure.include=*
+
++. use spring security to secure endpoint  -> WebSecurityConfig.configure()
+   ->   http.requestMatcher(EndpointRequest.toAnyEndpoint()).authorizeRequests()
+            .anyRequest().hasRole("ENDPOINT_ADMIN")
+            .and()
+            .httpBasic();
+
++. Custom HealthIndicator
+   -> create class implements 'HealthIndicator'(CustomEndpointActuator)
+   -> invoke 'http://localhost:8200/template/actuator/health'
+
+
+
+
