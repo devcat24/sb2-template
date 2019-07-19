@@ -136,6 +136,11 @@
 			<artifactId>tomcat-embed-jasper</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+		</dependency>
+		<!-- required for jsp & jstl !!! (if ommitted spring-boot can't find 'WEB-INF', without error !) -->
+		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<!--<scope>runtime</scope>-->
@@ -177,6 +182,11 @@
 			<artifactId>jquery</artifactId>
 			<version>1.12.3</version>
 			<!-- jquery 2.x doesn't support ie 6/7/8 -->
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>font-awesome</artifactId>
+			<version>4.6.2</version>
 		</dependency>
 		<!--<dependency>
 			<groupId>org.springframework.ldap</groupId>

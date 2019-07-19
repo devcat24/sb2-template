@@ -6,9 +6,9 @@ import com.github.devcat24.util.json.GsonUtil;
 import com.github.devcat24.util.net.RestTemplateExample;
 import com.github.devcat24.util.reflection.ReflectionSampleBean;
 import com.github.devcat24.util.regex.RegExpExample;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-//import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -18,7 +18,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-//import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -33,10 +32,9 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-@Slf4j
 @Controller("DefaultController")
 public class DefaultController {
-    //private static final org.slf4j.Logger logger = LoggerFactory.getLogger(DefaultController.class);
+    private static final Logger logger = LoggerFactory.getLogger(DefaultController.class);
 
     private JmsTemplate jmsTemplate;
     @Autowired
@@ -45,7 +43,6 @@ public class DefaultController {
 
     @Value("${template.keep.alive.ping.interval}")
     private Long keepAlivePing;
-
 
     // 1. Spring dependency injection - type 1: using field dependency injection
     //    > quite popular practice but, not recommended by Spring
@@ -127,69 +124,11 @@ public class DefaultController {
 
 
 
-
-
-    @SuppressWarnings("unchecked")
-    @ResponseBody
-    @RequestMapping(value="/reflectionEx01")
-    public String reflectionEx01() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        ReflectionSampleBean rsBean = new ReflectionSampleBean();
-        Class rsBeanClass = rsBean.getClass();
-        //rsBeanClass.getName(); rsBeanClass.getPackage();
-
-        Field[] fields = rsBeanClass.getDeclaredFields();  // rsBeanClass.getFields();       =>  from inheritance
-
-        String [] fieldStringList = new String[fields.length];
-        for(int ins=0; ins < fields.length ; ins++) {
-            //for(Field field : fields){
-            fields[ins].setAccessible(true);
-
-            Annotation[] annotations = fields[ins].getAnnotations();
-            String [] annotationNames = new String[annotations.length];
-            for(int inx=0; inx < annotations.length ; inx ++) {
-                Class<? extends Annotation> type = annotations[inx].annotationType();
-                annotationNames[inx] = type.getName();
-            }
-            String annotationString = StringUtils.join(annotationNames, ", ");
-            fieldStringList[ins] = fields[ins].getName() + " [" + annotationString + "]";
-        }
-        //Method [] methods = rsBeanClass.getDeclaredMethods();  // rsBeanClass.getMethods();  =>  from inheritance
-        Method setAddrMethod = rsBeanClass.getDeclaredMethod("setAddress", String.class);
-        setAddrMethod.setAccessible(true);
-        setAddrMethod.invoke(rsBean,"New Address");
-
-        return StringUtils.join(fieldStringList, ", ");
-
-
-        // --> Reflection with generic type argument
-        //
-        // public <T> String getAnnotationValueFromGenericList(List<T> objects) {
-        // 	working using annotation ...
-        // 	   -> even though, annotation could be extracted from 'List<T> objects'
-        // 	      but, if 'List<T> objects' is empty, this approach could make problem
-        // 	        => just use 'passing headers by parameter' logic
-        // 	if(objects != null && objects.size() > 0){
-        // 		Field [] fields = FieldUtils.getAllFields(objects.iterator().next().getClass());
-        // 		for(Field field : fields) {
-        // 			CsvBindByPosition csvBindByPosition = field.getAnnotation(CsvBindByPosition.class);
-        // 			if(csvBindByPosition != null){
-        // 				System.out.println(field.getName() + ": @CsvBindByPosition(position - " + csvBindByPosition.position() + ")");
-        // 			}
-        // 		}
-        // 	}
-        // 	return "ok";
-        // }
-    }
-
-
-
-
-
     @ResponseBody
     @RequestMapping(value="/msgSrc")
     public String msgSrc() throws Exception {
-        log.info("Local.US     : " + messageSource.getMessage("hello.test", null, "no such message", Locale.US));
-        log.info("Local.KR     : " + messageSource.getMessage("hello.test", null, "no such message", Locale.KOREA));
+        logger.info("Local.US     : " + messageSource.getMessage("hello.test", null, "no such message", Locale.US));
+        logger.info("Local.KR     : " + messageSource.getMessage("hello.test", null, "no such message", Locale.KOREA));
         return "ok !";
     }
 
@@ -257,5 +196,6 @@ public class DefaultController {
 
         return "sent!";
     }
-}
 
+
+}

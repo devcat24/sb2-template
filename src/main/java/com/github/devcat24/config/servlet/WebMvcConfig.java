@@ -1,9 +1,13 @@
 package com.github.devcat24.config.servlet;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.CacheControl;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.resource.WebJarsResourceResolver;
+
+import java.util.concurrent.TimeUnit;
 // import org.springframework.http.CacheControl;
 // import org.springframework.web.servlet.resource.WebJarsResourceResolver;
 // import java.util.concurrent.TimeUnit;
@@ -35,5 +39,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .resourceChain(true)
                 .addResolver(new WebJarsResourceResolver());
         */
+
     }
 }
