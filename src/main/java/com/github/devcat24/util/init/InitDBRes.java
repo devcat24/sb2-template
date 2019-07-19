@@ -9,7 +9,7 @@ import com.github.devcat24.mvc.db.repo.mm.MemberRepo;
 import com.github.devcat24.mvc.db.repo.mm.OrderItemRepo;
 import com.github.devcat24.mvc.db.repo.mm.OrderRepo;
 import com.github.devcat24.mvc.svc.HREmpSvc;
-import com.github.devcat24.mvc.svc.JPAService;
+import com.github.devcat24.mvc.svc.JPASvc;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -50,7 +50,7 @@ public class InitDBRes {
     private OrderItemRepo orderItemRepo;
 
     @Autowired
-    private JPAService jpaService;
+    private JPASvc jpaSvc;
 
     private HREmpSvc hrEmpSvc;
     @Autowired
@@ -60,8 +60,8 @@ public class InitDBRes {
 
     @PostConstruct
     public void buildData() throws JsonProcessingException {
-        jpaService.loadInitialData();
-        //jpaService.jpaRepositorySampleInvoke();
+        jpaSvc.loadInitialData();
+        //jpaSvc.jpaRepositorySampleInvoke();
 
         hrEmpSvc.save( Emp01.builder().empno(101).ename("Olivia").job("Manager").mgr(101).build() );
         hrEmpSvc.save( Emp01.builder().empno(102).ename("Amelia").job("Manager").mgr(101).build() );

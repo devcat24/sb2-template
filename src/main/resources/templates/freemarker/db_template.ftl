@@ -76,7 +76,7 @@
     </div>
     <br />
     <div class="bs-component" style="background-color: #d43f3a;color: #FFFFFF; font-weight:bold; padding: 1px;">
-        <h5>&nbsp;Check JPA examples from : com.github.devcat24.mvc.svc.JPAService</h5>
+        <h5>&nbsp;Check JPA examples from : com.github.devcat24.mvc.svc.JPASvc</h5>
     </div>
     <br />
 

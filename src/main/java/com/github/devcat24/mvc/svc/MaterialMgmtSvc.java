@@ -74,7 +74,7 @@ public class MaterialMgmtSvc {
     //@Transactional(value="fooTransactionManager", propagation = Propagation.REQUIRED)
     @Transactional(propagation = Propagation.REQUIRED)
     public void loadInitialData()  {
-        logger.info("------------- in JPAService.loadInitialData() ----------------");
+        logger.info("------------- in JPASvc.loadInitialData() ----------------");
         emp01Repo.saveAndFlush(Emp01.builder().empno(1001).ename("JohnDoe").job("Sales").mgr(1000).build());
 
         /*Item01 i01 = new Item01();

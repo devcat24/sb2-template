@@ -43,7 +43,7 @@ import java.util.List;
 // 1. Spring JPA use LAZY loading by default, to escape 'No Session' exception
 //    > Bind JPA operation with Transaction with '@Transactional(value="fooTransactionManager", propagation = Propagation.REQUIRED)' key word
 //    > Put JPA operation on '@Service' classes (Do not put JPA operation itself to '@PostConstruct' things ! -> put it '@Service' & invoke that method)
-//    > refer to -> 'JPAService.loadInitalData()'
+//    > refer to -> 'JPASvc.loadInitalData()'
 
 
 @NoArgsConstructor

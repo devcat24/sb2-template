@@ -1,10 +1,10 @@
 package com.github.devcat24.mvc.controller;
 
 import com.github.devcat24.config.prop.ApplicationVersion;
-import com.github.devcat24.mvc.svc.JPAService;
+import com.github.devcat24.mvc.svc.JMSSvc;
+import com.github.devcat24.mvc.svc.JPASvc;
 import com.github.devcat24.util.json.GsonUtil;
 import com.github.devcat24.util.net.RestTemplateExample;
-import com.github.devcat24.util.reflection.ReflectionSampleBean;
 import com.github.devcat24.util.regex.RegExpExample;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -21,10 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,10 +32,11 @@ import java.util.Map;
 public class DefaultController {
     private static final Logger logger = LoggerFactory.getLogger(DefaultController.class);
 
-    private JmsTemplate jmsTemplate;
+    private JMSSvc jmsSvc;
     @Autowired
-    public void setJmsTemplate(JmsTemplate jmsTemplate) { this.jmsTemplate = jmsTemplate; }
-
+    public void setJmsSvc(JMSSvc jmsSvc){
+        this.jmsSvc = jmsSvc;
+    }
 
     @Value("${template.keep.alive.ping.interval}")
     private Long keepAlivePing;
@@ -78,10 +75,10 @@ public class DefaultController {
 
 
 
-    private JPAService jpaService;
+    private JPASvc jpaSvc;
     @Autowired
-    void setJpaService(JPAService jpaService){
-        this.jpaService = jpaService;
+    void setJpaSvc(JPASvc jpaSvc){
+        this.jpaSvc = jpaSvc;
     }
 
     private RestTemplateExample restTemplateExample;
@@ -99,27 +96,27 @@ public class DefaultController {
 
     @RequestMapping(value={"/dbTemplate"})
     public String dbTemplate(Model model) throws Exception {
-        model.addAttribute("allMembers", jpaService.getAllMembers());
+        model.addAttribute("allMembers", jpaSvc.getAllMembers());
         return "db_template" ;
     }
 
     @ResponseBody
     @RequestMapping(value="/findMemberById", produces={"application/json;charset=UTF-8"})
     public String findMemberById(Long id){
-        /*Member foundMember = jpaService.findMemberById(id);
+        /*Member foundMember = jpaSvc.findMemberById(id);
 
         GsonBuilder gsonBuilder = new GsonBuilder();
         new GraphAdapterBuilder().addType(Member.class).registerOn(gsonBuilder);
         Gson gson = gsonBuilder.setPrettyPrinting().setDateFormat("dd/MM/yyyy").create();
         return gson.toJson(foundMember);
         */
-        return GsonUtil.toJsonString(jpaService.findMemberById(id));
+        return GsonUtil.toJsonString(jpaSvc.findMemberById(id));
     }
 
     @ResponseBody
     @RequestMapping(value="/findAllMembersFrom", produces={"application/json;charset=UTF-8"})
     public String findAllMembersFrom(Long id){
-        return GsonUtil.toJsonString(jpaService.findAllMembersFrom(id));
+        return GsonUtil.toJsonString(jpaSvc.findAllMembersFrom(id));
     }
 
 
@@ -189,12 +186,14 @@ public class DefaultController {
     @ResponseBody
     @RequestMapping(value="/sendAmqQueue01")
     public String sendAmqQueue01() throws Exception {
-        String qName = "amq.exam.queue01";
-        //jmsTemplate.setPubSubDomain(true);  // -> publish as topic
-        jmsTemplate.convertAndSend("amq.exam.queue01", "New Message !");
+//        String qName = "amq.exam.queue01";
+//        //jmsTemplate.setPubSubDomain(true);  // -> publish as topic
+//        jmsTemplate.convertAndSend("amq.exam.queue01", "New Message !");
+        if(jmsSvc.sendAmqQueue01()) {
+            return "sent!";
+        }
 
-
-        return "sent!";
+        return "fail to send message!";
     }
 
 

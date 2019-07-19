@@ -1,7 +1,7 @@
 package com.github.devcat24.config.security;
 
 import com.github.devcat24.config.prop.DevUser;
-import com.github.devcat24.mvc.svc.JPAService;
+import com.github.devcat24.mvc.svc.JPASvc;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
@@ -16,7 +16,7 @@ import java.io.IOException;
 @Slf4j
 public class TemplateSecurityFilter implements Filter {
     private FilterConfig config;
-    private JPAService jpaService;
+    private JPASvc jpaSvc;
     private String[] excludePattern = {"gif", "jpg", "png", "ico", "css", "js", "html", "htm", "woff", "woff2", "jpeg", "swf", "otf", "tif", "tiff", "map"};
 
     @Override
@@ -24,7 +24,7 @@ public class TemplateSecurityFilter implements Filter {
         this.config = filterConfig;
 
         ApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(config.getServletContext());
-        this.jpaService= ctx.getBean(JPAService.class);
+        this.jpaSvc = ctx.getBean(JPASvc.class);
     }
     @Override
     public void destroy() {
@@ -50,7 +50,7 @@ public class TemplateSecurityFilter implements Filter {
             if(! DevUser.loginAsDevUser){
                 /* UserInfo loginUser = (UserInfo)session.getAttribute("loginUser");
                 if(loginUser == null){
-                    UserInfo user = jpaService.getUserByName(requestUser);
+                    UserInfo user = jpaSvc.getUserByName(requestUser);
                     session.setAttribute("loginUser", user);
                 }   else {
                     if(! StringUtils.equalsIgnoreCase(requestUser, user.getName()) ) {
@@ -67,7 +67,7 @@ public class TemplateSecurityFilter implements Filter {
                 log.warn(loginModeMsg);
                  /*//// hard-coded user from application.properties -> template.auth.loginAsDevUser && template.auth.devUserName
                 String loginUserName = DevUser.userName;
-                UserInfo user = jpaService.getUserByName(loginUserName);
+                UserInfo user = jpaSvc.getUserByName(loginUserName);
                 if(user == null){
                     throw LoginUserNotFoundException("...");
                 }

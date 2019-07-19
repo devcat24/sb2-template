@@ -28,9 +28,9 @@ import java.util.List;
 @SuppressWarnings({"unused", "UnusedAssignment", "FieldCanBeLocal"})
 @Slf4j
 // lombok annotation for logging (@Slf4j/@Log4j/@Log4j2/@CommonsLog/@Log) -> invoke simply with 'log.info("Sample message");'
-@Service("PAService")
-public class JPAService {
-    private static final Logger logger = LoggerFactory.getLogger(JPAService.class);
+@Service("JPASvc")
+public class JPASvc {
+    private static final Logger logger = LoggerFactory.getLogger(JPASvc.class);
 
     private Emp01Repo emp01Repo;
     @Autowired
@@ -85,7 +85,7 @@ public class JPAService {
     //@Transactional(value="fooTransactionManager", propagation = Propagation.REQUIRED)
     @Transactional
     public void loadInitialData()  {
-        log.info("------------- in JPAService.loadInitialData() ----------------");
+        log.info("------------- in JPASvc.loadInitialData() ----------------");
 //        Emp01 e01 = new Emp01();
 //        e01.setEmpno(1001);
 //        e01.setEname("JohnDoe");
