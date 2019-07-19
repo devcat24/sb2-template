@@ -2,7 +2,8 @@
 
 clear;
 echo "1. Generate password escaped application.properties_sample "
-./src/main/resources/shell_scripts/escape_prop.sh
+echo "   -> currently disabled "
+# ./src/main/resources/shell_scripts/escape_prop.sh
 echo "  "
 
 #echo "2. clean up temporary directories"
@@ -26,4 +27,5 @@ sleep 1
 
 echo "4. Starting Spring Boot application"
 #mvn -Dspring.config.location=./dev_conf/application.properties clean package install -U
-mvn -Dspring.config.location=./dev_conf/application.properties package 
+# mvn -Dspring.config.location=./dev_conf/application.properties package
+mvn clean package

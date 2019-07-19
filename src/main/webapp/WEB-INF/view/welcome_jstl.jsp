@@ -44,7 +44,7 @@
         <i class="fa fa-chevron-right" aria-hidden="true"></i></p>
     <p>4. RestTemplate File download : RestTemplateSvc.downloadRemoteFile()</p>
     <p>5. Reflection : <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        <a href="./reflectionEx01">TestController.reflectionEx01()</a>,
+        ReflectionTest.serviceLoaderTest(),
         <a href="https://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/reflect/package-summary.html">Commons Lang <i class="fa fa-arrow-right" aria-hidden="true"></i> Reflect</a>
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
     </p>
