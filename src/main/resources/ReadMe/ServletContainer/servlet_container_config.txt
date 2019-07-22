@@ -1,0 +1,15 @@
+1. Configuration sample files
+  - application.properties : 'Spring Datasource & JPA EntityManager' section
+  - ServletContainer.java : Configuration for basic JSTL supports
+  - pom.xml : project library configuration
+
+
+2. application.properties
+  - 'Servlet Container Configuration' section
+
+3. pom.xml
+  - 'org.apache.tomcat.embed / tomcat-embed-jasper' & 'javax.servlet / jstl' should be declared
+
+4. ServletContainerConfig.java
+  - 'InternalResourceViewResolver' bean should be defined which matches directory structures with '/WEB-INF'
+  - To support 'AJP protocol', 'EmbeddedServletContainerFactory' bean should be defined using AJP related properties.

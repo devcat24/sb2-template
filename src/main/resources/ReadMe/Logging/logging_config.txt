@@ -1,0 +1,90 @@
+1. define logging properties 'application.properties'
+   -> create multiple configuration by environment 'development/test/staging/production' & load by excution script
+	############## General LOGGING ###############################
+	logging.config=classpath:logback_console.xml
+	# Location of the logging configuration file. For instance 'classpath:logback_daily_rolling.xml' for Logback
+	# logging.exception-conversion-word=%wEx
+	# Conversion word used when logging exceptions.
+	logging.file=/var/log/dev-template/stdout/myapp.log
+	# Log file name. For instance 'myapp.log' will generate 'myapp.log.log'
+	logging.level.*=DEBUG
+	# Log levels severity mapping. For instance 'logging.level.org.springframework=DEBUG'
+	# logging.path=/opt/dev/logs/myapp
+	# Location of the log file. For instance '/var/log'
+	# logging.pattern.console=
+	# Appender pattern for output to the console. Only supported with the default logback setup.
+	# logging.pattern.file=.%d{yyyy-MM-dd}.log
+	# Appender pattern for output to the file. Only supported with the default logback setup.
+	# logging.pattern.level=
+	# Appender pattern for log level (default %5p). Only supported with the default logback setup.
+	# logging.register-shutdown-hook=false
+	# Register a shutdown hook for the logging system when it is initialized.
+	##############################################################
+
+
+2. Configure logback_***.xml
+
+
+3. invoke 'Logger' in application
+   a. general type
+      private static final Logger logger = LoggerFactory.getLogger(SecurityFilter.class);
+   b. invoke specific looger defined in 'logback_***.xml'
+      private static final Logger servletRequestPerfLogger = LoggerFactory.getLogger("servletRequestPerfLogger");
+   c. using Lombok annotation
+	   @Slf4j // (@Slf4j/@Log4j/@Log4j2/@CommonsLog/@Log) -> invoke simply with 'log.info("Sample message");'
+
+
+   ---------------------<logback_***.xml sample>-------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}/}spring.log}"/>
+    <include resource="org/springframework/boot/logging/logback/file-appender.xml" />
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- By default, encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
+        <encoder>
+            <pattern>%d{yyyyMMdd HH:mm:ss.SSS} [%thread] %-3level %logger{5} - %msg %n</pattern>
+        </encoder>
+    </appender>
+    <appender name="dailyRolling" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}.stdout.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE}.stdout.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>90</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyyMMdd HH:mm:ss.SSS} [%thread] %-3level %logger{5} - %msg %n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="springSvcPerfLogger" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyyMMdd HH:mm:ss.SSS} [%thread] %-3level %logger{5} - %msg %n</pattern>
+        </encoder>
+    </appender>
+    <logger name="springSvcPerfLogger" level="DEBUG" additivity="false">
+        <appender-ref ref="springSvcPerfLogger"/>
+    </logger>
+    <appender name="servletRequestPerfLogger" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyyMMdd HH:mm:ss.SSS} [%thread] %-3level %logger{5} - %msg %n</pattern>
+        </encoder>
+    </appender>
+    <logger name="servletRequestPerfLogger" level="DEBUG" additivity="false">
+        <appender-ref ref="servletRequestPerfLogger"/>
+    </logger>
+    <logger name="jdbc" level="OFF"/>
+    <logger name="jdbc.sqltiming" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <logger name="jdbc.resultsettable" level="DEBUG" additivity="false">>
+        <appender-ref ref="STDOUT" />
+    </logger>
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>
+   ----------------------------------------------------------------------
+

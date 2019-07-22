@@ -1,0 +1,38 @@
++. using spring loaded
+  : https://docs.spring.io/spring-boot/docs/current/reference/html/howto-hotswapping.html
+ a. pom.xml
+	<build>
+	<finalName>${project.artifactId}</finalName>
+		<!-- remove version from final jar name -->
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<executable>true</executable>
+				</configuration>
+
+				<dependencies>
+					<dependency>
+						<groupId>org.springframework</groupId>
+						<artifactId>springloaded</artifactId>
+						<version>1.2.5.RELEASE</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
+
+ b. IntelliJ > Settings
+	Build, Execution, Deployment > Compiler > Build project automatically -> checked
+	Build, Execution, Deployment > HotSwap > Reload classes after compilation -> Always
+
+ c. mvn run option
+    export MAVEN_OPTS="-Xmx384m -XX:+UseG1GC ${JMX_OPTS} -javaagent:/opt/dev/lib/spring-loaded/springloaded-1.2.7.RELEASE.jar -noverify"
+
++. alternatives -> using DCEVM
+  > not working well
+    http://hotswapagent.org/mydoc_quickstart.html
+
+
+

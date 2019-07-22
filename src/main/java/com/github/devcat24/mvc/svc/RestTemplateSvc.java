@@ -24,17 +24,30 @@ public class RestTemplateSvc {
     @Value("${rest.api.password}")
     String password;
 
+    // -> for Spring 4.x -> 'BasicAuthorizationInterceptor' is deprecated
+    @SuppressWarnings("deprecation")
     private BasicAuthorizationInterceptor getBasicAuthorizationInterceptor(){
         return new BasicAuthorizationInterceptor(username, password);
     }
+
 
     public String fetchAsStringFromRestAPI() throws Exception {
         String rtn = null;
         String url = "http://localhost:8200/template/rest/jsonHolder/emps";
         try {
             RestTemplate restTemplate = new RestTemplate();
-            restTemplate.getInterceptors().add(getBasicAuthorizationInterceptor());
-            ResponseEntity<String> res = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
+
+
+            // -> for Spring 4.x -> 'BasicAuthorizationInterceptor' is deprecated
+            // restTemplate.getInterceptors().add(getBasicAuthorizationInterceptor());
+            // ResponseEntity<String> res = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setBasicAuth(username, password);
+            HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+            ResponseEntity<String> res = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
+
+
             //noinspection RedundantStringToString
             rtn = res.getBody().toString();
         } catch (Exception ex){

@@ -1,3 +1,5 @@
+--- for Spring Boot 2.x ---
+
 1. Define Database properties & JPA properties in 'application.properties'
    -> refer to '### Datasource & JPA configuration (custom Java Config class) ###' in 'application.properties'
    -> need to comment out '### Datasource & JPA configuration (using Spring Boot standard properties) ###' section
