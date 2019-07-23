@@ -36,7 +36,9 @@ public class FunctionalInterfaceExample01 {
         BiConsumer<String, String> streamBiConsumer01 = (p1, p2) -> { System.out.println(p1 + ", " + p2); };
         streamBiConsumer01.accept("first param", "second param");
 
-        // 3. Function ( parameter -> o (only one param) , return -> o (Object) , apply() interface) => useful for type-conversion
+        // 3. Function ( parameter -> o (only one param) , return -> o (Object) , apply() interface)
+        //      => useful for type-conversion
+        //        cf. UnaryOperator/BinaryOperator => cannot change return type (parameter & return should be same type of object)
         Function<String, Integer> streamFunction01 = p -> {
             return Integer.parseInt(p.substring(1)) * 10;
         };
@@ -60,6 +62,8 @@ public class FunctionalInterfaceExample01 {
 
 
         // 5. UnaryOperator ( parameter -> o (one), return -> o (Object) , apply() interface )
+        //      => UnaryOperator/BinaryOperator => cannot change return type (parameter & return should be same type of object)
+        //          cf. Function => parameter & return could be different object type => useful for type-conversion
         //UnaryOperator<String> str = (msg) -> { return msg.toUpperCase();} ;
         UnaryOperator<String> unaryOperator01 = (msg) -> msg.toUpperCase() ;
         assertThat("UNARYOPERATOR").isEqualTo(unaryOperator01.apply("UnaryOperator"));
