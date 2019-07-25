@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -26,8 +27,11 @@ public class Sb2TemplateRunEnvTest {
 	@LocalServerPort
 	private int port;
 
+	@Value(value = "${server.servlet.context-path}")
+	String contextPath;
+
 	private String getRootUrl(){
-		return "http://localhost:" + port;
+		return "http://localhost:" + port + contextPath;
 	}
 
     @Before
@@ -40,5 +44,4 @@ public class Sb2TemplateRunEnvTest {
 		ResponseEntity<String> response = restTemplate.exchange(getRootUrl() + "/api/v1/emp", HttpMethod.GET, entity, String.class);
 		assertNotNull(response.getBody());
 	}
-
 }
