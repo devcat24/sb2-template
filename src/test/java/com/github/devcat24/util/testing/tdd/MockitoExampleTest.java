@@ -1,4 +1,4 @@
-package com.github.devcat24.util.testing;
+package com.github.devcat24.util.testing.tdd;
 
 import com.github.devcat24.mvc.svc.RestTemplateSvc;
 import lombok.extern.slf4j.Slf4j;

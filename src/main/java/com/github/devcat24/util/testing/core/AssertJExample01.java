@@ -1,4 +1,4 @@
-package com.github.devcat24.util.testing;
+package com.github.devcat24.util.testing.core;
 
 
 import com.github.devcat24.util.stream.Article;

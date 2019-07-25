@@ -1,4 +1,4 @@
-package com.github.devcat24.util.testing;
+package com.github.devcat24.util.testing.bdd;
 
 public class FizzBuzz {
     public String play(int num) {

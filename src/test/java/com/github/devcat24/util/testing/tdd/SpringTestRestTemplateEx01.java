@@ -1,5 +1,6 @@
-package com.github.devcat24;
+package com.github.devcat24.util.testing.tdd;
 
+import com.github.devcat24.Sb2TemplateApplication;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +20,7 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(SpringRunner.class)
 //Testing with running server environment
 @SpringBootTest(classes = Sb2TemplateApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class Sb2TemplateRunEnvTest {
+public class SpringTestRestTemplateEx01 {
 
     @Autowired
 	private TestRestTemplate restTemplate;

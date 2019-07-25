@@ -1,4 +1,4 @@
-package com.github.devcat24.util.testing;
+package com.github.devcat24.util.testing.bdd;
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;

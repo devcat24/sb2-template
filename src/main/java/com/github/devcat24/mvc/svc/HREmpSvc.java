@@ -1,6 +1,7 @@
 package com.github.devcat24.mvc.svc;
 
 import com.github.devcat24.exception.ResourceNotFoundException;
+import com.github.devcat24.mvc.controller.HREmpController;
 import com.github.devcat24.mvc.db.entity.hr.Emp01;
 import com.github.devcat24.mvc.db.repo.hr.Emp01Repo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ public class HREmpSvc {
     }
 
     public List<Emp01> getAllEmp() {
+        System.out.println("-> HREmpSvc.getAllEmp() invoked" );
         return emp01Repo.findAll();
     }
 

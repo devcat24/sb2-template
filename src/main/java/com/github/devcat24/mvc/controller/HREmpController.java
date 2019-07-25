@@ -53,6 +53,7 @@ public class HREmpController {
     })
     @GetMapping("/emp")
     public List<Emp01> getAllEmp() {
+        System.out.println("-> HREmpController.getAllEmp() invoked" );
         return hrEmpSvc.getAllEmp();
     }
     @ApiOperation(value = "Get an employee by Id")

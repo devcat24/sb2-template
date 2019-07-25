@@ -1,5 +1,6 @@
-package com.github.devcat24.util.testing;
+package com.github.devcat24.util.testing.bdd;
 
+import com.github.devcat24.util.testing.bdd.VegeItem;
 import cucumber.api.DataTable;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
