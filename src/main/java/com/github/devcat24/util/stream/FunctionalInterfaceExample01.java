@@ -12,6 +12,7 @@ public class FunctionalInterfaceExample01 {
 
     public void example01(){
 
+        /*  This example code moved to Test case -> FunctionalInterfaceExample01Test.class
 
         // 1. Supplier ( parameter -> x , return -> o,  get() interface)
         Supplier<Stream<String>> streamSupplier = () -> Stream.of("d2", "a2", "b1", "b3", "c", "a5")
@@ -77,11 +78,13 @@ public class FunctionalInterfaceExample01 {
         // cf. Runnable interface -> functional style
         // Runnable r = () -> { System.out.println(" test "); };
         // r.run();
-
+        */
 
     }
 
+    /*  This example code moved to Test case
     public Predicate<Address> isCentralPredicate01 () {
         return p -> p.getStreet().equalsIgnoreCase("CENTRAL");
     }
+    */
 }

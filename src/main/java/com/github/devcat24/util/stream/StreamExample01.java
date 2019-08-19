@@ -11,6 +11,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class StreamExample01 {
 
     public void example01(){
+
+        /*  This example code moved to Test case -> StreamExample01Test.class
+
         // --- generating sample data ---
         Address addr01 = Address.builder().zipcode(2000).city("Auckland").street("WEST").build();
         Address addr02 = Address.builder().zipcode(3000).city("Hamilton").street("EAST").build();
@@ -269,50 +272,49 @@ public class StreamExample01 {
         assertThat("Tauranga").isEqualToIgnoringCase(optionalReduced02.orElse("Hamilton"));
 
         // Parallel Stream
-        /*
-        ForkJoinPool commonPool = ForkJoinPool.commonPool();
-        // System.out.println(commonPool.getParallelism());    // 3
-        // JVM options: -Djava.util.concurrent.ForkJoinPool.common.parallelism=5
+        //    ForkJoinPool commonPool = ForkJoinPool.commonPool();
+        //    // System.out.println(commonPool.getParallelism());    // 3
+        //    // JVM options: -Djava.util.concurrent.ForkJoinPool.common.parallelism=5
+        //
+        //    Arrays.asList("a1", "a2", "b1", "c2", "c1")
+        //            .parallelStream()
+        //            .filter(s -> {
+        //                System.out.format("filter: %s [%s]\n", s, Thread.currentThread().getName());
+        //                return true;
+        //            })
+        //            .map(s -> {
+        //                System.out.format("map: %s [%s]\n", s, Thread.currentThread().getName());
+        //                return s.toUpperCase();
+        //            })
+        //            .forEach(s -> System.out.format("forEach: %s [%s]\n", s, Thread.currentThread().getName()));
+        //    // Parallel stream -> sort after processing  : only works for while sorting -> after sort, works parallel again
+        //    Arrays.asList("a1", "a2", "b1", "c2", "c1")
+        //            .parallelStream()
+        //            .filter(s -> {                                                                              // -> parallel processin
+        //                System.out.format("filter: %s [%s]\n", s, Thread.currentThread().getName());
+        //                return true;
+        //            })
+        //            .map(s -> {                                                                                 // -> parallel processing
+        //                System.out.format("map: %s [%s]\n", s, Thread.currentThread().getName());
+        //                return s.toUpperCase();
+        //            })
+        //            .sorted((s1, s2) -> {                                                                       // -> works serial here
+        //                System.out.format("sort: %s <> %s [%s]\n", s1, s2, Thread.currentThread().getName());
+        //                return s1.compareTo(s2);
+        //            })                                                                                          // -> works parallel again !
+        //            .forEach(s -> System.out.format("forEach: %s [%s]\n", s, Thread.currentThread().getName()));
+        //    Arrays.asList(addr01, addr02, addr03, addr04).parallelStream()
+        //            .reduce(0,
+        //                    (sum, a) -> {
+        //                        System.out.println("accumulator: sum=" + sum + "; address=" + a.getCity() + " [" + Thread.currentThread().getName() + "]");
+        //                        return sum = sum + a.getZipcode();
+        //                    },
+        //                    (sum1, sum2) -> {
+        //                        System.out.println("combiner: sum1=" + sum1 + "; sum2=" + sum2 + " [" + Thread.currentThread().getName() + "]");
+        //                        return sum1 + sum2;
+        //                    }
+        //            );
 
-        Arrays.asList("a1", "a2", "b1", "c2", "c1")
-                .parallelStream()
-                .filter(s -> {
-                    System.out.format("filter: %s [%s]\n", s, Thread.currentThread().getName());
-                    return true;
-                })
-                .map(s -> {
-                    System.out.format("map: %s [%s]\n", s, Thread.currentThread().getName());
-                    return s.toUpperCase();
-                })
-                .forEach(s -> System.out.format("forEach: %s [%s]\n", s, Thread.currentThread().getName()));
-        // Parallel stream -> sort after processing  : only works for while sorting -> after sort, works parallel again
-        Arrays.asList("a1", "a2", "b1", "c2", "c1")
-                .parallelStream()
-                .filter(s -> {                                                                              // -> parallel processin
-                    System.out.format("filter: %s [%s]\n", s, Thread.currentThread().getName());
-                    return true;
-                })
-                .map(s -> {                                                                                 // -> parallel processing
-                    System.out.format("map: %s [%s]\n", s, Thread.currentThread().getName());
-                    return s.toUpperCase();
-                })
-                .sorted((s1, s2) -> {                                                                       // -> works serial here
-                    System.out.format("sort: %s <> %s [%s]\n", s1, s2, Thread.currentThread().getName());
-                    return s1.compareTo(s2);
-                })                                                                                          // -> works parallel again !
-                .forEach(s -> System.out.format("forEach: %s [%s]\n", s, Thread.currentThread().getName()));
-        Arrays.asList(addr01, addr02, addr03, addr04).parallelStream()
-                .reduce(0,
-                        (sum, a) -> {
-                            System.out.println("accumulator: sum=" + sum + "; address=" + a.getCity() + " [" + Thread.currentThread().getName() + "]");
-                            return sum = sum + a.getZipcode();
-                        },
-                        (sum1, sum2) -> {
-                            System.out.println("combiner: sum1=" + sum1 + "; sum2=" + sum2 + " [" + Thread.currentThread().getName() + "]");
-                            return sum1 + sum2;
-                        }
-                );
-        */
 
 
         // 1. creating stream
@@ -355,7 +357,8 @@ public class StreamExample01 {
                 .parallel()
                 .reduce(0, (left, right) -> left + right);
         assertThat(5050).isEqualTo(sum);
-
+        System.out.println("done --");
+        */
     }
 
 }
