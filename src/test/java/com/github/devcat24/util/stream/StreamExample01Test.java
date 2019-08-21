@@ -3,6 +3,7 @@ package com.github.devcat24.util.stream;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.stream.*;
 
@@ -285,6 +286,35 @@ public class StreamExample01Test {
                 .map(Address::getCity);
         //assertThat("Tauranga").isEqualToIgnoringCase(optionalReduced02.get());
         assertThat("Tauranga").isEqualToIgnoringCase(optionalReduced02.orElse("Hamilton"));
+
+        List<Address> srcAddrList01 = Arrays.asList(addr01, addr02, addr03, addr04);
+        AtomicInteger idx01 = new AtomicInteger(0);
+        List<Address> targetAddrList01 = Stream.of("d2", "a3", "b1", "a1", "c", "a4", "a2")
+                .filter(s -> s.startsWith("a"))
+                .sorted((prev, curr) -> Integer.compare(Integer.parseInt(prev.substring(1)), Integer.parseInt(curr.substring(1)))).map(s -> {
+                    int idx = idx01.getAndIncrement();
+                    // int rand = (int) (Math.random() * 2000);
+                    // return Address.builder().zipcode(Integer.parseInt(s.substring(1)) * 1000).city("No Where: " + idx).street(rand + "").build();
+                    return srcAddrList01.get( Integer.parseInt(s.substring(1))-1);
+                }).collect(Collectors.toList())
+                .stream().sorted(Comparator
+                        .comparing(Address::getZipcode)
+                        .thenComparing( s -> s.getStreet())
+                        .reversed())
+                .peek(s -> { System.out.println(s.getCity());})  // -> peek(check without consume)
+                .skip(1).limit(3)                                // -> select between {skip} and {limit}
+                // .count()                                      // -> returns long type, cf. sum(), min(), max(), average()
+                .collect(Collectors.toList());                   // -> cf. collect(Collectors.groupingBy(Address::getStreet))  -> returns as Map<$, $> type
+        //idx01 = new AtomicInteger(0);  // -> compile error 'AtomicInteger -> final'
+        AtomicInteger idx02 = new AtomicInteger(0);  // -> compile error 'AtomicInteger -> final'
+        targetAddrList01.stream().forEach( s -> {
+            System.out.println(" << new AddrList >> : zipcode [" + s.getZipcode() + "]   city [" + s.getCity() + "]   street [" + s.getStreet() + "] (" + idx02.getAndIncrement() +")");
+        });
+
+        // List<Address> addrDBList01 = Stream.of(Arrays.asList(1001, 1002, 1003).stream()).map( addressJPARepository::findById ).collect(Collectors.toList()); // -> while passing values to JPARepository
+        // Arrays.asList("a1", "b2", "x5").stream();  // -> convert array to stream
+        // Arrays.asList("a1", "b2", "x5").stream().collect(Collectors.toList(); // -> convert stream to List  cf. collect(Collectors.groupingBy(Address::getStreet))
+        // Arrays.asList("a1", "b2", "x5").stream(). (...) (...)  (..) .toArray[Address01[]::new];      // -> convert stream to array type
 
         // Parallel Stream
         //    ForkJoinPool commonPool = ForkJoinPool.commonPool();
