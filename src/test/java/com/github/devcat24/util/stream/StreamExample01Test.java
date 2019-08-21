@@ -301,14 +301,14 @@ public class StreamExample01Test {
                         .comparing(Address::getZipcode)
                         .thenComparing( s -> s.getStreet())
                         .reversed())
-                .peek(s -> { System.out.println(s.getCity());})  // -> peek(check without consume)
+                //.peek(s -> { System.out.println(s.getCity());})  // -> peek(check without consume)
                 .skip(1).limit(3)                                // -> select between {skip} and {limit}
                 // .count()                                      // -> returns long type, cf. sum(), min(), max(), average()
                 .collect(Collectors.toList());                   // -> cf. collect(Collectors.groupingBy(Address::getStreet))  -> returns as Map<$, $> type
         //idx01 = new AtomicInteger(0);  // -> compile error 'AtomicInteger -> final'
         AtomicInteger idx02 = new AtomicInteger(0);  // -> compile error 'AtomicInteger -> final'
         targetAddrList01.stream().forEach( s -> {
-            System.out.println(" << new AddrList >> : zipcode [" + s.getZipcode() + "]   city [" + s.getCity() + "]   street [" + s.getStreet() + "] (" + idx02.getAndIncrement() +")");
+            // System.out.println(" << new AddrList >> : zipcode [" + s.getZipcode() + "]   city [" + s.getCity() + "]   street [" + s.getStreet() + "] (" + idx02.getAndIncrement() +")");
         });
 
         // List<Address> addrDBList01 = Stream.of(Arrays.asList(1001, 1002, 1003).stream()).map( addressJPARepository::findById ).collect(Collectors.toList()); // -> while passing values to JPARepository
