@@ -1,0 +1,328 @@
+-----------------------------------------------------------------------------------------------------------------------------
+Spring Boot & Redis Embedded Server configuration
+      > Many limitations exist, mainly used for test or dev env
+-----------------------------------------------------------------------------------------------------------------------------
++. Dependency config : pom.xml
+------------------------------
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-redis</artifactId>
+</dependency>
+<dependency>
+    <groupId>it.ozimov</groupId>
+    <artifactId>embedded-redis</artifactId>
+    <version>0.7.2</version>
+</dependency>
+<dependency>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+    <version>1.18.8</version>
+    <scope>provided</scope>
+</dependency>
+
+
++. Embedded Redis Server Configuration : EmbeddedRedisConfig.java (Simple version)
+------------------------------
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import redis.embedded.RedisServer;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import java.io.IOException;
+
+@Profile("dev") // only active when profile is "dev"
+@Configuration
+public class EmbeddedRedisSeverConfig {
+    @Value("${spring.redis.port}")
+    private int redisPort;
+    private RedisServer redisServer;
+    @PostConstruct
+    public void redisServer() throws IOException {
+        redisServer = new RedisServer(redisPort);
+        redisServer.start();
+    }
+    @PreDestroy
+    public void stopRedis() {
+        if (redisServer != null) {
+            redisServer.stop();
+        }
+    }
+}
+
+
++. Embedded Redis properties : application.properties
+------------------------------
+spring.profiles.active=dev
+spring.redis.host=localhost
+spring.redis.port=6389
+
+
+-----------------------------------------------------------------------------------------------------------------------------
+Spring Data Redis configuration (client)
+      > Manage Redis using Spring Data standard interface(RedisTemplate & CrudRepository)
+-----------------------------------------------------------------------------------------------------------------------------
++. Dependency config : pom.xml
+------------------------------
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-redis</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+    <version>1.18.8</version>
+    <scope>provided</scope>
+</dependency>
+
+
+
+
++. Redis CRUD Repository config : RedisRepositoryConfig.java
+------------------------------
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
+
+@Configuration
+@EnableRedisRepositories
+public class RedisRepositoryConfig {
+    @Value("${spring.redis.host}")
+    private String redisHost;
+
+    @Value("${spring.redis.port}")
+    private int redisPort;
+
+    @Bean
+    public RedisConnectionFactory redisConnectionFactory() {
+        return new LettuceConnectionFactory(redisHost, redisPort);
+    }
+
+    @Bean
+    public RedisTemplate<?, ?> redisTemplate() {
+        RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory());
+        return redisTemplate;
+    }
+}
+
+
+
++. DAO class : ItemGroupCode.java
+------------------------------
+import lombok.Builder;
+import lombok.Getter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
+@Getter
+@RedisHash("ItemGroupCode")
+public class ItemGroupCode implements Serializable {
+    @Id
+    private String itemId;
+    private Integer groupId;
+    private LocalDateTime updatedAt;
+
+    @Builder
+    public ItemGroupCode(String itemId, Integer groupId, LocalDateTime updatedAt) {
+        this.itemId = itemId;
+        this.groupId = groupId;
+        this.updatedAt = updatedAt;
+    }
+    public void refresh(Integer groupId, LocalDateTime updatedAt) {
+        if(updatedAt.isAfter(this.updatedAt)){
+            this.groupId = groupId;
+            this.updatedAt = updatedAt;
+        }
+    }
+}
+
+
+
++. Redis CRUD Repository interface : ItemGroupCodeRepo.java
+------------------------------
+import com.github.devcat24.mvc.dto.fi.ItemGroupCode;
+import org.springframework.data.repository.CrudRepository;
+
+public interface ItemGroupCodeRepo extends CrudRepository<ItemGroupCode, String> {
+}
+
+
+
+
+
++. Test code for Redis C/R/U/D : RedisClientTest.java
+------------------------------
+import com.github.devcat24.mvc.dto.fi.ItemGroupCode;
+import com.github.devcat24.mvc.redis.repo.ItemGroupCodeRepo;
+import org.junit.After;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+import java.time.LocalDateTime;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.assertj.core.api.Java6Assertions.assertThat;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class RedisClientTest {
+    @Autowired
+    ItemGroupCodeRepo itemGroupCodeRepo;
+
+    @After
+    public void tearDown(){
+        itemGroupCodeRepo.deleteAll();
+    }
+    @Test
+    public void redisCRUDTest01() throws Exception {
+
+        String itemId = "I2019";
+        ItemGroupCode newItemGroupCode = ItemGroupCode.builder().itemId(itemId).groupId(200).updatedAt(LocalDateTime.of(2019,8, 21, 0, 0)).build();
+        // save
+        itemGroupCodeRepo.save(newItemGroupCode);
+
+        // query
+        ItemGroupCode queriedItemGroupCode = itemGroupCodeRepo.findById(itemId).orElseThrow(() -> new Exception("No matching key found : " + itemId));
+        // System.out.println(" [queried from Redis] itemId: " + queriedItemGroupCode.getItemId() + ",   groupId: " + queriedItemGroupCode.getGroupId() +", dateTime: " + queriedItemGroupCode.getUpdatedAt().toString());
+        assertThat(queriedItemGroupCode.getGroupId()).isEqualTo(200);
+
+        // update
+        queriedItemGroupCode.refresh(100, LocalDateTime.of(2019, 8, 22, 0, 0));
+        itemGroupCodeRepo.save(queriedItemGroupCode);
+
+        // query
+        ItemGroupCode queriedItemGroupCode02 = itemGroupCodeRepo.findById(itemId).orElseThrow(() -> new Exception("No matching key found : " + itemId));
+        // System.out.println(" [queried after update] itemId: " + queriedItemGroupCode02.getItemId() + ",   groupId: " + queriedItemGroupCode02.getGroupId() +", dateTime: " + queriedItemGroupCode02.getUpdatedAt().toString());
+        assertThat(queriedItemGroupCode.getGroupId()).isEqualTo(100);
+
+        // delete
+        itemGroupCodeRepo.delete(queriedItemGroupCode02);
+        // ItemGroupCode queriedItemGroupCode03 = itemGroupCodeRepo.findById(itemId).orElseThrow(() -> new Exception("No matching key found : " + itemId));
+        // System.out.println(" [queried after delete] itemId: " + queriedItemGroupCode03.getItemId() + ",   groupId: " + queriedItemGroupCode03.getGroupId() +", dateTime: " + queriedItemGroupCode03.getUpdatedAt().toString());
+
+        Throwable thrown = catchThrowable(()-> { itemGroupCodeRepo.findById(itemId).orElseThrow(() -> new RuntimeException("No matching key found : " + itemId)); });
+        assertThat(thrown).isInstanceOf(RuntimeException.class).hasMessageContaining("No matching key found");
+    }
+}
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------
+Redis Embedded Server random port support for Spring Test
+-----------------------------------------------------------------------------------------------------------------------------
++. Embedded Redis properties : application.properties
+------------------------------
+spring.profiles.active=dev
+spring.redis.host=localhost
+spring.redis.port=6379
+#spring.redis.port=6389
+spring.redis.enable.random.port.on.profile=dev
+
+
++. Embedded Redis Server Configuration : EmbeddedRedisSeverConfig.java
+------------------------------
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+//import org.springframework.context.annotation.Profile;
+import redis.embedded.RedisServer;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+
+//@Profile("dev") // only active when profile is "dev"
+@Configuration
+public class EmbeddedRedisSeverConfig {
+
+    @Value("${spring.redis.port}")
+    private int redisPort;
+
+    @Value("${spring.profiles.active:}")
+    private String activeProfile;
+
+    private RedisServer redisServer;
+
+    @Value("${spring.redis.enable.random.port.on.profile:}")
+    private String enableRandomPortOnProfile;
+
+    @PostConstruct
+    public void redisServer() throws IOException {
+        String [] randomPortProfiles = (enableRandomPortOnProfile != null && !enableRandomPortOnProfile.isEmpty()) ?   enableRandomPortOnProfile.split(",") : new String[]{};
+        boolean inRedisRandomPortProfile = Arrays.stream(randomPortProfiles).anyMatch(this::isDevProfileMode);
+
+        String osName = System.getProperty("os.name");
+        boolean isUnixCompatibleOS = osName != null && (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) ;
+
+        if(! inRedisRandomPortProfile) {
+            redisServer = new RedisServer(redisPort);
+        } else {
+            if(isUnixCompatibleOS) {
+                int randomPort = isRedisRunning() ? findAvailablePort() : redisPort;
+                redisServer = new RedisServer(randomPort);
+            }   else {
+                redisServer = new RedisServer(redisPort);
+            }
+        }
+        redisServer.start();
+    }
+
+    @PreDestroy
+    public void stopRedis() {
+        if (redisServer != null) {
+            redisServer.stop();
+        }
+    }
+
+    private boolean isDevProfileMode(String randomPortProfile){
+        return (activeProfile != null) && (Arrays.stream(activeProfile.split(",")).anyMatch(s -> s.equalsIgnoreCase(randomPortProfile)));
+    }
+
+    // check whether redis server is running in the system
+    private boolean isRedisRunning() throws IOException {
+        return isRunning(executeGrepProcessCommand(redisPort));
+    }
+
+    // find random available port
+    public int findAvailablePort() throws IOException {
+        for (int port = 10000; port <= 65535; port++) {
+            Process process = executeGrepProcessCommand(port);
+            if (!isRunning(process)) {
+                return port;
+            }
+        }
+        throw new IllegalArgumentException("Not Found Available port: 10000 ~ 65535");
+    }
+
+    private Process executeGrepProcessCommand(int port) throws IOException {
+        String command = String.format("netstat -nat | grep LISTEN|grep %d", port);
+        String[] shell = {"/bin/sh", "-c", command};
+        return Runtime.getRuntime().exec(shell);
+    }
+
+    private boolean isRunning(Process process) {
+        String line;
+        StringBuilder pidInfo = new StringBuilder();
+        try (BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+            while ((line = input.readLine()) != null) {
+                pidInfo.append(line);
+            }
+        } catch (Exception ignored) {
+        }
+        return !pidInfo.toString().isEmpty();
+    }
+}
+
+
+
+
