@@ -29,8 +29,20 @@ public class EmbeddedRedisSeverConfig {
 
     @PostConstruct
     public void redisServer() throws IOException {
+
+        String osName = System.getProperty("os.name");
+        boolean isUnixCompatibleOS = osName != null && (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) ;
+        if(isUnixCompatibleOS) {
+            int randomPort = isRedisRunning() ? findAvailablePort() : redisPort;
+            redisServer = new RedisServer(randomPort);
+        }   else {
+            redisServer = new RedisServer(redisPort);
+        }
+
+        /*  // -> 'mvn package' with port collision
         String [] randomPortProfiles = (enableRandomPortOnProfile != null && !enableRandomPortOnProfile.isEmpty()) ?   enableRandomPortOnProfile.split(",") : new String[]{};
         boolean inRedisRandomPortProfile = Arrays.stream(randomPortProfiles).anyMatch(this::isDevProfileMode);
+        //boolean inRedisRandomPortProfile = Arrays.stream(randomPortProfiles).filter( s -> isDevProfileMode(s)).count() > 0;
 
         String osName = System.getProperty("os.name");
         boolean isUnixCompatibleOS = osName != null && (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) ;
@@ -45,6 +57,8 @@ public class EmbeddedRedisSeverConfig {
                 redisServer = new RedisServer(redisPort);
             }
         }
+        */
+
         redisServer.start();
     }
 
@@ -57,6 +71,7 @@ public class EmbeddedRedisSeverConfig {
 
     private boolean isDevProfileMode(String randomPortProfile){
         return (activeProfile != null) && (Arrays.stream(activeProfile.split(",")).anyMatch(s -> s.equalsIgnoreCase(randomPortProfile)));
+        // return (activeProfile != null) && (Arrays.stream(activeProfile.split(",")).filter(s -> s.equalsIgnoreCase(randomPortProfile)).count() > 0);
     }
 
     // check whether redis server is running in the system
