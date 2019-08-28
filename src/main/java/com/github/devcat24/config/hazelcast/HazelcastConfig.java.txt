@@ -1,0 +1,77 @@
+/*
+package com.github.devcat24.config.hazelcast;
+
+import com.hazelcast.config.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+// import java.util.Properties;
+
+//@Profile("dev") // only active when profile is "dev"
+@Configuration
+public class HazelcastConfig {
+
+    @Bean
+    public Config hazelcastConfig(){
+        Config config = new Config();
+        config.setInstanceName("hazelcastInstance")
+                .addMapConfig(
+                        new MapConfig()
+                                .setName("configuration")
+                                .setMaxSizeConfig(new MaxSizeConfig(271, MaxSizeConfig.MaxSizePolicy.FREE_HEAP_SIZE))
+                                .setEvictionPolicy(EvictionPolicy.LRU)
+                                .setTimeToLiveSeconds(-1));
+        return config;
+
+//
+//        // MapStoreConfig mapStoreCfg = new MapStoreConfig();
+//        // mapStoreCfg.setImplementation(new HazelCastMySQLJSONMapStore(url, username, password, table, Emp.class));
+//        // mapStoreCfg.setEnabled(true);
+//
+//        MapConfig defaultMapConfig = new MapConfig()
+//                .setName("sampleMap")
+//                .setMaxSizeConfig(new MaxSizeConfig(271, MaxSizeConfig.MaxSizePolicy.FREE_HEAP_SIZE))
+//                .setEvictionPolicy(EvictionPolicy.LFU)
+//                .setTimeToLiveSeconds(0)
+//                .setInMemoryFormat(InMemoryFormat.BINARY)
+//                .setBackupCount(1)
+//                // .setMapStoreConfig(mapStoreCfg)
+//                ;
+//
+//
+//        Config config = new Config();
+//
+//        // Properties could be transferred with 'java -Dhazelcast.property.foo=value'
+//        // https://docs.hazelcast.org/docs/2.3/manual/html/ch12s06.html
+//        Properties jmxProp = (Properties) new Properties().setProperty("hazelcast.jmx", "true");
+//        Properties jmxDetailProp = (Properties) new Properties().setProperty("hazelcast.jmx.detailed", "true");
+//
+//        config.setInstanceName("default")
+//                .addMapConfig(defaultMapConfig)
+//                .setProperties(jmxProp)
+//                .setProperties(jmxDetailProp);
+//
+//        // default network config
+//        NetworkConfig networkConfig = config.getNetworkConfig();
+//        networkConfig.setPort(5701).setPortCount(20);
+//        networkConfig.setPortAutoIncrement(true);
+//        // cluster configuration
+//        JoinConfig joinConfig = networkConfig.getJoin();
+//        joinConfig.getMulticastConfig().setEnabled(false);
+//        //
+//        // joinConfig.getTcpIpConfig()
+//        //        .addMember("member01.com")
+//        //        .addMember("localhost").setEnabled(true);
+//
+//        // ManagementCenter config (commercial feature)
+//        // ManagementCenterConfig managementCenterConfig = config.getManagementCenterConfig();
+//        // managementCenterConfig.setEnabled(true).setUrl("http://localhost:8080/mancenter");
+//
+//
+//
+//        return config;
+    }
+}
+
+
+*/

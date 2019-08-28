@@ -1,0 +1,99 @@
+https://docs.hazelcast.org/docs/latest/manual/html-single/
+
+
+----------------------------------------------------------------------------
+Embedded Hazelcast configuration
+----------------------------------------------------------------------------
++. Maven dependency : pom.xml
+    <dependency>
+        <groupId>com.hazelcast</groupId>
+        <artifactId>hazelcast</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.hazelcast</groupId>
+        <artifactId>hazelcast-spring</artifactId>
+    </dependency>
+
++. application.properties : set configuration file location -> this also be configured by Java Config
+    spring.hazelcast.config=classpath:config/my-hazelcast.xml
+
++. src/main/resources/config/my-hazelcast.xml
+    <?xml version="1.0" encoding="UTF-8"?>
+    <hazelcast
+            xsi:schemaLocation="http://www.hazelcast.com/schema/config http://www.hazelcast.com/schema/config/hazelcast-config.xsd"
+            xmlns="http://www.hazelcast.com/schema/config"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <properties>
+            <property name="hazelcast.jmx">true</property>
+        </properties>
+        <map name="sampleMap">
+            <max-size>271</max-size>
+            <eviction-policy>LFU</eviction-policy>
+            <!--<time-to-live-seconds>20</time-to-live-seconds>-->
+            <!-- time-to-live-seconds -> Maximum number of seconds for each entry to stay in the map. 0 means infinite. Default is 0 -->
+
+            <in-memory-format>BINARY</in-memory-format>
+            <backup-count>1</backup-count>
+
+            <!--<map-store initial-mode="EAGER" enabled="true">
+                <factory-class-name>org.hazelcast.server.persistence.MapSolrStoreFactory</factory-class-name>
+                <write-delay-seconds>0</write-delay-seconds>
+                <properties>
+                    <property name="solrServerUrls">http://T1:8983/solr/,http://T2:18983/solr/</property>
+                    <property name="coreName">collection1</property>
+                    <property name="connectTimeout">60</property>
+                    <property name="readTimeout">60</property>
+                    <property name="loadAll">false</property>
+                    <property name="deleteOnEvict">false</property>
+                </properties>
+            </map-store>-->
+        </map>
+        <network>
+            <!-- hazelcast needs TCP 5701 ~ 5703 -->
+            <join>
+                <multicast enabled="false"></multicast>
+                <!--
+                <tcp-ip enabled="true">
+                    <member>192.168.100.10</member>
+                    <member>192.168.200.10</member>
+                </tcp-ip>
+                -->
+            </join>
+        </network>
+        <!-- // management-center needs commercial license
+        <management-center enabled="true">
+            http://localhost:8400/mancenter
+        </management-center>
+        -->
+    </hazelcast>
+
+----------------------------------------------------------------------------
+Hazelcast client code example
+----------------------------------------------------------------------------
+    @Qualifier("hazelcastInstance")
+    @Autowired
+    private HazelcastInstance hazelcastInstance;
+
+    String valueStr = "{ 'id': '2001', 'name': 'Kim'}";
+
+    // IMap iMap = hazelcastInstance.getMap(mapName);
+    Map<String, String> hzMap = hazelcastInstance.getMap("sampleMap");
+    // Get size of map
+    assertThat(hzMap.size() ).isEqualTo(0);
+
+    // insert new <key, value>
+    hzMap.put("key01", valueStr);
+    assertThat(hzMap.size() ).isEqualTo(1);
+    //System.out.println("key01: " + hzMap.get("key01"));
+    assertThat(hzMap.get("key01").equalsIgnoreCase(valueStr)).isTrue();
+
+    // update existing value
+    String valueStr2 = "{ 'id': '9001', 'name': 'Updated user'}";
+    hzMap.put("key01", valueStr2);
+    //System.out.println("key01: " + hzMap.get("key01") + ",  <-- : " + valueStr);
+    assertThat(hzMap.get("key01").equalsIgnoreCase(valueStr)).isFalse();
+
+    // remove existing value
+    hzMap.remove("key01");
+    assertThat(hzMap.size() ).isEqualTo(0);
+
