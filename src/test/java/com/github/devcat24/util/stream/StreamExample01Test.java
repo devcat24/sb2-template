@@ -311,6 +311,21 @@ public class StreamExample01Test {
             // System.out.println(" << new AddrList >> : zipcode [" + s.getZipcode() + "]   city [" + s.getCity() + "]   street [" + s.getStreet() + "] (" + idx02.getAndIncrement() +")");
         });
 
+
+        int[] oArr01 = {1, 2, 3};
+        int[] newArr01 = new int[oArr01.length+1];
+        newArr01 = Arrays.copyOf(oArr01, oArr01.length+1);
+        newArr01[newArr01.length-1] = 999;
+
+        String boxedArr01 = Arrays.stream(newArr01).boxed().map(s -> Integer.toString(s)).collect(Collectors.joining(", ", "[", "]")) ;
+        assertThat("[1, 2, 3, 999]").isEqualToIgnoringCase( boxedArr01 );
+
+        List<String> boxedArrList01 = Arrays.stream(newArr01).boxed().map(s -> Integer.toString(s)).collect(Collectors.toList()) ;
+        assertThat(1).isEqualTo(boxedArrList01.stream().mapToInt(Integer::parseInt).filter( s -> s > 10).count());
+        //boxedArrList01.stream().forEach(System.out::println);
+
+
+
         // List<Address> addrDBList01 = Stream.of(Arrays.asList(1001, 1002, 1003).stream()).map( addressJPARepository::findById ).collect(Collectors.toList()); // -> while passing values to JPARepository
         // Arrays.asList("a1", "b2", "x5").stream();  // -> convert array to stream
         // Arrays.asList("a1", "b2", "x5").stream().collect(Collectors.toList(); // -> convert stream to List  cf. collect(Collectors.groupingBy(Address::getStreet))
