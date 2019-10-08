@@ -15,6 +15,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ServiceLoader;
 
+@SuppressWarnings("unchecked")
 @RunWith(SpringRunner.class)
 //@SpringBootTest(/*webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT*/)
 public class ReflectionTest {
@@ -51,6 +52,7 @@ public class ReflectionTest {
             fieldStringList[ins] = fields[ins].getName() + " [" + annotationString + "]";
         }
         //Method [] methods = rsBeanClass.getDeclaredMethods();  // rsBeanClass.getMethods();  =>  from inheritance
+        //noinspection unchecked
         Method setAddrMethod = rsBeanClass.getDeclaredMethod("setAddress", String.class);
         setAddrMethod.setAccessible(true);
         setAddrMethod.invoke(rsBean,"New Address");

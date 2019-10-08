@@ -87,11 +87,14 @@ public class StreamExample01Test {
         assertThat(3).isEqualTo(streetList.size());       // WEST, EAST, CENTRAL
 
 
-        rtnObj = user03.getInterest().stream()
+        Optional<String> optionalRtnObj = user03.getInterest().stream()
+        //rtnObj = user03.getInterest().stream()
                 .filter( s -> s.startsWith("Fi"))
                 .map(String::toUpperCase)
                 .findFirst();
-        assertThat("FINANCE").isEqualToIgnoringCase((String) ((Optional)rtnObj).orElse("None") );
+
+        assertThat("FINANCE").isEqualToIgnoringCase((String) optionalRtnObj.orElse("None") );
+        //assertThat("FINANCE").isEqualToIgnoringCase((String) ((Optional<String>)rtnObj).orElse("None") );
 
         // IntStream Object
         assertThat(39).isEqualTo((Integer) IntStream.range(30, 40).max().orElse(10));
@@ -194,11 +197,14 @@ public class StreamExample01Test {
         assertThat((boolean) rtnObj).isTrue();
 
 
-        rtnObj = orderList01.stream()
+
+        // rtnObj = orderList01.stream()  // -> unchecked exception !
+        List<Order> listOrderObj01 = (List<Order>) orderList01.stream()
                 .filter( o -> o.getUser().getAddress().getStreet().equalsIgnoreCase("east") )
                 //.collect(Collectors.toSet())
                 .collect(Collectors.toList());
-        int numOfOrder = (int) ( (List<Order>) rtnObj ).stream().filter(o -> o.getUser().getName().equalsIgnoreCase("David")).count();
+        int numOfOrder = (int) ( (List<Order>) listOrderObj01 ).stream().filter(o -> o.getUser().getName().equalsIgnoreCase("David")).count();
+
         assertThat(numOfOrder).isEqualTo(3);
 
 

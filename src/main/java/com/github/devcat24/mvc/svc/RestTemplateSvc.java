@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
-import org.springframework.http.client.support.BasicAuthorizationInterceptor;
+//import org.springframework.http.client.support.BasicAuthorizationInterceptor;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -25,14 +25,17 @@ public class RestTemplateSvc {
     String password;
 
     // -> for Spring 4.x -> 'BasicAuthorizationInterceptor' is deprecated
+    /*
     @SuppressWarnings("deprecation")
     private BasicAuthorizationInterceptor getBasicAuthorizationInterceptor(){
         return new BasicAuthorizationInterceptor(username, password);
     }
+    */
 
 
-    public String fetchAsStringFromRestAPI() throws Exception {
-        String rtn = null;
+    @SuppressWarnings("unused")
+    public String fetchAsStringFromRestAPI() {
+        String rtn ;
         String url = "http://localhost:8200/template/rest/jsonHolder/emps";
         try {
             RestTemplate restTemplate = new RestTemplate();
@@ -48,7 +51,7 @@ public class RestTemplateSvc {
             ResponseEntity<String> res = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
 
 
-            //noinspection RedundantStringToString
+            //noinspection RedundantStringToString,ConstantConditions
             rtn = res.getBody().toString();
         } catch (Exception ex){
             ex.printStackTrace();
@@ -56,14 +59,23 @@ public class RestTemplateSvc {
         }
         return rtn;
     }
-    public RestEmp[] fetchAsObjFromRestAPI() throws Exception {
+    public RestEmp[] fetchAsObjFromRestAPI() {
         RestEmp [] rtnList;
         String url = "http://localhost:8200/template/rest/jsonHolder/emps";
         try {
             RestTemplate restTemplate = new RestTemplate();
-            restTemplate.getInterceptors().add(getBasicAuthorizationInterceptor());
-            //ResponseEntity<String> res = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
-            rtnList = restTemplate.getForObject(url, RestEmp[].class);
+
+            // -> for Spring 4.x -> 'BasicAuthorizationInterceptor' is deprecated
+            // restTemplate.getInterceptors().add(getBasicAuthorizationInterceptor());
+            // ResponseEntity<String> res = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
+            // rtnList = restTemplate.getForObject(url, RestEmp[].class);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setBasicAuth(username, password);
+            HttpEntity<RestEmp[]> requestEntity = new HttpEntity<>(headers);
+
+            ResponseEntity<RestEmp[]> res = restTemplate.exchange(url, HttpMethod.GET, requestEntity, RestEmp[].class);
+            rtnList = res.getBody();
         } catch (Exception ex){
             ex.printStackTrace();
             throw ex;
@@ -72,7 +84,7 @@ public class RestTemplateSvc {
     }
 
 
-    @SuppressWarnings("ArraysAsListWithZeroOrOneArgument")
+    @SuppressWarnings({"ArraysAsListWithZeroOrOneArgument", "unused"})
     public void downloadRemoteFile(String fileLocation, String newFileName) throws IOException {
         String apiFileDownloadBaseUrl = "https://localhost:8200/template/api/file";
         String fileWorkingDir = "/data/downloads/files";
@@ -81,20 +93,22 @@ public class RestTemplateSvc {
         String url = apiFileDownloadBaseUrl + fileLocation;
 
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.getInterceptors().add(getBasicAuthorizationInterceptor());
-
         restTemplate.getMessageConverters().add(new ByteArrayHttpMessageConverter());
 
+        // -> for Spring 4.x -> 'BasicAuthorizationInterceptor' is deprecated
+        // restTemplate.getInterceptors().add(getBasicAuthorizationInterceptor());
         HttpHeaders headers = new HttpHeaders();
+        headers.setBasicAuth(username, password);
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
 
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-        ResponseEntity<byte[]> res = restTemplate.exchange(url, HttpMethod.GET, entity, byte[].class, "1");
+        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+        ResponseEntity<byte[]> res = restTemplate.exchange(url, HttpMethod.GET, requestEntity, byte[].class, "1");
 
         if(res.getStatusCode() == HttpStatus.OK){
             byte[] fileStream = res.getBody();
             String newFilePathString = fileWorkingDir + File.separator + newFileName;
             File file = new File(newFilePathString);  // overwrites if file exists
+            //noinspection ConstantConditions
             FileUtils.writeByteArrayToFile(file, fileStream); // automatically invokes IOUtils.closeQuietly()
         }
         // --> clearing directory

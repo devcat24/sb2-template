@@ -16,10 +16,13 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
-import java.util.Map;
+//import java.net.URI;
+//import java.util.Map;
 
-import static org.mockito.Matchers.*;
+// static method 'org.mockito.Matchers.*' is deprecated, use 'org.mockito.ArgumentMatchers.*'
+//import static org.mockito.Matchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -32,6 +35,7 @@ import static org.mockito.Mockito.when;
 public class MockitoExampleTest {
 
     // Mock Injection type #1.1 - using annotation
+    @SuppressWarnings("unused")
     @Mock
     private RestTemplateSvc restTemplateSvc;
 
@@ -40,13 +44,13 @@ public class MockitoExampleTest {
         this.restTemplateSvc = restTemplateSvc;
     }
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
     }
 
 
     @Test
-    public void testRestTemplateSvc() throws Exception {
+    public void testRestTemplateSvc() {
         // Mock injection only works for direct dependencies of an object (not for nest method) !
 
         ResponseEntity<String> responseEntity = new ResponseEntity<>("my response body", HttpStatus.OK);
@@ -57,7 +61,9 @@ public class MockitoExampleTest {
         // Long runId = anyLong();        // -> any object type
         Class strClass = any();           // -> any class type
         // any() -> do not allow 'null' / anyObject() & any(String.class) -> include 'null'
-        when(restTemplate.exchange(anyString(), anyObject(), any(HttpEntity.class), strClass)).thenReturn(responseEntity);
+        // anyObject() is deprecated in Mockito 3.0  !
+        //when(restTemplate.exchange(anyString(), anyObject(), any(HttpEntity.class), strClass)).thenReturn(responseEntity);
+        when(restTemplate.exchange(anyString(), any(), any(HttpEntity.class), strClass)).thenReturn(responseEntity);
         // -> when method has return type
 
         // Mock Injection type #2.1 - using static method
