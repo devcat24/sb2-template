@@ -7,6 +7,9 @@ import org.springframework.data.redis.core.RedisHash;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/*  // temporary disabled as Embedded Redis Server has a startup issue on Windows
+
+
 @Getter
 @RedisHash("ItemGroupCode")
 public class ItemGroupCode implements Serializable {
@@ -28,3 +31,4 @@ public class ItemGroupCode implements Serializable {
         }
     }
 }
+*/

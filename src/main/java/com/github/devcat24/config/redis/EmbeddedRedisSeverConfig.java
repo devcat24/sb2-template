@@ -1,5 +1,8 @@
 package com.github.devcat24.config.redis;
 
+/*  // temporary disabled as Embedded Redis Server has a startup issue on Windows
+
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 //import org.springframework.context.annotation.Profile;
@@ -39,25 +42,26 @@ public class EmbeddedRedisSeverConfig {
             redisServer = new RedisServer(redisPort);
         }
 
-        /*  // -> 'mvn package' with port collision
-        String [] randomPortProfiles = (enableRandomPortOnProfile != null && !enableRandomPortOnProfile.isEmpty()) ?   enableRandomPortOnProfile.split(",") : new String[]{};
-        boolean inRedisRandomPortProfile = Arrays.stream(randomPortProfiles).anyMatch(this::isDevProfileMode);
-        //boolean inRedisRandomPortProfile = Arrays.stream(randomPortProfiles).filter( s -> isDevProfileMode(s)).count() > 0;
 
-        String osName = System.getProperty("os.name");
-        boolean isUnixCompatibleOS = osName != null && (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) ;
+        // -> 'mvn package' with port collision
+        //    String [] randomPortProfiles = (enableRandomPortOnProfile != null && !enableRandomPortOnProfile.isEmpty()) ?   enableRandomPortOnProfile.split(",") : new String[]{};
+        //    boolean inRedisRandomPortProfile = Arrays.stream(randomPortProfiles).anyMatch(this::isDevProfileMode);
+        //    //boolean inRedisRandomPortProfile = Arrays.stream(randomPortProfiles).filter( s -> isDevProfileMode(s)).count() > 0;
+        //
+        //    String osName = System.getProperty("os.name");
+        //    boolean isUnixCompatibleOS = osName != null && (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) ;
+        //
+        //    if(! inRedisRandomPortProfile) {
+        //        redisServer = new RedisServer(redisPort);
+        //    } else {
+        //        if(isUnixCompatibleOS) {
+        //            int randomPort = isRedisRunning() ? findAvailablePort() : redisPort;
+        //            redisServer = new RedisServer(randomPort);
+        //        }   else {
+        //            redisServer = new RedisServer(redisPort);
+        //        }
+        //    }
 
-        if(! inRedisRandomPortProfile) {
-            redisServer = new RedisServer(redisPort);
-        } else {
-            if(isUnixCompatibleOS) {
-                int randomPort = isRedisRunning() ? findAvailablePort() : redisPort;
-                redisServer = new RedisServer(randomPort);
-            }   else {
-                redisServer = new RedisServer(redisPort);
-            }
-        }
-        */
 
         redisServer.start();
     }
@@ -108,3 +112,4 @@ public class EmbeddedRedisSeverConfig {
         return !pidInfo.toString().isEmpty();
     }
 }
+*/
