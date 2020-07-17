@@ -1,5 +1,3 @@
---- for Spring Boot 1.x ---
-
 1. Configuration sample files
   - application.properties : 'Spring Datasource & JPA EntityManager' section
   - FooConfig.java : Primary Datasource

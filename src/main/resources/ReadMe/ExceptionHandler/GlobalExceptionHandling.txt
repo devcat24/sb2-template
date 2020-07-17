@@ -1,5 +1,3 @@
---- Spring Boot 1.x ---
-
 1. Create GlobalExceptionHandler class using '@ControllerAdvice' annotation
   a. create methods with '@ExceptionHandler' annotation
      -> This method only works for 'sub-type exceptions' which is specified by annotation argument
