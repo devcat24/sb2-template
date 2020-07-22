@@ -3,7 +3,7 @@ package com.github.devcat24.mvc.controller;
 import com.github.devcat24.exception.ResourceNotFoundException;
 import com.github.devcat24.mvc.db.entity.hr.Emp01;
 import com.github.devcat24.mvc.svc.HREmpSvc;
-import io.swagger.annotations.*;
+//import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +28,7 @@ import java.util.Map;
 // 2. Query user
 //   $ curl -X GET http://localhost:8080/api/v1/emp/12331
 
-@Api(value="Employee Management System", description="Operations pertaining to employee in Employee Management System")
+/* @Api(value="Employee Management System", description="Operations pertaining to employee in Employee Management System")
 // '@ApiResponses' can be defined both class level & method level
 @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Successfully retrieved list"),
@@ -36,7 +36,7 @@ import java.util.Map;
         @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
         @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
         @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
-})
+}) */
 @RestController
 @RequestMapping("/api/v1")
 public class HREmpController {
@@ -46,35 +46,39 @@ public class HREmpController {
         this.hrEmpSvc = hrEmpSvc;
     }
 
-    @ApiOperation(value = "View a list of available employees", response = List.class)
+    /* @ApiOperation(value = "View a list of available employees", response = List.class)
     // '@ApiResponses' can be defined both class level & method level(overrides class level definition)
     @ApiResponses(value = {
             @ApiResponse(code = 400, message = "Please try again with valid data")
-    })
+    }) */
     @GetMapping("/emp")
     public List<Emp01> getAllEmp() {
         System.out.println("-> HREmpController.getAllEmp() invoked" );
         return hrEmpSvc.getAllEmp();
     }
-    @ApiOperation(value = "Get an employee by Id")
+    //@ApiOperation(value = "Get an employee by Id")
     @GetMapping("/emp/{id}")
-    public ResponseEntity<Emp01> getEmpById(
-            @ApiParam(value = "Employee id from which employee object will retrieve", required = true) @PathVariable(value = "id") Integer empno) throws ResourceNotFoundException {
+    //public ResponseEntity<Emp01> getEmpById(
+    //        @ApiParam(value = "Employee id from which employee object will retrieve", required = true) @PathVariable(value = "id") Integer empno) throws ResourceNotFoundException {
+    public ResponseEntity<Emp01> getEmpById(@PathVariable(value = "id") Integer empno) throws ResourceNotFoundException {
         Emp01 emp01 = hrEmpSvc.getEmpById(empno).orElseThrow(() -> new ResourceNotFoundException("Employee not found for this empno :: " + empno));
         return ResponseEntity.ok().body(emp01);
     }
 
 
-    @ApiOperation(value = "Add an employee")
+    //@ApiOperation(value = "Add an employee")
     @PostMapping("/emp")
-    public Emp01 createEmp(@ApiParam(value = "Employee object store in database table", required = true) @Valid @RequestBody Emp01 emp01) {
+    //public Emp01 createEmp(@ApiParam(value = "Employee object store in database table", required = true) @Valid @RequestBody Emp01 emp01) {
+    public Emp01 createEmp(@Valid @RequestBody Emp01 emp01) {
         return hrEmpSvc.save(emp01);
     }
 
-    @ApiOperation(value = "Update an employee")
+    //@ApiOperation(value = "Update an employee")
     @PutMapping("/emp/{id}")
-    public ResponseEntity<Emp01> updateEmp( @ApiParam(value = "Employee Id to update employee object", required = true) @PathVariable(value = "id") Integer empno,
-                                            @ApiParam(value = "Update employee object", required = true) @Valid @RequestBody Emp01 emp01) throws ResourceNotFoundException {
+    // public ResponseEntity<Emp01> updateEmp( @ApiParam(value = "Employee Id to update employee object", required = true) @PathVariable(value = "id") Integer empno,
+    //                                        @ApiParam(value = "Update employee object", required = true) @Valid @RequestBody Emp01 emp01) throws ResourceNotFoundException {
+    public ResponseEntity<Emp01> updateEmp( @PathVariable(value = "id") Integer empno,
+                                            @Valid @RequestBody Emp01 emp01) throws ResourceNotFoundException {
         Emp01 updatedEmp = hrEmpSvc.getEmpById(empno).orElseThrow(() -> new ResourceNotFoundException("Employee not found for this empno :: " + empno));
 
         updatedEmp.setEname(emp01.getEname());
@@ -84,9 +88,10 @@ public class HREmpController {
         hrEmpSvc.save(updatedEmp);
         return ResponseEntity.ok(updatedEmp);
     }
-    @ApiOperation(value = "Delete an employee")
+    //@ApiOperation(value = "Delete an employee")
     @DeleteMapping("/emp/{id}")
-    public Map<String, Boolean> deleteEmp(@ApiParam(value = "Employee Id from which employee object will delete from database table", required = true) @PathVariable(value = "id") Integer empno) throws ResourceNotFoundException {
+    //public Map<String, Boolean> deleteEmp(@ApiParam(value = "Employee Id from which employee object will delete from database table", required = true) @PathVariable(value = "id") Integer empno) throws ResourceNotFoundException {
+    public Map<String, Boolean> deleteEmp(@PathVariable(value = "id") Integer empno) throws ResourceNotFoundException {
         hrEmpSvc.delete(empno);
         Map<String, Boolean> res = new HashMap<>();
         res.put("deleted", Boolean.TRUE);

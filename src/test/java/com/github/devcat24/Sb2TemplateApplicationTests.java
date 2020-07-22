@@ -13,7 +13,8 @@ import static org.junit.Assert.assertTrue;
 // @WebMvcTest -> only test for controller without dependency of service layer
 @WebMvcTest(controllers = Sb2TemplateApplication.class)
 //@Import(SpringSecurityConfig.class)   // include security config to WebMvcTest
-@AutoConfigureMockMvc(secure=false)
+//@AutoConfigureMockMvc(secure=false)	// deprecated in Spring Boot 2.2
+@AutoConfigureMockMvc
 public class Sb2TemplateApplicationTests {
 	@Before
 	public void setUp(){

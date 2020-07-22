@@ -1,7 +1,7 @@
 package com.github.devcat24.mvc.db.entity.hr;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+//import io.swagger.annotations.ApiModel;
+//import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,7 +19,7 @@ import java.io.Serializable;
 //@Slf4j                  // lombok annotation for logging (@Slf4j/@Log4j/@Log4j2/@CommonsLog/@Log) -> invoke simply with 'log.info("Sample message");'
 @Entity(name="Emp01")
 @Table(name="tb_emp_01")
-@ApiModel(description = "All details about the Employee. ")
+//@ApiModel(description = "All details about the Employee. ")
 public class Emp01 implements Serializable{
 
     @SuppressWarnings("unused")
@@ -36,7 +36,7 @@ public class Emp01 implements Serializable{
     @Setter @Getter @Id
     //@GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="empno", unique=true, columnDefinition="Integer")
-    @ApiModelProperty(notes = "The database generated employee ID", example="10001")
+    //@ApiModelProperty(notes = "The database generated employee ID", example="10001")
     public Integer empno;
     // Although JPA support column type like...  Integer(10), Float(7,2)
     // But, some databases (ex. H2, Postgresql...) have the issues about that patterns.
@@ -46,18 +46,18 @@ public class Emp01 implements Serializable{
     @Size(min=1, max=30)
     @Setter @Getter
     @NotEmpty @Column(name="ename", nullable=false, columnDefinition="TEXT")
-    @ApiModelProperty(notes = "The employee name", example="Robert")
+    //@ApiModelProperty(notes = "The employee name", example="Robert")
     public String ename;
 
     @SuppressWarnings("DefaultAnnotationParam")
     @Setter @Getter
     @Column(name="job", nullable=false, columnDefinition="TEXT", unique=false, updatable=true, length=100)
-    @ApiModelProperty(notes = "The employee job title", example="Manager")
+    //@ApiModelProperty(notes = "The employee job title", example="Manager")
     public String job;
 
     @Setter @Getter
     @Column(name="mgr", columnDefinition="Integer")
-    @ApiModelProperty(notes = "The manager of employee", example="10001")
+    //@ApiModelProperty(notes = "The manager of employee", example="10001")
     public Integer mgr;
 
 

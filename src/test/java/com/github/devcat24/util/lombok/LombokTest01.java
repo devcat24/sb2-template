@@ -1,8 +1,8 @@
 package com.github.devcat24.util.lombok;
 
 import com.github.devcat24.util.stream.Address;
-import lombok.val;
-import lombok.var;
+//import lombok.val;
+//import lombok.var;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class LombokTest01 {
         }
 
         // lombok 'val' works exactly like 'var', except the local variable is marked as final
-        val addrList02 = addrList01;
+        var addrList02 = addrList01;
         // addrList02 = addrList01;  -> 'val' is immutable, runtime error 'Error:(29, 9) java: cannot assign a value to final variable addrList02'
         //   cf. addrList02.add(Address.builder().zipcode(4000).city("Tauranga").street("NORTH").build());  -> no error (call by reference)
 
