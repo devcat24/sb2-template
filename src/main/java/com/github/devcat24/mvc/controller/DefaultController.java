@@ -73,8 +73,6 @@ public class DefaultController {
     }
 
 
-
-
     private JPASvc jpaSvc;
     @Autowired
     void setJpaSvc(JPASvc jpaSvc){

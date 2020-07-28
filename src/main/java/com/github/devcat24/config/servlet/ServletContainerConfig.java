@@ -3,16 +3,24 @@ package com.github.devcat24.config.servlet;
 import org.apache.catalina.connector.Connector;
 import org.apache.coyote.ajp.AbstractAjpProtocol;
 import org.springframework.beans.factory.annotation.Value;
-//import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
-//import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
-import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.web.servlet.ServletComponentScan;
-//import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
+//import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
+//import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+//import org.springframework.boot.web.server.WebServerFactoryCustomizer;
+//import org.springframework.boot.web.support.SpringBootServletInitializer;
+//import org.springframework.context.annotation.Primary;
+//import org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean;
+//import freemarker.cache.ClassTemplateLoader;
+//import org.springframework.web.servlet.ViewResolver;
+//import org.springframework.web.servlet.view.InternalResourceViewResolver;
+//import org.springframework.web.servlet.view.JstlView;
+//import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
+//import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
+//import java.io.IOException;
 
 @Configuration
 @ServletComponentScan({"com.github.devcat24.servlet"})
@@ -27,13 +35,39 @@ public class ServletContainerConfig extends SpringBootServletInitializer {
     @Value("${tomcat.ajp.enabled}")
     boolean tomcatAjpEnabled;
 
-    @Bean
-    public InternalResourceViewResolver setupViewResolver() {
-        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-        resolver.setPrefix("/WEB-INF/view/");
-        resolver.setSuffix(".jsp");
-        return resolver;
-    }
+//    @Bean
+//    public InternalResourceViewResolver setupJSTLViewResolver() {
+//        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+//
+//        resolver.setViewClass(JstlView.class);
+//        resolver.setPrefix("/WEB-INF/view/");
+//        resolver.setSuffix(".jsp");
+//        resolver.setContentType("text/html");
+//        resolver.setOrder(0);
+//
+//        return resolver;
+//    }
+
+    // https://o7planning.org/en/11257/using-multiple-viewresolvers-in-spring-boot
+//    @Bean(name = "viewResolver")
+//    public ViewResolver getViewResolver() {
+//        FreeMarkerViewResolver viewResolver = new FreeMarkerViewResolver();
+//
+//        viewResolver.setCache(true);
+//        viewResolver.setPrefix("/freemarker/");
+//        viewResolver.setSuffix(".ftl");
+//        viewResolver.setOrder(1);
+//        return viewResolver;
+//    }
+
+//    @Bean(name = "freemarkerConfig")
+//    public FreeMarkerConfigurer getFreemarkerConfig() {
+//        FreeMarkerConfigurer config = new FreeMarkerConfigurer();
+//
+//        config.setTemplateLoaderPath("classpath:/templates/freemarker");
+//        return config;
+//    }
+
 
     // mod_jk_ajp secret issue with Spring Boot +2.2.5
     //   > https://stackoverflow.com/questions/60501470/springboot-the-ajp-connector-is-configured-with-secretrequired-true-but-the-s
@@ -57,6 +91,7 @@ public class ServletContainerConfig extends SpringBootServletInitializer {
             ajpConnector.setPort(ajpPort);
             ajpConnector.setAllowTrace(false);
             ajpConnector.setScheme("http");
+            //noinspection rawtypes
             final AbstractAjpProtocol protocol = (AbstractAjpProtocol) ajpConnector.getProtocolHandler();
             ajpConnector.setSecure(true);
             protocol.setSecret(remoteAuthentication);
@@ -113,6 +148,5 @@ public class ServletContainerConfig extends SpringBootServletInitializer {
         connector.setAllowTrace(false);
         return connector;
     }*/
-
 
 }
