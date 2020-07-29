@@ -1,0 +1,91 @@
+*. SpringDoc OpenAPI Official Document : https://github.com/springdoc/springdoc-openapi
+*. Swagger  -> changed to OpenAPI 3
+*. Swagger to OpenAPI migration Guide : https://springdoc.org/migrating-from-springfox.html
+
+
+
+
+1. Maven dependencies
+    <dependency>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-ui</artifactId>
+        <version>1.4.3</version>
+    </dependency>
+    <dependency>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-webflux-ui</artifactId>
+        <version>1.4.3</version>
+    </dependency>
+
+
+2. Swagger configuration with application.properties
+    ################## OpenAPI Documentation ######################
+    springdoc.swagger-ui.path=/swagger-ui.html
+    # invoke swagger with 'http://xxx.xxx.xxx.xxx:xxxx/template/swagger-ui.html'
+    springdoc.swagger-ui.operations-sorter=method
+    springdoc.packagesToScan=package1, package2
+    springdoc.pathsToMatch=/v1, /api/balance/**
+    ################## OpenAPI Documentation ######################
+
+3. Swagger Config class
+    @Configuration
+    public class OpenAPIConfig {
+        @Bean
+        public OpenAPI springShopOpenAPI() {
+            return new OpenAPI()
+                    .info(new Info().title("Dev Template REST sample with Open API")
+                    .description("REST API with Spring Boot")
+                    .version("v0.0.1")
+                    //.contact(new Contact().name("Devcat24").email("devcat24@gmail.com"))
+                    .license(new License().name("Apache 2.0").url("http://springdoc.org")))
+                    .externalDocs(new ExternalDocumentation()
+                    .url("http://www.github.com/devcat24"));
+        }
+    }
+
+
+
+4. Add guide with annotation - Controller
+    @Tag(name="Employee Management System", description="Operations pertaining to employee in Employee Management System")
+    // '@ApiResponses' can be defined both class level & method level
+    @ApiResponses(value={
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved list"),
+            @ApiResponse(responseCode = "400", description = "Invalid request"),
+            @ApiResponse(responseCode = "401", description = "You are not authorized to view the resource"),
+            @ApiResponse(responseCode = "403", description = "Accessing the resource you were trying to reach is forbidden"),
+            @ApiResponse(responseCode = "404", description = "The resource you were trying to reach is not found")
+    })
+    @RestController
+    @RequestMapping("/api/v1")
+    public class HREmpController {
+            ...
+        @Operation(summary="View all employees", description = "View a list of available employees")
+        // '@ApiResponses' can be defined both class level & method level
+        @ApiResponses(value={
+                @ApiResponse(responseCode = "400", description = "Please try again with valid data")
+            }
+        )
+        @GetMapping("/emp")
+        public List<Emp01> getAllEmp() {
+            return hrEmpSvc.getAllEmp();
+        }
+            ...
+        @Operation(summary="Update employee", description = "Update an employee")
+        @PutMapping("/emp/{id}")
+        public ResponseEntity<Emp01> updateEmp( @Parameter(name = "Employee Id", required = true) @PathVariable(value = "id") Integer empno,
+                                                @ParameterObject @Valid @RequestBody Emp01 emp01) throws ResourceNotFoundException {
+            Emp01 updatedEmp = hrEmpSvc.getEmpById(empno).orElseThrow(() -> new ResourceNotFoundException("Employee not found for this empno :: " + empno));
+            ...
+
+6. Add guide with annotation - Model
+            ...
+    @Entity(name="Emp01")
+    @Table(name="tb_emp_01")
+    @Schema(name="Employ", description = "All details about the Employee.")
+    public class Emp01 implements Serializable{
+            ...
+        @Setter @Getter @Id
+        @Column(name="empno", unique=true, columnDefinition="Integer")
+        @Schema(name="Employee ID", description = "The database generated employee ID", example="10001")
+        public Integer empno;
+              ...

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.devcat24.mvc.dto.mm.RestEmp;
 import com.github.devcat24.mvc.svc.RestTemplateSvc;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -110,6 +111,7 @@ public class RESTSvcController {
     // 5. Jackson ObjectMapper samples
     @RequestMapping(value="/rest/jackson/conv/samples")
     @ResponseBody
+    @Hidden // '@ApiIgnore' can be replaced by '@Parameter(hidden = true)' or '@Operation(hidden = true)' or @Hidden
     public String jacksonConvertSamples() throws IOException {
         String rtnString = "";
 
@@ -179,6 +181,7 @@ public class RESTSvcController {
     //   -> curl 'http://localhost:8200/template/rest/xml/order/2'
     @RequestMapping(method= RequestMethod.GET, value="/rest/xml/order/{orderNo}")
     @ResponseBody
+    @Hidden // '@ApiIgnore' can be replaced by '@Parameter(hidden = true)' or '@Operation(hidden = true)' or @Hidden
     public String getXmlOrder(@PathVariable int orderNo) throws IOException {
         String rtnString = "";
 
@@ -219,14 +222,14 @@ public class RESTSvcController {
         return rtnString;
     }
 
-    @RequestMapping(value="/rest/jsonHolder/emps", produces={MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(value="/rest/jsonHolder/emps", method=RequestMethod.GET, produces={MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public String jsonHolderEmps(){
         return " [{\"id\":10001, \"name\":\"JohnDoe\"}, {\"id\":10002, \"name\":\"JaneSmith\"} ]";
 
     }
 
-    @RequestMapping(value="/rest/xmlHolder/order", produces={MediaType.APPLICATION_XML_VALUE})
+    @RequestMapping(value="/rest/xmlHolder/order", method=RequestMethod.GET, produces={MediaType.APPLICATION_XML_VALUE})
     @ResponseBody
     public String xmlHolderOrder(){
         return   " <?xml version=\"1.0\" encoding=\"UTF-8\"?>                 "

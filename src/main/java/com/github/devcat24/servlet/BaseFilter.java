@@ -3,6 +3,7 @@ package com.github.devcat24.servlet;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 
@@ -24,12 +25,16 @@ public class BaseFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 
         long startTime = System.currentTimeMillis();
-        logger.info("BaseFilter.doFilter: before processing : ");
+        if(! ((HttpServletRequest)req).getRequestURL().toString().contains("template/ping") ){
+            logger.info("BaseFilter.doFilter: before processing : ");
+        }
         // actions before servlet processing
 
         chain.doFilter(req, res);
 
-        logger.info("BaseFilter.doFilter: after processing : " + (startTime - System.currentTimeMillis()));
+        if(! ((HttpServletRequest)req).getRequestURL().toString().contains("template/ping") ){
+            logger.info("BaseFilter.doFilter: after processing : " + (startTime - System.currentTimeMillis()));
+        }
         // actions after servlet processing
     }
 }

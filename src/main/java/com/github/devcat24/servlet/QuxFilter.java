@@ -4,6 +4,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @WebFilter("/*")
@@ -25,12 +26,17 @@ public class QuxFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 
         long startTime = System.currentTimeMillis();
-        logger.info("QuxFilter.doFilter: before processing : ");
+
+        if(! ((HttpServletRequest)req).getRequestURL().toString().contains("template/ping") ){
+            logger.info("QuxFilter.doFilter: before processing : ");
+        }
         // actions before servlet processing
 
         chain.doFilter(req, res);
 
-        logger.info("QuxFilter.doFilter: after processing : " + (startTime - System.currentTimeMillis()));
+        if(! ((HttpServletRequest)req).getRequestURL().toString().contains("template/ping") ){
+            logger.info("QuxFilter.doFilter: after processing : " + (startTime - System.currentTimeMillis()));
+        }
         // actions after servlet processing
     }
 }

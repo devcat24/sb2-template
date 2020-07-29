@@ -6,16 +6,19 @@ import com.github.devcat24.mvc.svc.JPASvc;
 import com.github.devcat24.util.json.GsonUtil;
 import com.github.devcat24.util.net.RestTemplateExample;
 import com.github.devcat24.util.regex.RegExpExample;
+import io.swagger.v3.oas.annotations.Hidden;
+// import io.swagger.v3.oas.annotations.Parameter;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
-import org.springframework.jms.core.JmsTemplate;
+// import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -65,10 +68,12 @@ public class DefaultController {
     //    this.messageSource = messageSource;
     // }
 
+    @SuppressWarnings("unused")
     @RequestMapping(value={"/"})
-    public String welcome(@SuppressWarnings("unused") HttpServletRequest req, HttpServletResponse res, Model model) throws Exception {
+    public String welcome(@SuppressWarnings("unused") HttpServletRequest req, HttpServletResponse res, Model model){
         model.addAttribute("applicationVersion", ApplicationVersion.applicationVersion);
         model.addAttribute("keepAlivePing", keepAlivePing);
+        //noinspection SpringMVCViewInspection
         return "welcome_jstl" ;
     }
 
@@ -85,21 +90,22 @@ public class DefaultController {
         this.restTemplateExample = restTemplateExample;
     }
 
-    @SuppressWarnings("RedundantThrows")
     @RequestMapping(value={"/basicContents"})
-    public String welcome(Model model) throws Exception {
+    public String welcome(Model model) {
         model.addAttribute("applicationVersion", ApplicationVersion.applicationVersion);
+        //noinspection SpringMVCViewInspection
         return "basic_contents" ;
     }
 
     @RequestMapping(value={"/dbTemplate"})
-    public String dbTemplate(Model model) throws Exception {
+    public String dbTemplate(Model model){
         model.addAttribute("allMembers", jpaSvc.getAllMembers());
         return "db_template" ;
     }
 
     @ResponseBody
     @RequestMapping(value="/findMemberById", produces={"application/json;charset=UTF-8"})
+    @Hidden
     public String findMemberById(Long id){
         /*Member foundMember = jpaSvc.findMemberById(id);
 
@@ -113,6 +119,7 @@ public class DefaultController {
 
     @ResponseBody
     @RequestMapping(value="/findAllMembersFrom", produces={"application/json;charset=UTF-8"})
+    @Hidden
     public String findAllMembersFrom(Long id){
         return GsonUtil.toJsonString(jpaSvc.findAllMembersFrom(id));
     }
@@ -120,16 +127,18 @@ public class DefaultController {
 
 
     @ResponseBody
-    @RequestMapping(value="/msgSrc")
-    public String msgSrc() throws Exception {
+    @RequestMapping(value="/msgSrc", method = RequestMethod.GET)
+    @Hidden // '@ApiIgnore' can be replaced by '@Parameter(hidden = true)' or '@Operation(hidden = true)' or @Hidden
+    public String msgSrc(){
         logger.info("Local.US     : " + messageSource.getMessage("hello.test", null, "no such message", Locale.US));
         logger.info("Local.KR     : " + messageSource.getMessage("hello.test", null, "no such message", Locale.KOREA));
         return "ok !";
     }
 
     @ResponseBody
-    @RequestMapping(value="/regExpExamples")
-    public String regExpExamples() throws Exception {
+    @RequestMapping(value="/regExpExamples", method = RequestMethod.GET)
+    //@Hidden // '@ApiIgnore' can be replaced by '@Parameter(hidden = true)' or '@Operation(hidden = true)' or @Hidden
+    public String regExpExamples(){
         RegExpExample regExpExample = new RegExpExample();
         regExpExample.regExp01();
         return "ok !";
@@ -137,6 +146,7 @@ public class DefaultController {
 
     @ResponseBody
     @RequestMapping(value="/restTemplateExamples")
+    @Hidden // '@ApiIgnore' can be replaced by '@Parameter(hidden = true)' or '@Operation(hidden = true)' or @Hidden
     public String restTemplateExample() throws Exception {
         return restTemplateExample.getJsonPostExample01();
     }
@@ -145,6 +155,7 @@ public class DefaultController {
     /** Test code for Exception Handler */
     @ResponseBody
     @RequestMapping(value="/exceptionTest01")
+    @Hidden // '@ApiIgnore' can be replaced by '@Parameter(hidden = true)' or '@Operation(hidden = true)' or @Hidden
     public String exceptionTest01(String errType) throws Exception {
         if(StringUtils.isNotBlank(errType) && errType.equals("type1")){
             throw new SQLException("SQL Exception !!! (type1)");
@@ -163,6 +174,7 @@ public class DefaultController {
      */
     @ResponseBody
     @RequestMapping(value="/ping", produces = "application/json")
+    @Hidden // '@ApiIgnore' can be replaced by '@Parameter(hidden = true)' or '@Operation(hidden = true)' or @Hidden
     public String ping(HttpServletRequest request) {
 
         Map<String, String> map = new HashMap<>();
@@ -183,7 +195,8 @@ public class DefaultController {
 
     @ResponseBody
     @RequestMapping(value="/sendAmqQueue01")
-    public String sendAmqQueue01() throws Exception {
+    @Hidden
+    public String sendAmqQueue01(){
 //        String qName = "amq.exam.queue01";
 //        //jmsTemplate.setPubSubDomain(true);  // -> publish as topic
 //        jmsTemplate.convertAndSend("amq.exam.queue01", "New Message !");
