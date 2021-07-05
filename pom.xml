@@ -5,10 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<!--<version>2.1.6.RELEASE</version>-->
-		<!-- <version>2.1.9.RELEASE</version> -->
-		<!--<version>2.2.8.RELEASE</version>-->
-		<version>2.3.1.RELEASE</version>
+		<version>2.5.2</version>
 
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
@@ -24,6 +21,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<docker.image.prefix>devcat24</docker.image.prefix>
+		<io-rest-assured.version>4.1.2</io-rest-assured.version>
+
 	</properties>
 
 	<dependencies>
@@ -366,7 +365,7 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
-			<version>5.2.0</version>
+			<version>5.7.1</version>
 			<scope>test</scope>
 		</dependency>
 		<!--<dependency>
@@ -374,6 +373,33 @@
 			<artifactId>maven-pmd-plugin</artifactId>
 			<version>3.12.0</version>
 		</dependency>-->
+
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>${io-rest-assured.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured-common</artifactId>
+			<version>${io-rest-assured.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>json-path</artifactId>
+			<version>${io-rest-assured.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>xml-path</artifactId>
+			<version>${io-rest-assured.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+
 	</dependencies>
 	<build>
 		<finalName>${project.artifactId}</finalName>
@@ -448,7 +474,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
-				<version>3.12.0</version>
+				<version>3.14.0</version>
 				<configuration>
 					<rulesets>
 						<ruleset>/rulesets/java/braces.xml</ruleset>

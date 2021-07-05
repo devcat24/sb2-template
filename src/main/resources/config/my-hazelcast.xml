@@ -7,8 +7,8 @@
         <property name="hazelcast.jmx">true</property>
     </properties>
     <map name="sampleMap">
-        <max-size>271</max-size>
-        <eviction-policy>LFU</eviction-policy>
+        <!--<max-size>271</max-size>-->
+        <!--<eviction-policy>LFU</eviction-policy>-->
         <!--<time-to-live-seconds>20</time-to-live-seconds>-->
         <!-- time-to-live-seconds -> Maximum number of seconds for each entry to stay in the map. 0 means infinite. Default is 0 -->
 
